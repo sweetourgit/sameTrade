@@ -1,5 +1,5 @@
 @echo off
 echo [INFO] start up devProxy Server.
-cd ..\jiaqi\
+cd ..\sameTrade\
 call npm run dev
 pause

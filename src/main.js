@@ -21,7 +21,6 @@ import qs from 'qs'
 
 Vue.prototype.$http = axios
 Vue.prototype.qs = qs
-import '@/style/main.css'
 //global variable
 Vue.prototype.GLOBAL = global
 Vue.config.productionTip = false
