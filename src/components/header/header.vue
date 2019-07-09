@@ -2,12 +2,9 @@
         <div class="header">
           <div class="log">
            <!-- <div class="el-icon-star-on"></div> -->
-            <div class="left">同业系统 </div>
+            <div class="left">嘉麒管理后台</div>
           </div>
           <div class="right">
-           	<el-badge :value="100" :max="99" class="icon el-icon-bell">
-              <div class=""></div>
-            </el-badge>
             <div class="vertical-line"></div>
            		<div class="icon el-icon-service"><span id="nameNum" @click="listUser">{{name}}</span></div>
               <div class="vertical-line1"></div>

@@ -33,137 +33,15 @@
     return {
         category: [
             {
-              name: '账户管理',
+              name: '同业系统',
               img: 'account.png',
               items: [
                 {
-                  value: '用户列表',
-                  router:'/userList'
-                },
-                {
-                  value: '组织列表',
-                  router:'/organList'
-                },
-                {
-                  value: '职位列表',
-                  router:'/positionList'
-                },
-                {
-                  value: '角色模板',
-                  router:'/role'
-                }
-              ]
-            },
-            {
-              name: '内容管理',
-              img: 'content.png',
-              items: [
-                {
-                  value: '区域列表',
-                  router:'/cityList'
-                },
-                {
-                  value: '自定义地区',
-                  router:'/customArea'
-                },
-                {
-                  value: '景点列表',
-                  router:'/scenicList'
-                },
-                {
-                  value: '标签列表',
-                  router:'/labelList'
-                },
-                {
-                  value: '素材列表',
-                  router:'/materialList'
-                },
-                {
-                  value: '酒店列表',
-                  router:'/hotelList'
-                },
-                {
-                  value: '供应商信息',
-                  router:'/supplierInfo'
-                },
-                {
-                  value: '商户信息',
-                  router:'/merchantInfo'
-                },
-                {
-                  value: '功能管理',
-                  router:'/priList'
-                },{
-                  value: '权限列表',
-                  router:'/proList'
-                },{
-                  value: '黑名单',
-                  router:'/blacklist'
-                }
-              ]
-            },
-            {
-              name: '产品管理',
-              img: 'product.png',
-              items: [
-                {
-                  value: '产品列表',
+                  value: '产品预定',
                   router:'/productList'
-                },
-                {
-                  value: '出行模板',
-                  router:'/travelTemplate'
-                },
-                {
-                  value: '团期计划',
-                  router:'/regimentPlan/teamPlanList'
-                },
-                {
-                  value: '共享库存',
-                  router:'/sharedInventory'
-                },
+                }
               ]
             },
-            {
-              name: '订单管理',
-              img: 'order.png',
-              items: [
-                {
-                  value: '订单管理',
-                  router:'/orderList'
-                }
-              ],
-            },
-          {
-            name: '财务管理',
-            img: 'order.png',
-            items: [
-              {
-                value: '无收入借款管理',
-                router:'/loanManagement'
-              },
-              {
-                value: '预付款管理',
-                router:'/advancePayment'
-              },
-              {
-                value: '收款管理',
-                router:'/collectionManagement'
-              },
-              {
-                value: '报销管理',
-                router:'/reimburseManagement'
-              },
-              {
-                value: '欠款管理',
-                router:'/arrearsManagement'
-              },
-              {
-                value: '银行账号管理',
-                router:'/bankAccount'
-              },
-            ],
-          }
         ],
         isRouter:true,
         menuNumber:[],

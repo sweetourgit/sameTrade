@@ -434,7 +434,7 @@
                       sessionStorage.setItem('orgID',res.data.orgID)
                       sessionStorage.setItem('account',this.ruleForm.user)
                       store.save('name',res.data.name)
-                      this.$router.push('/userList')
+                      this.$router.push('/productList')
                       this.$message.success('登录成功');
                       localStorage.removeItem("code",res.data)
                     }).catch(err => {
