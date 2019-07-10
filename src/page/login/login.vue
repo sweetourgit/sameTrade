@@ -7,7 +7,7 @@
       </div>
       <div class="top_right">
         <span>已有账号,</span>
-        <span style="margin-left: 5px;color: #429EF7;cursor:pointer;">马上登录</span>
+        <span style="margin-left: 5px;color: #429EF7;cursor:pointer;" @click="login">马上登录</span>
         <span style="margin-left: 20px;">|</span>
         <span style="margin-left: 20px;color: #429EF7;cursor:pointer;">返回首页</span>
       </div>
@@ -642,6 +642,7 @@
         this.emailShow = false;
         this.newpasswordShow = false;
         this.phoneShow = false;
+        this.isRetrieve = true;
       },
       aaa(show){
         if(this.logClick || show == 'show'){
