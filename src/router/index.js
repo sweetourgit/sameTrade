@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import productList from '@/page/productReserve/productList'
+import userList from '@/page/userList/userList'
+import salesStatistics from '@/page/salesStatistics/salesStatistics'
 import login from '@/page/login/login'
 
 
@@ -18,6 +20,20 @@ export default new Router({
         keepAlive: true,
         auth:true}
     },{
+          path: '/userList',
+          component: userList,
+          name: '账户信息',
+          meta: {
+              keepAlive: true,
+              auth:true}
+      },{
+          path: '/salesStatistics',
+          component: userList,
+          name: '销售统计',
+          meta: {
+              keepAlive: true,
+              auth:true}
+      },{
       path: '/login',
       component: login,
       meta: {

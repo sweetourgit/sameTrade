@@ -39,7 +39,14 @@
                 {
                   value: '产品预定',
                   router:'/productList'
-                }
+                },
+                  {
+                      value: '账户信息',
+                      router:'/userList'
+                  },{
+                      value: '销售统计',
+                      router:'/salesStatistics'
+                  }
               ]
             },
         ],
