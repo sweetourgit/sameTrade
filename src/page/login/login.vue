@@ -1,33 +1,35 @@
 <template>
-
   <div class="app">
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="renderer" content="webkit|ie-comp|ie-stand">   -->
-    <div class="top">
-      <div style="float:left">
-        <span class="top-titleone">嘉麒集团</span>
-        <span class="top-titletwo">通行证</span>
+    <div class="top_handle">
+      <div class="top_left">
+        <span>嘉麒集团</span>
+        <span style="margin-left: 40px;">通行证</span>
+      </div>
+      <div class="top_right">
+        <span>已有账号,</span>
+        <span style="margin-left: 5px;color: #429EF7;cursor:pointer;">马上登录</span>
+        <span style="margin-left: 20px;">|</span>
+        <span style="margin-left: 20px;color: #429EF7;cursor:pointer;">返回首页</span>
       </div>
     </div>
 
-    <div class="big">
+    <div class="big" v-show="isRetrieve">
       <!-- <div class="title">嘉麒集团应用管理中心系统</div> -->
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" class="demo-ruleForm login-container" v-show="show">
-        <span class="forget-title">嘉麒应用管理中心</span>
+        <span class="forget-title">嘉麒同业系统</span>
         <div class="forget-group">
-          <div class="forget-account">用户登录</div>
+          <div class="forget-account">登录账号</div>
           <div class="forget-border"></div>
         </div>
 
-
-        <el-button type="text" class="form-forget" @click="forget">忘记密码</el-button>
+        <el-button type="text" class="form-forget" @click="forget">忘记密码 ? </el-button>
 
         <el-form-item prop="user" class="user-input">
           <!-- <div><img src="../../../static/login/user.png" class="img" style="width:35px;"></div> -->
-          <el-input  v-model="ruleForm.user"  placeholder="手机号/邮箱" @keyup.enter.native="loginForm('ruleForm')"></el-input>
+          <el-input  v-model="ruleForm.user" prefix-icon="el-icon-user"  placeholder="用户名" @keyup.enter.native="loginForm('ruleForm')"></el-input>
         </el-form-item>
         <el-form-item prop="password" class="password-input">
-          <el-input type="password"  v-model="ruleForm.password" placeholder="密码" @keyup.enter.native="loginForm('ruleForm')"></el-input>
+          <el-input type="password" prefix-icon="el-icon-lock"  v-model="ruleForm.password" placeholder="密码" @keyup.enter.native="loginForm('ruleForm')"></el-input>
         </el-form-item>
 
 <!-- 
@@ -46,46 +48,42 @@
         <!-- 验证码 -->
 
 
-        <!-- <router-link to="/role"> </router-link> -->
-
         <el-button type="primary" @keydown.enter="loginForm('ruleForm')" class="button" @click="loginForm('ruleForm')">登录</el-button>
 
-        <!-- <el-checkbox class="remember" >记住密码</el-checkbox> -->
+        <el-checkbox class="remember" >记住密码</el-checkbox>
       </el-form>
 
 
       <!-- 忘记密码之手机验证 -->
       <el-form ref="phoneruleForm" :model="phoneruleForm" :rules="phonerules" label-width="80px" class="demo-ruleForm login-forget"   v-show="phoneShow">
-        <span class="forget-title">嘉麒应用管理中心</span>
+        <span class="forget-title">嘉麒同业系统</span>
         <!-- 找回密码 -->
         <div class="forget-group">
           <div class="forget-account">找回密码</div>
-          <div class="forget-border"></div>
+          <!-- <div class="forget-border"></div> -->
+        </div>
+        <div class="font_text">
+          <span>已有账号,</span>
+          <span style="margin-left: 5px;color: #429EF7;cursor:pointer;" @click="login">马上登录</span>
         </div>
         <!-- 立刻登录 -->
-        <el-button type="text" class="form-forget" @click="login">立刻登录</el-button>
-
+        <!-- <el-button type="text" class="form-forget" @click="login">立刻登录</el-button> -->
 
         <div class="input-with-select">
-
-
-          <el-form-item prop="phone">
-            <el-input placeholder="请输入手机号码"   v-model="phoneruleForm.phone">
-              <!-- 检测值的改变 -->
-              <el-select v-model="select" slot="prepend" placeholder="手机号" style="width:90px" @change="haha">
-                <el-option label="手机号" value="0"></el-option>
-                <el-option label="邮箱" value="1"></el-option>
-              </el-select>
-
-            </el-input>
-
+          <el-form-item prop="phone" class="phone-input">
+            <el-input  v-model="phoneruleForm.phone" prefix-icon="el-icon-user"  placeholder="手机号/邮箱"></el-input>
           </el-form-item>
           <!-- <el-button type="primary" @click="send" v-if="!sendMsgDisabled" class="phone-button" ><span style="margin-right:0px">获取验证码</span></el-button>
             <el-button type="primary" plain disabled @click="send" v-if="sendMsgDisabled" class="phone-button">{{time}}S后获取</el-button> -->
-
         </div>
+
+        <el-form-item class="phone-button">
+          <el-button type="primary" class="next-button-phone" @click="submitForm('emailruleForm')" >下一步</el-button>
+        </el-form-item>
+
+
         <!-- 手机验证码 -->
-        <div>
+        <!-- <div>
           <el-form-item prop="phoneVerification" class="phone-verify">
             <el-input  placeholder="请输入手机验证码" v-model="phoneruleForm.phoneVerification"   >
               <el-button slot="append" @click="send" v-if="!sendMsgDisabled" class="phone-button" ><span style="margin-right:0px">获取验证码</span></el-button>
@@ -96,11 +94,14 @@
           <el-form-item class="verify-buttom">
             <el-button type="primary" class="next-button-phone" @click="phoneSubmitForm('phoneruleForm')" >下一步</el-button>
           </el-form-item>
-        </div>
+        </div> -->
       </el-form>
+
+
+      
       <!-- 忘记密码之邮箱验证 -->
       <el-form ref="emailruleForm" :model="emailruleForm" :rules="emailrules" label-width="80px" class="demo-ruleForm login-forget" v-show="emailShow" >
-        <span class="forget-title">嘉麒应用管理中心</span>
+        <span class="forget-title">嘉麒同业系统</span>
         <div class="forget-group">
           <div class="forget-account">找回密码</div>
           <div class="forget-border"></div>
@@ -121,9 +122,14 @@
           <el-button type="primary" class="next-button-email" @click="submitForm('emailruleForm')" >下一步</el-button>
         </el-form-item>
       </el-form>
+
+
+
+
+
       <!-- 忘记密码找回 -->
       <el-form ref="passwordruleForm" :model="passwordruleForm" :rules="newpasswordrules" label-width="80px" class="demo-ruleForm login-forget" v-show="newpasswordShow" >
-        <span class="forget-title">嘉麒应用管理中心</span>
+        <span class="forget-title">嘉麒同业系统</span>
         <div class="forget-group">
           <div class="forget-account">找回密码</div>
           <div class="forget-border"></div>
@@ -151,6 +157,122 @@
         Copy right @2018 嘉麒集团版权所有 辽ICP备辽B2 - 20150118
       </div>
     </div>
+
+    <!-- 找回密码页面 -->
+    <div class="retrievePass" v-show="!isRetrieve">
+
+      <!-- 找回密码 -->
+      <div v-show="isView">
+        <div class="passView">
+          <div class="passHand">
+            <div class="passTop">账号安全</div>
+          </div>
+          <div class="passBody">找回密码</div>
+          <div style="margin-top: 40px;">
+            <el-form ref="passForm" :model="passForm" label-width="270px">
+
+              <el-form-item>
+                <el-input class="passInput" v-model="passForm.account" placeholder="手机号/邮箱"></el-input>
+              </el-form-item>
+
+              
+              <el-form-item>
+                <el-button class="passButton" type="primary" @click="onSubmit">下一步</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+      </div>
+      <!-- 找回密码END -->
+
+      <!-- 找回密码手机 -->
+      <div v-show="isView">
+        <div class="passView">
+          <div class="passHand">
+            <div class="passTop">账号安全</div>
+          </div>
+          <div class="passBody">找回密码</div>
+          <div style="margin-top: 40px;">
+            <el-form ref="passForm" :model="passForm" label-width="270px">
+
+              <el-form-item>
+                <el-input class="passInput" v-model="passForm.account" placeholder="手机号/邮箱"></el-input>
+              </el-form-item>
+
+              <el-form-item>
+                <el-input style="width: 200px" v-model="passForm.account" placeholder="验证码"></el-input>
+                <el-button style="width: 110px;margin-left: 20px;" type="primary">发送验证码</el-button>
+              </el-form-item>
+              
+              <el-form-item>
+                <el-button class="passButton" type="primary" @click="onSubmit">下一步</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+      </div>
+      <!-- 找回密码手机END -->
+
+      <!-- 修改密码 -->
+      <div v-show="isView">
+        <div class="passView">
+          <div class="passHand">
+            <div class="passTop">账号安全</div>
+          </div>
+          <div class="passBody">修改密码</div>
+          <div style="margin-top: 40px;" v-show="isView">
+            <el-form ref="passForm" :model="passForm" label-width="270px">
+
+              <el-form-item>
+                <el-input class="passInput" v-model="passForm.account" placeholder="设置密码"></el-input>
+              </el-form-item>
+
+              <el-form-item>
+                <el-input class="passInput" v-model="passForm.account" placeholder="确认密码"></el-input>
+              </el-form-item>
+
+              
+              <el-form-item>
+                <el-button class="passButton" type="primary" @click="onSubmit">下一步</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <div style="margin-top: 90px;text-align: center;">
+            <div>您已成功设置密码,请试用新密码登录</div>
+            <el-button style="margin-top: 40px;" class="passButton" type="primary" @click="onSubmit">马上登录</el-button>
+          </div>
+        </div>
+      </div>
+      <!-- 修改密码END -->
+
+      <!-- 邮箱提示 -->
+      <div>
+        <div class="passView">
+          <div class="passHand">
+            <div class="passTop">账号安全</div>
+          </div>
+          <div class="passBody">找回密码</div>
+
+          <div style="width: 390px;margin: 50px 0 0 270px;line-height: 30px;">
+            <div>我们已像您的注册邮箱 <span>84*****420@qq.com</span> 发送了一封密码找回邮件 请您注意 <span style="color: red;">接收文件</span></div>
+            <el-button style="margin-top: 40px;" class="passButton" type="primary" @click="onSubmit">去邮箱接收文件</el-button>
+            <div style="font-size: 13px;color: #A9A9A9;margin-top: 10px;">请注意查收邮件,并按照邮件中的提示操作,完成安全认证。</div>
+            <div style="float: left; font-size: 13px;color: #A9A9A9;margin-top: -10px;">没有收到?</div>
+            <div style="float: left; font-size: 13px;color: red; margin: -10px 0 0 10px;">重新发送</div>
+          </div>
+        </div>
+      </div>
+      <!-- 邮箱提示END -->
+
+      
+      <div class="passFoot">
+          Copy right @2018 嘉麒集团版权所有 辽ICP备辽B2 - 20150118
+      </div>
+    </div>
+
+
+
   </div>
 </template>
 
@@ -190,6 +312,8 @@
         }
       };
       return {
+        isRetrieve: false, // 找回密码页面
+        isView: false,
         show: true,
         phoneShow: false,
         verifyShow: true,
@@ -197,6 +321,9 @@
         newpasswordShow:false,
         pop:false,
         pop1: false,
+        passForm: {
+          account: ''
+        },
         // input5: '',
         // input:'',
         select: '0',
@@ -228,13 +355,13 @@
         // 邮箱和手机
         phonerules:{
           phone: [
-            { required: true, message: '请输入手机号', trigger: 'blur' },
-            { pattern:/^[1][3,4,5,7,8][0-9]{9}$/, message: "手机格式错误!"}
+            { required: true, message: '请输入账户', trigger: 'blur' },
+            // { pattern:/^[1][3,4,5,7,8][0-9]{9}$/, message: "手机格式错误!"}
           ],
-          phoneVerification: [
-            { required: true, message: '请输入手机验证码', trigger: 'blur' },
-            { min: 6, max: 6, message: '请输入六位手机验证码', trigger: 'blur' }
-          ],
+          // phoneVerification: [
+          //   { required: true, message: '请输入手机验证码', trigger: 'blur' },
+          //   { min: 6, max: 6, message: '请输入六位手机验证码', trigger: 'blur' }
+          // ],
 
         },
         //  邮箱验证
@@ -540,6 +667,10 @@
 
         })
       },
+
+      onSubmit() {
+
+      }
     }
 
 
@@ -554,12 +685,30 @@
     left:0;
     width:100%;
     height:100%;
-    overflow-x:hidden;
     background:#FFF;
   }
+  .top_handle {
+    height: 5%;
+  }
+  .top_left {
+    float: left;
+    position: absolute;
+    top: 4%;
+    padding-left:5% !important;
+    font-size: 20px;
+  }
+  .top_right {
+    float: right;
+    position: absolute;
+    top: 4%;
+    right: 15%;
+    padding-left:5% !important;
+    font-size: 15px;
+  }
+
   .top{
-    position: fixed;
-    top:0px;
+    // position: fixed;
+    // top:0px;
     height: 5%;
     margin-bottom:50px;
   }
@@ -577,8 +726,11 @@
     padding-left:13% !important;
     line-height:5%;
     font-size: 22px;
-
     color:#666;
+  }
+  .top-account {
+    margin: 35px 200px 0 0;
+    // line-height:5%;
   }
 
   .big{
@@ -614,18 +766,18 @@
   .login-container {
     position: absolute;
     -webkit-border-radius: 5px;
-    border-radius: 10px;
+    border-radius: 6px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
     // margin: 0 auto;
 
     float: right;
-    height:430px;
-    width: 430px;
-    margin: 5% 10% 10% 61%;
+    height:500px;
+    width: 455px;
+    margin: 5% 10% 10% 65%;
     background: #fff;
     // border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
+    // box-shadow: 0 0 25px #cac6c6;
     background-color:rgba(255,255,255,.7);
     // display:true;
 
@@ -633,18 +785,18 @@
   .login-forget{
     position: absolute;
     -webkit-border-radius: 5px;
-    border-radius: 10px;
+    border-radius: 6px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
 
     // margin: 0 auto;
     float: right;
-    height:320px;
-    width: 430px;
-    margin: 5% 10% 10% 61%;
+    height:380px;
+    width: 455px;
+    margin: 5% 10% 10% 65%;
     background: #fff;
     // border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
+    // box-shadow: 0 0 25px #cac6c6;
     background-color:rgba(255,255,255,.7);
 
   }
@@ -658,8 +810,6 @@
   }
   .login-account{
     position:relative;
-    // float:left;
-    // width:25%;
     left: 30%;
     top:22%;
     color: #008FF4;
@@ -688,19 +838,22 @@
   .form-forget{
     position:relative;
     float: right;
-    // width:25%;
-    // top:20%;
-    margin-top:9%;
+    margin-top:19.3%;
     right:10%;
     color: #888;
     font-size:18px;
     border-bottom: #888 solid 3px;
   }
+  .font_text {
+    float: right;
+    font-size: 15px;
+    margin: 120px 50px 0 0;
+  }
   .input-with-select{
     position: relative;
-    margin-top:20%;
-    right:5%;
-    width:85%;
+    top: 35px;
+    right: 35px;
+    width:445px;
   }
 
   .input-with-email{
@@ -714,14 +867,14 @@
     margin-top:5%;
     float:left;
     width:100%;
-    right: 10%;
+    right: 8%;
   }
   .password-input{
     position:relative;
     float:left;
     width:100%;
 
-    right: 10%;
+    right: 8%;
   }
   .verification-input{
     position:relative;
@@ -753,17 +906,11 @@
   }
   // 手机找回页面的下一步按钮
   .next-button-phone{
-    position: absolute;
-    //  这个地方写的有问题
-    width:200%;
-    // margin-right:60px;
-    // margin-top:-1px !important;
-    // margin: 0 auto;
-    left:0px;
-    bottom: 30px;
-    // right: 5%;
-    // margin-bottom:10%;
-    buttom:40px !important;
+    position:relative;
+    margin-top:45px;
+    float:left;
+    width:365px;
+    right: 35px;
   }
   .next-button-email{
     position: relative;
@@ -804,19 +951,17 @@
   }
   .forget-title{
     position: relative;
-    //  float: left;
-    top:20px;
-    margin: 0 40px;
+    top:50px;
+    margin: 0 75px;
     text-align: center;
     color: #444;
-    font-size:24px;
+    font-size:22px;
+    font-weight: lighter;
 
   }
   .login-button{
-
     text-align:center;
   }
-
 
   .foot{
     position: fixed;
@@ -825,19 +970,28 @@
     height:18%;
     width:100%;
     text-align: center;
-    line-height:50px;
+    line-height:140px;
     color: #666;
-    font-size:18px;
+    font-size:15px;
+  }
+  .passFoot {
+    position: fixed;
+    bottom:0px;
+    height:20%;
+    width:100%;
+    text-align: center;
+    // line-height:140px;
+    // color: #666;
+    font-size:15px;
   }
 
   .phone{
     width:65%;margin:0 auto;
   }
   .phone-input{
-    position: relative;
-    width:300px;
-    right:45px;
-    margin-left:30px;
+    position:relative;
+    float:left;
+    width:100%;
   }
 
   // 手机找回页面的验证码输入框
@@ -848,13 +1002,10 @@
 
   }
   .phone-button{
-    // position: relative;
-    // float:right;
-    // left:30%;
-    // bottom:62px;
-    // height:40px;
-    // text-align:center;
-
+    position:relative;
+    margin-top:5%;
+    float:left;
+    width:100%;
   }
   .email{
     width:50%;
@@ -915,11 +1066,11 @@
   }
   .forget-group{
     position:relative;
-    height:12%;
-    margin-top:11%;
+    height:8%;
+    margin-top:21%;
     float:left;
     // top:15%;
-    left: 3%;
+    left: 5%;
     // margin-bottom:10%;
   }
   .input-phone{
@@ -958,6 +1109,44 @@
     position: absolute;
     top: 100%;
     left: 0;
-
+  }
+  .retrievePass {
+    margin-top: 50px;
+    height: 100%;
+    background: #F4F4F4;
+  }
+  .passView {
+    width: 900px;
+    height: 390px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 6px;
+    background: #fff;
+  }
+  .passHand {
+    height: 40px;
+    border-radius: 6px 6px 0 0;
+    background: #008CF6;
+  }
+  .passTop {
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    font-size: 18px;
+  }
+  .passBody {
+    text-align: center;
+    margin-top: 78px;
+    font-size: 18px;
+  }
+  .passInput {
+    width: 335px;
+  }
+  .passButton {
+    width: 335px;
   }
 </style>
