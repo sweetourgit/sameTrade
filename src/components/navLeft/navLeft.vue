@@ -40,13 +40,17 @@
                   value: '产品预定',
                   router:'/productList'
                 },
-                  {
-                      value: '账户信息',
-                      router:'/userList'
-                  },{
-                      value: '销售统计',
-                      router:'/salesStatistics'
-                  }
+                {
+                    value: '订单管理',
+                    router:'/orderManagement'
+                },
+                {
+                    value: '账户信息',
+                    router:'/userList'
+                },{
+                    value: '销售统计',
+                    router:'/salesStatistics'
+                }
               ]
             },
         ],

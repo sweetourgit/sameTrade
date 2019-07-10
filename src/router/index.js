@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import productList from '@/page/productReserve/productList'
+import orderManagement from '@/page/orderManagement/orderList'
 import userList from '@/page/userList/userList'
 import salesStatistics from '@/page/salesStatistics/salesStatistics'
 import login from '@/page/login/login'
@@ -20,6 +21,13 @@ export default new Router({
         keepAlive: true,
         auth:true}
     },{
+          path: '/orderManagement',
+          component: orderManagement,
+          name: '订单管理',
+          meta: {
+              keepAlive: true,
+              auth:true}
+      },{
           path: '/userList',
           component: userList,
           name: '账户信息',
