@@ -49,7 +49,7 @@
                     router:'/userList'
                 },{
                     value: '销售统计',
-                    router:'/salesStatistics'
+                    router:'/salesList'
                 }
               ]
             },

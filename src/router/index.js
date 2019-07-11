@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import productList from '@/page/productReserve/productList'
 import orderManagement from '@/page/orderManagement/orderList'
 import userList from '@/page/userList/userList'
-import salesStatistics from '@/page/salesStatistics/salesStatistics'
+import salesList from '@/page/salesList/salesList'
 import login from '@/page/login/login'
 
 
@@ -35,8 +35,8 @@ export default new Router({
               keepAlive: true,
               auth:true}
       },{
-          path: '/salesStatistics',
-          component: userList,
+          path: '/salesList',
+          component: salesList,
           name: '销售统计',
           meta: {
               keepAlive: true,

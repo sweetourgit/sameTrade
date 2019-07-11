@@ -117,7 +117,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-button class="combut" type="primary">添加</el-button>
+      <el-button class="combut" type="primary" @click="adddialog">添加</el-button>
       <div class="block" style="margin-top: 20px;margin-bottom: 20px">
         <el-pagination
                 @size-change="handleSizeChange"
@@ -130,6 +130,68 @@
         </el-pagination>
       </div>
     </div>
+<!--添加账号-->
+    <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="姓名" prop="name" class="inpusty">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone" class="inpusty">
+          <el-input v-model="ruleForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" class="inpusty" >
+          <el-input v-model="ruleForm.mail"></el-input>
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-select v-model="ruleForm.sex" placeholder="请选择性别">
+            <el-option label="男" value="1"></el-option>
+            <el-option label="女" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="微信"  class="inpusty">
+          <el-input v-model="ruleForm.vx"></el-input>
+        </el-form-item>
+        <el-form-item label="qq" class="inpusty" >
+          <el-input v-model="ruleForm.qq"></el-input>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="ruleForm.status" placeholder="请选择状态">
+            <el-option label="正常" value="1"></el-option>
+            <el-option label="停用" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="密码" prop="password" class="inpusty">
+          <el-input v-model="ruleForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="职务" prop="type">
+          <el-checkbox-group v-model="ruleForm.type">
+            <el-checkbox label="管理员" name="type"></el-checkbox>
+            <el-checkbox label="产品负责人" name="type"></el-checkbox>
+            <el-checkbox label="旅游顾问" name="type"></el-checkbox>
+            <el-checkbox label="财务" name="type"></el-checkbox>
+            <el-checkbox style="margin-left: 0px" label="管理人员" name="type"></el-checkbox>
+            <el-checkbox label="销售员" name="type"></el-checkbox>
+            <el-checkbox label="计调员" name="type"></el-checkbox>
+            <el-checkbox label="客服" name="type"></el-checkbox>
+            <el-checkbox style="margin-left: 0px" label="运营人员" name="type"></el-checkbox>
+            <el-checkbox label="组织经理" name="type"></el-checkbox>
+            <el-checkbox label="其他" name="type"></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
 
 
 
@@ -142,7 +204,58 @@
       return {
           input:'',
           currentPage4: 4,
+          dialogVisible:false,
           fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+          ruleForm: {
+              name: '',
+              phone:'',
+              mail:'',
+              sex: '',
+              vx:'',
+              qq:'',
+              status:'',
+              date1: '',
+              date2: '',
+              delivery: false,
+              type: [],
+              resource: '',
+              desc: ''
+          },
+          rules: {
+              name: [
+                  { required: true, message: '请输入姓名', trigger: 'blur' },
+                  { min: 1, max: 40, message: '长度在 1 到 40 个字符', trigger: 'blur' }
+              ],
+              phone: [
+                  { required: true, message: '请输入电话', trigger: 'blur' },
+
+              ],
+              sex: [
+                  { required: true, message: '请选择性别', trigger: 'change' }
+              ],
+              status: [
+                  { required: true, message: '请选择状态', trigger: 'change' }
+              ],
+              password: [
+                  { required: true, message: '请输入密码', trigger: 'blur' },
+                  { min: 6, max: 30, message: '长度在 6 到 30个字符', trigger: 'blur' }
+              ],
+              date1: [
+                  { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+              ],
+              date2: [
+                  { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+              ],
+              type: [
+                  { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+              ],
+              resource: [
+                  { required: true, message: '请选择活动资源', trigger: 'change' }
+              ],
+              desc: [
+                  { required: true, message: '请填写活动形式', trigger: 'blur' }
+              ]
+          },
           tableData: [{
               date: '2016-05-02',
               name: '停用',
@@ -170,6 +283,31 @@
       }
     },
     methods:{
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    alert('submit!');
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
+        adddialog(){
+            this.dialogVisible = true
+        },
+
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                })
+                .catch(_ => {});
+        },
+
         handleRemove(file, fileList) {
             console.log(file, fileList);
         },
@@ -230,6 +368,9 @@
   .combut{
     margin-top: 18px;
     margin-left: 25px;
+  }
+  .inpusty{
+    width: 320px;
   }
 </style>
 
