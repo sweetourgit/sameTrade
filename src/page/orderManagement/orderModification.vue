@@ -78,7 +78,7 @@ export default {
   data() {
     return {
        //备注信息弹窗
-       dialogFormMark:true,     
+       dialogFormMark:false,     
     }
   },
   created(){
