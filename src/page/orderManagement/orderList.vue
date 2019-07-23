@@ -37,7 +37,7 @@
          </el-table-column>
          <el-table-column  label="操作" width="250" align="center">
              <template slot-scope="scope">
-                <span class="cursor blue">详情</span>
+                <span class="cursor blue" @click="operation(scope.row.id,1)">详情</span>
                 <span class="em">|</span>
                 <span class="cursor blue">预定占位</span>
                 <span class="em">|</span>
@@ -48,7 +48,7 @@
          </el-table-column>
      </el-table>
      <!--分页-->
-     <div style="width:1100px;overflow:hidden">
+     <div style="width:1350px;overflow:hidden">
        <el-pagination class="pagination"
           @size-change="handleSizeChange"
           background
@@ -58,14 +58,19 @@
           :page-size="10"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
-        </el-pagination> 
+        </el-pagination>
+        <order-modification :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-modification> 
       </div>
-      <!--列表结束-->
+      <!--列表结束--> 
   </div>
 </template>
 
 <script>
+  import orderModification from './orderModification';
   export default {
+    components:{
+      "order-modification":orderModification,
+    },
     data() {
       return {
         //搜索
@@ -103,9 +108,21 @@
         pageSize: 10, // 设定默认分页每页显示数
         pageIndex: 1, // 设定当前页数
         total: 0,
+        orderId:0,    //组件参数
+        variable:0,   //设置一个变量展示弹窗
+        dialogType:0, //弹窗类型  1：订单详细  2：修改订单
       }
     },
     methods:{
+      operation(orderId,i){
+          this.orderId = orderId;
+          this.variable++;
+          if(i==1){
+            this.dialogType=1; //订单详细弹窗
+          }else if(i==2){
+            this.dialogType=2; //修改订单弹窗
+          }         
+      },
       reset(){
         this.name='';       //产品名称
         this.orderCode='';  //订单ID
