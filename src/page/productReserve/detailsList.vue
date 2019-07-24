@@ -65,23 +65,23 @@
 
 
 .slide {  
-    width: 950px;  
-    height: 150px;  
+    width: 540px;  
+    height: 360px;  
     margin: 0 auto;  
-    margin-top: 50px;  
+    margin-top: 0px;  
     overflow: hidden;  
     position: relative;  
   }  
-  .slideshow {  
-    width: 95px;  
-    height: 150px;  
-  }  
+  /* .slideshow {  
+      width: 95px;  
+      height: 150px;  
+    } */  
   li {  
     position: absolute;  
   }  
   img {  
-    width: 95px;  
-    height: 150px;  
+    width: 540px;  
+    height: 360px;  
   }  
   .bar {  
     position: absolute;  
@@ -92,9 +92,10 @@
     text-align: center;  
   }  
   .bar span {  
-    width: 20px;  
-    height: 5px;  
-    border: 1px solid;  
+    width: 10px;  
+    height: 10px;  
+    border: 1px solid;
+    border-radius: 10px;
     background: white;  
     display: inline-block;  
     margin-right: 10px;  
