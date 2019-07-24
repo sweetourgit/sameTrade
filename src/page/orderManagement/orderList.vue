@@ -39,9 +39,9 @@
              <template slot-scope="scope">
                 <span class="cursor blue" @click="operation(scope.row.id,1)">详情</span>
                 <span class="em">|</span>
-                <span class="cursor blue">预定占位</span>
+                <span class="cursor blue" @click="operation(scope.row.id,2)">预定占位</span>
                 <span class="em">|</span>
-                <span class="cursor red">取消订单</span>
+                <span class="cursor red" @click="cancelOrder(scope.row.id)">取消订单</span>
                 <span class="em">|</span>
                 <span class="cursor blue">备注</span>
              </template> 
@@ -59,17 +59,20 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
-        <order-modification :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-modification> 
+        <order-detail :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-detail>
+        <order-modification :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-modification>  
       </div>
       <!--列表结束--> 
   </div>
 </template>
 
 <script>
+  import orderDetail from './orderDetail';
   import orderModification from './orderModification';
   export default {
     components:{
       "order-modification":orderModification,
+      "order-detail":orderDetail,
     },
     data() {
       return {
@@ -149,6 +152,22 @@
        // this.getPage(val,this.pageSize);
         this.pageIndex=val;
       },
+      cancelOrder(){
+        this.$confirm("是否取消该订单?", "提示",{
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消"
+            })
+          })
+      }
 
 
 
