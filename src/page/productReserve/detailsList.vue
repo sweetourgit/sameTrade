@@ -28,7 +28,7 @@
   export default {
     data() {
       return {
-        bannerList:["/static/image/banner01.jpg","/static/image/banner02.jpg","/static/image/banner01.jpg"],
+        bannerList:["/static/image/banner01.jpg","/static/image/banner02.jpg","/static/image/banner01.jpg" ],
         mark:'',
       }
     },
