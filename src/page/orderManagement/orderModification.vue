@@ -21,7 +21,7 @@
                  <el-input-number v-model="num" @change="handleChange" :min="0" :max="100" size="medium"></el-input-number>
                </div>
                <div class="registration">
-                 <span>成人 ￥16999.00 * 2</span><br/>
+                 <span>儿童 ￥16999.00 * 2</span><br/>
                  <el-input-number v-model="num" @change="handleChange" :min="0" :max="100" size="medium"></el-input-number>
                </div>
                <div class="registration">
@@ -30,11 +30,40 @@
              </el-form-item>
              <el-form-item label="其他费用">
                <br/>
-               <el-input v-model="input" placeholder="请输入金额" class="input"></el-input>
-               <el-input v-model="input" placeholder="请输入摘要" class="input"></el-input>
+               <el-input v-model="ruleForm.otherCost" placeholder="请输入金额" class="input"></el-input>
+               <el-input v-model="ruleForm.otherCostRemark" placeholder="请输入摘要" class="input"></el-input>
              </el-form-item>
-
-
+             <div class="price">
+               <p class="totle">总价：￥32980.00</p>
+               <p class="surplus">剩余额度：￥400,000.00</p>
+             </div>
+             <hr/>
+             <el-form-item label="订单联系人" class="contact" prop="name">
+               <br/>
+               <el-input v-model="input" placeholder="请输入" class="input"></el-input>
+             </el-form-item>
+             <el-form-item label="联系电话" class="contact" prop="phone">
+               <br/>
+               <el-input v-model="input" placeholder="请输入" class="input"></el-input>
+             </el-form-item>
+             <hr/> 
+             <table cellpadding="5" cellspacing="0" width="100%" class="tour-list">
+               <tr bgcolor="#f7f7f7">
+                 <td width="100">姓名</td>
+                 <td width="160">报名类型</td>
+                 <td width="160">电话</td>
+                 <td>身份证</td>
+                 <td width="100">性别</td>
+               </tr>
+               <tr>
+                 <td><el-input v-model="input"></el-input></td>
+                 <td><el-input v-model="input"></el-input></td>
+                 <td><el-input v-model="input"></el-input></td>
+                 <td><el-input v-model="input"></el-input></td>
+                 <td><el-input v-model="input"></el-input></td>
+               </tr>
+             </table>
+             <hr/>
              <el-form-item class="button">
                 <el-button>取 消</el-button>
                 <el-button>保存更改</el-button>
@@ -63,13 +92,20 @@ export default {
       dialogFormMark:true,
       num:0,
       ruleForm:{
-        
-
+        otherCost:"1000",
+        otherCostRemark:'123'
+       
       },
       rules:{
         nums: [
           { required: true, message: '', trigger: 'blur' },
         ],
+        name: [
+          { required: true, message: '联系人不能为空', trigger: 'blur' },
+        ],
+        phone: [
+          { required: true, message: '联系电话不能为空', trigger: 'blur' },
+        ]
       }
     }
   },
@@ -97,8 +133,17 @@ export default {
    .line2{background-color: #eee}
    .sta-title{font-size: 16px}
    .confirm-time{position: absolute;top:30px;left:394px}
-   .button{margin: 10px;text-align: right}
-   .registration{float: left;margin:-10px 25px 10px 10px;text-align: center}
+   .button{margin:20px 0 0 10px;text-align: right}
+   .registration{float: left;margin:-5px 25px 20px 10px;text-align: center}
    .el-input-number--medium{width: 150px}
    .input{width: 200px;margin-right: 10px}
+   .price{margin-top:-40px;text-align: right;}
+   .price p{margin:8px 0}
+   .totle{font-size: 17px;font-weight: bold;}
+   .surplus{font-size: 12px;}
+   hr{background-color: #eee;height: 1px;border:0;clear: both}
+   .contact{float: left;margin:35px 50px 30px 0}
+   .contact .el-input{width: 300px}
+   .tour-list{margin: 35px 0;line-height: 35px;border-top:1px solid #eee;border-left:1px solid #eee;text-align: center;}
+   .tour-list td{border-right:1px solid #eee;border-bottom:1px solid #eee;}
 </style>

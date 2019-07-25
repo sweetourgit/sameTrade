@@ -12,16 +12,16 @@
                   <td>24093932018091010185273</td>
               </tr>
               <tr>
-                  <td>产品ID：</td>
+                  <td>团期计划：</td>
                   <td>24093932018091010185273</td>
-              </tr>
-              <tr>
-                  <td>团期ID：</td>
-                  <td>24093932018091010185273</td>
-              </tr>
+              </tr> 
               <tr>
                   <td>下单时间：</td>
                   <td>2018/09/10 13:37</td>
+              </tr>
+              <tr>
+                  <td>出发日期：</td>
+                  <td>2018/09/21</td>
               </tr>
               <tr>
                   <td>订单状态：</td>
@@ -30,6 +30,14 @@
               <tr>
                   <td>套餐名称：</td>
                   <td>君澜日式豪华房 含早餐 双人不限次温泉门票</td>
+              </tr>
+              <tr>
+                  <td>出发地：</td>
+                  <td>沈阳</td>
+              </tr>
+              <tr>
+                  <td>目的地：</td>
+                  <td>沈阳</td>
               </tr>
               <tr>
                   <td>操作人：</td>
@@ -48,7 +56,7 @@
                   <td>13852632541</td>
               </tr>
               <tr>
-                  <td>单价：</td>
+                  <td>数量：</td>
                   <td>成人 3000.00 * 2 儿童 3000.00*1</td>
               </tr>
               <tr>
@@ -56,12 +64,16 @@
                   <td>签证费 6000.00</td>
               </tr>
               <tr>
-                  <td>应付：</td>
+                  <td>订单总额：</td>
                   <td>15000.00</td>
               </tr>
               <tr>
-                  <td>已付：</td>
+                  <td>欠款金额：</td>
                   <td>0.00</td>
+              </tr>
+              <tr>
+                  <td>还款日期：</td>
+                  <td>2018/10/20</td>
               </tr>
           </table>
           <el-table :data="tourList" ref="multipleTable" class="table" :header-cell-style="getRowClass" border :cell-style="getCellClass">     

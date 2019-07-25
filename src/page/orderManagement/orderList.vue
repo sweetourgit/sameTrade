@@ -5,7 +5,7 @@
       <el-input v-model="name" class="input"></el-input>
       <span class="search-title">订单ID：</span>
       <el-input v-model="orderCode" class="input"></el-input>
-      <span class="search-title">出发日期：</span>
+      <span class="search-title">下单日期：</span>
       <el-date-picker v-model="beginDate" type="date" placeholder="开始天数" class="start-time"></el-date-picker>
          <div class="date-line"></div>
       <el-date-picker v-model="endDate" type="date" placeholder="结束天数" class="start-time"></el-date-picker></br>
@@ -19,7 +19,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick" class="el-tab">
         <el-tab-pane v-for="item in elTabs" :label="item.lable" :name="item.name" :key="item.name">
            
-        </el-tab-pane>
+        </el-tab-pane> 
       </el-tabs>
       <el-table :data="orderList" ref="multipleTable" class="table" :header-cell-style="getRowClass" border>
          <el-table-column  prop="id" label="ID" width="80" align="center"></el-table-column>
