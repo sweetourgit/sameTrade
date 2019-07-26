@@ -40,11 +40,11 @@
              <hr/>
              <el-form-item label="订单联系人" class="contact" prop="name">
                <br/>
-               <el-input v-model="input" placeholder="请输入" class="input"></el-input>
+               <el-input v-model="ruleForm.name" placeholder="请输入" class="input"></el-input>
              </el-form-item>
              <el-form-item label="联系电话" class="contact" prop="phone">
                <br/>
-               <el-input v-model="input" placeholder="请输入" class="input"></el-input>
+               <el-input v-model="ruleForm.phone" placeholder="请输入" class="input"></el-input>
              </el-form-item>
              <hr/> 
              <table cellpadding="5" cellspacing="0" width="100%" class="tour-list">
@@ -56,11 +56,11 @@
                  <td width="100">性别</td>
                </tr>
                <tr>
-                 <td><el-input v-model="input"></el-input></td>
-                 <td><el-input v-model="input"></el-input></td>
-                 <td><el-input v-model="input"></el-input></td>
-                 <td><el-input v-model="input"></el-input></td>
-                 <td><el-input v-model="input"></el-input></td>
+                 <td><el-input></el-input></td>
+                 <td><el-input></el-input></td>
+                 <td><el-input></el-input></td>
+                 <td><el-input></el-input></td>
+                 <td><el-input></el-input></td>
                </tr>
              </table>
              <hr/>
@@ -89,11 +89,13 @@ export default {
   data() {
     return {
       //弹窗
-      dialogFormMark:true,
+      dialogFormMark:false,
       num:0,
       ruleForm:{
         otherCost:"1000",
-        otherCostRemark:'123'
+        otherCostRemark:'123',
+        name:'',
+        phone:'',
        
       },
       rules:{

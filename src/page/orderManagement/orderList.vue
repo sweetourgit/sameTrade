@@ -43,7 +43,7 @@
                 <span class="em">|</span>
                 <span class="cursor red" @click="cancelOrder(scope.row.id)">取消订单</span>
                 <span class="em">|</span>
-                <span class="cursor blue">备注</span>
+                <span class="cursor blue" @click="operation(scope.row.id,3)">备注</span>
              </template> 
          </el-table-column>
      </el-table>
@@ -61,6 +61,7 @@
         </el-pagination>
         <order-detail :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-detail>
         <order-modification :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-modification>  
+        <order-remarks :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-remarks>  
       </div>
       <!--列表结束--> 
   </div>
@@ -69,10 +70,12 @@
 <script>
   import orderDetail from './orderDetail';
   import orderModification from './orderModification';
+  import orderRemarks from './orderRemarks';
   export default {
     components:{
       "order-modification":orderModification,
       "order-detail":orderDetail,
+      "order-remarks":orderRemarks,
     },
     data() {
       return {
@@ -120,11 +123,7 @@
       operation(orderId,i){
           this.orderId = orderId;
           this.variable++;
-          if(i==1){
-            this.dialogType=1; //订单详细弹窗
-          }else if(i==2){
-            this.dialogType=2; //修改订单弹窗
-          }         
+          this.dialogType=i;        
       },
       reset(){
         this.name='';       //产品名称
