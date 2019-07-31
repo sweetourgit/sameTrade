@@ -18,11 +18,13 @@
              <el-form-item>
                <div class="registration">
                  <span>成人 ￥16999.00 * 2</span><br/>
-                 <el-input-number v-model="num" @change="handleChange" :min="0" :max="100" size="medium"></el-input-number>
+                 <el-input-number v-model="num" @change="handleChange" :min="0" :max="100" size="medium"></el-input-number><br/>
+                 <span>余位 9</span>
                </div>
                <div class="registration">
                  <span>儿童 ￥16999.00 * 2</span><br/>
-                 <el-input-number v-model="num" @change="handleChange" :min="0" :max="100" size="medium"></el-input-number>
+                 <el-input-number v-model="num" @change="handleChange" :min="0" :max="100" size="medium"></el-input-number><br/>
+                 <span>余位 9</span>
                </div>
                <div class="registration">
                  <span>单房差 ￥999.00 * 0</span><br/>
