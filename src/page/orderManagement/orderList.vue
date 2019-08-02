@@ -5,7 +5,7 @@
       <el-input v-model="name" class="input"></el-input>
       <span class="search-title">订单ID：</span>
       <el-input v-model="orderCode" class="input"></el-input>
-      <span class="search-title">出发日期：</span>
+      <span class="search-title">下单日期：</span>
       <el-date-picker v-model="beginDate" type="date" placeholder="开始天数" class="start-time"></el-date-picker>
          <div class="date-line"></div>
       <el-date-picker v-model="endDate" type="date" placeholder="结束天数" class="start-time"></el-date-picker></br>
@@ -19,7 +19,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick" class="el-tab">
         <el-tab-pane v-for="item in elTabs" :label="item.lable" :name="item.name" :key="item.name">
            
-        </el-tab-pane>
+        </el-tab-pane> 
       </el-tabs>
       <el-table :data="orderList" ref="multipleTable" class="table" :header-cell-style="getRowClass" border>
          <el-table-column  prop="id" label="ID" width="80" align="center"></el-table-column>
@@ -39,11 +39,11 @@
              <template slot-scope="scope">
                 <span class="cursor blue" @click="operation(scope.row.id,1)">详情</span>
                 <span class="em">|</span>
-                <span class="cursor blue">预定占位</span>
+                <span class="cursor blue" @click="operation(scope.row.id,2)">预定占位</span>
                 <span class="em">|</span>
-                <span class="cursor red">取消订单</span>
+                <span class="cursor red" @click="cancelOrder(scope.row.id)">取消订单</span>
                 <span class="em">|</span>
-                <span class="cursor blue">备注</span>
+                <span class="cursor blue" @click="operation(scope.row.id,3)">备注</span>
              </template> 
          </el-table-column>
      </el-table>
@@ -59,17 +59,23 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
-        <order-modification :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-modification> 
+        <order-detail :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-detail>
+        <order-modification :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-modification>  
+        <order-remarks :orderId="orderId" :variable="variable" :dialogType="dialogType"></order-remarks>  
       </div>
       <!--列表结束--> 
   </div>
 </template>
 
 <script>
+  import orderDetail from './orderDetail';
   import orderModification from './orderModification';
+  import orderRemarks from './orderRemarks';
   export default {
     components:{
       "order-modification":orderModification,
+      "order-detail":orderDetail,
+      "order-remarks":orderRemarks,
     },
     data() {
       return {
@@ -117,11 +123,7 @@
       operation(orderId,i){
           this.orderId = orderId;
           this.variable++;
-          if(i==1){
-            this.dialogType=1; //订单详细弹窗
-          }else if(i==2){
-            this.dialogType=2; //修改订单弹窗
-          }         
+          this.dialogType=i;        
       },
       reset(){
         this.name='';       //产品名称
@@ -149,6 +151,22 @@
        // this.getPage(val,this.pageSize);
         this.pageIndex=val;
       },
+      cancelOrder(){
+        this.$confirm("是否取消该订单?", "提示",{
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消"
+            })
+          })
+      }
 
 
 
