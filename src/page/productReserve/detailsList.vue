@@ -12,14 +12,11 @@
           </el-carousel-item>
         </el-carousel>
         <div class="w570">
-          <ul class="mouth">
-            <li class="mouth_fl" @click="pickPre(currentYear,currentMonth)"><</li>
-            <li class="mouth_date">{{currentYear}}-{{currentMonth}}月</li>
-            <li class="mouth_date">{{currentYear}}-{{currentMonth}}月</li>
-            <li class="mouth_date">{{currentYear}}-{{currentMonth}}月</li>
-            <li class="mouth_date">{{currentYear}}-{{currentMonth}}月</li>
-            <li class="mouth_fr" @click="pickNext(currentYear,currentMonth)">></li>
+          <ul class="mouth" id="month">
+            <li v-for="(item,index) in calendarDate" v-bind:class="{current: currentIndex==index}" class="mouth_date" @click="pickNav('nav',item.Year,item.Month,index)">{{item.Year}}年{{item.Month}}月</li>
           </ul>
+          <div class="mouth_fl" @click="pickNav('pre')"><</div>
+          <div class="mouth_fr" @click="pickNav('next')">></div>
           <ul class="week">
             <li>日</li>
             <li>一</li>
@@ -30,10 +27,18 @@
             <li>六</li>
           </ul>
           <ul class="days">
-            <li v-for="item in calendarList">
-              <div class="tc">{{item.date}}</div>
-              <div>{{item.price}}</div>
-              <div>{{item.type}}</div>
+            <!--显示日期-->
+            <li v-for="(item,index) in arrDay" v-bind:class="{active:chooseDate==currentYear+'-'+currentMonth+'-'+item}">             
+              <div class="tc">{{item}}</div>
+              <!--判断是否是当前年和月份-->
+              <div v-for="date in calendarDate" v-if="date.Year==currentYear||date.Month==currentMonth">
+                <!--判断当前日期是否有计划，有则显示-->
+                <div v-for="day in date.list" v-bind:class="{price_color:day.surplus==0}" v-if="day.DepartureDate==currentYear+'-'+currentMonth+'-'+item" @click="chooseDateMes(day.DepartureDate,day.surplus,day.ID)">
+                  <div>{{day.CKPrice}}</div>
+                  <div v-if="day.surplus==0">已售罄</div>
+                  <div v-else>余位{{day.surplus}}</div>
+                </div>
+              </div>
             </li>
           </ul>
         </div>
@@ -395,50 +400,160 @@
         adult: 0,//成人计数器
         children:0,//儿童计数器
         tabPosition:'left',
-        calendarList:[{
-          date:'1',
-          price:'16900.00',
-          type:'已售罄'
-        },{
-          date:'2',
-          price:'16900.00',
-          type:'已售罄'
+        //日历
+        calendarDate:[{
+          Month:'08',
+          Year:'2019',
+          list:[{
+            CKPrice:'8999.00',
+            DepartureDate:"2019-08-10",
+            ID:1,
+            surplus:4
+          },{
+            CKPrice:'8999.00',
+            DepartureDate:"2019-08-18",
+            ID:2,
+            surplus:4
+          },
+          {
+            CKPrice:'9299.00',
+            DepartureDate:"2019-08-22",
+            ID:3,
+            surplus:0
+          }]
+        },
+        {
+          Month:'09',
+          Year:'2019',
+          list:[{
+            CKPrice:'8999.00',
+            DepartureDate:"2019-09-18",
+            ID:1,
+            surplus:4
+          },
+          {
+            CKPrice:'9299.00',
+            DepartureDate:"2019-09-22",
+            ID:2,
+            surplus:0
+          }]
+        },
+        {
+          Month:'10',
+          Year:'2019',
+          list:[{
+            CKPrice:'8999.00',
+            DepartureDate:"2019-10-18",
+            ID:1,
+            surplus:4
+          }]
+        },
+        {
+          Month:'11',
+          Year:'2019',
+          list:[{
+            CKPrice:'8999.00',
+            DepartureDate:"2019-11-18",
+            ID:1,
+            surplus:4
+          }]
         }],
-        currentYear: 1970, // 当前月的年份
-        currentMonth: 1,
+        currentYear: 0, // 当前月的年份
+        currentMonth: 0,// 当前月的月份
+        arrDay:[], //日历日期
+        currentIndex:0,//当前选中月份索引
+        chooseDate:0,//选中团期
+        ulLeft:0,
       }
     },
     methods:{
-      pickPre(year, month) {
-        if (
-          this.today.getMonth() + 1 < this.currentMonth ||
-          this.today.getFullYear() < this.currentYear
-        ) {
-          this.clearchecked();
-          var d = new Date(this.formatDate(year, month, 1));
-          d.setDate(0);
-          this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
-          this.calendarList(this.ccc[0]);
-          this.n = [];
-        } else {
-          this.$message({
-            message: '不能选择以前的',
-            type: 'warning'
-          });
+      //日历导航切换
+      pickNav(type,year,month,index){
+        //向前翻页
+        if(type == "pre"){
+          if(this.currentIndex>0){
+            this.currentIndex--;
+            this.sider("pre");
+          }        
+        }
+        //向后翻页
+        if(type == "next"){
+          if(this.currentIndex<this.calendarDate.length-1){
+            this.currentIndex++; 
+            this.sider("next");
+          }
+        }
+        //点击导航
+        if(type == "nav"){
+          this.currentIndex=index;
+        }
+        this.currentYear=this.calendarDate[this.currentIndex].Year;
+        this.currentMonth=this.calendarDate[this.currentIndex].Month;
+        this.initCalendarTbody();
+      },
+      sider(type){  //滑动效果
+        var _this = this;
+        //target定义的滑动终点的left值
+        var target; 
+        if(type=="next"){
+          target = this.ulLeft == 0?-130:Number(this.ulLeft.slice(0,-2))-130;
+        }else{
+          target = this.ulLeft == 0?130:Number(this.ulLeft.slice(0,-2))+130;
+        }    
+
+        var oDiv = document.getElementById("month");
+        if(this.calendarDate.length>4){
+           var timer = setInterval(sider,'10');
+        }
+        //滑动方法
+        function sider(){
+          var left = _this.ulLeft;
+          left = left == 0?0:left.slice(0,-2);
+          left=Number(left);       
+          //左右翻页判断
+          if(type=="next"){
+            if(left>target){
+             left-=5;
+            }else{
+               clearInterval(timer);//如果到终点就把定时器关掉
+            }
+          }else{
+            if(left<target){
+             left+=5;
+            }else{
+               clearInterval(timer);
+            }
+          }
+          _this.ulLeft=oDiv.style.left=left+'px';
         }
       },
-      // 点击下个月
-      pickNext(year, month) {
-        this.clearchecked();
-        var d = new Date(this.formatDate(year, month, 1));
-        d.setDate(35);
-        this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
-        this.calendarList(this.ccc[0]);
-        this.n = [];
+      //生成日历
+      initCalendarTbody(){
+        //默认选中数据第一个月份
+        if(this.currentYear==0){
+          this.currentYear=this.calendarDate[0].Year;
+          this.currentMonth=this.calendarDate[0].Month;
+        }
+        //贮存每一天
+        for (var i = 0; i < 42; i++) {
+            this.arrDay[i] = "";
+        }
+        //循环团期的每一天，没有团期时为当前月份
+        for (var i = 0; i < new Date(this.currentYear, this.currentMonth, 0).getDate(); i++) {
+            this.arrDay[i + new Date(this.currentYear, this.currentMonth - 1, 1).getDay()] = i + 1;  //判断1号是星期几确定日期从第几个表格开始显示
+        }
       },
-
+      //选择团期
+      chooseDateMes(dep,surplus,id){  //dep：计划日期,surplus：选中日期余位，id：团期计划id
+         if(surplus!=0){
+           this.chooseDate=dep;
+           //通过id调用套餐等方法预留
+           console.log(id);
+         }
+      }
     },
-    created () {  
+    created(){  
+      this.initCalendarTbody();
     } 
   }
 
@@ -453,13 +568,15 @@
 .picture{width: 570px; float: left;}
 .banner{width: 570px; height: 380px;}
 .mt20{margin: 20px 0 0 0;}
-.w570{width: 570px; overflow: hidden;}
-.mouth{list-style-type: none; width: 570px; margin: 20px 0 0 -40px;}
+.w570{width: 570px; overflow: hidden;position: relative;}
+.mouth{list-style-type: none;padding:0;margin-left: 25px;margin-top: 30px;display:flex;width:100%;position: absolute;left:0;}
 ul{list-style-type: none;}
-.mouth_fl{float: left; font-size: 16px;font-weight:bold;}
-.mouth_fr{float: right; font-size: 16px;font-weight:bold;}
-.mouth_date{float: left;width: 135px; text-align: center;}
-.week{ width: 570px; height: 30px; line-height: 30px; background: #f6f6f6; overflow: hidden;margin:50px 0 0 -40px;}
+.mouth_fl{position: absolute;left:0;top:30px;font-size: 16px;font-weight:bold;}
+.mouth_fr{position: absolute;right:0;top:30px;font-size: 16px;font-weight:bold;}
+
+.mouth_date{float: left;width: 130px;text-align: center;flex-shrink:0;}
+
+.week{ width: 570px; height: 30px; line-height: 30px; background: #f6f6f6; overflow: hidden;margin:65px 0 0 -40px;}
 .week li{width: 80px; float: left; text-align: center;}
 .days{width:570px;margin:10px 0 0 -40px;}
 .days li{width: 80px; height: 80px;line-height: 25px; float: left;}
@@ -514,9 +631,10 @@ ul{list-style-type: none;}
 .schedule ul{ margin: 0 0 0 -40px;list-style:decimal none outside;}
 .schedule ul li{display:list-item;text-align:-webkit-match-parent;}
 .cost_01{margin: 0 0 0 134px;}
-
-
-
+/*日历*/
+.current{color: #2e94f9}
+.price_color{color:#b5b5b6;}
+.active{border:1px solid #2e94f9;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;}
       
 
   
