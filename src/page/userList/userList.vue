@@ -6,11 +6,11 @@
         公司信息
       </div>
       <div class="comContent">
-        <span style="margin-left: 10px">名称：</span> <span style="margin-left: 10px">丹东康辉国际旅行社有限公司</span>
-        <span style="margin-left: 100px">类型：</span><span style="margin-left: 10px">同业社</span>
-        <span style="margin-left: 100px">到期时间：</span><span style="margin-left: 10px">2019年10月7日</span>
+        <span style="margin-left: 10px">名称：</span> <span style="margin-left: 10px">{{company_name}}</span>
+        <span style="margin-left: 100px">类型：</span><span style="margin-left: 10px">{{company_type}}</span>
+        <span style="margin-left: 100px">到期时间：</span><span style="margin-left: 10px">{{company_time}}</span>
         <div class="comContent">
-          <span style="margin-left: 10px">剩余额度：</span> <span style="margin-left: 10px">400,00.00</span>
+          <span style="margin-left: 10px">剩余额度：</span> <span style="margin-left: 10px">{{company_quota}}</span>
         </div>
       </div>
     </div>
@@ -25,8 +25,8 @@
         <span style="margin-left: 345px">公司LOGO</span>
       </div>
       <div class="comContent" style="border-bottom: #E8E8E8 1px solid;padding-bottom:18px">
-        <el-input v-model="input" placeholder="请输入内容" style="width: 250px;margin-left: 10px"></el-input>
-        <el-input v-model="input" placeholder="请输入内容"  style="width: 250px; margin-left: 105px"></el-input>
+        <el-input v-model="linker" placeholder="请输入内容" style="width: 250px;margin-left: 10px"></el-input>
+        <el-input v-model="phone" placeholder="请输入内容"  style="width: 250px; margin-left: 105px"></el-input>
         <el-upload
                 style="width: 696px;float: right;margin-right: 45px;margin-top: 4px"
                 class="upload-demo"
@@ -48,11 +48,11 @@
         <span style="margin-left: 345px">对公账号</span>
       </div>
       <div class="comContent">
-        <el-input v-model="input" placeholder="请输入内容" style="width: 250px;margin-left: 10px"></el-input>
-        <el-input v-model="input" placeholder="请输入内容"  style="width: 250px; margin-left: 105px"></el-input>
-        <el-input v-model="input" placeholder="请输入内容"  style="width: 250px; margin-left: 132px"></el-input>
+        <el-input v-model="publicName" placeholder="请输入内容" style="width: 250px;margin-left: 10px"></el-input>
+        <el-input v-model="bankName" placeholder="请输入内容"  style="width: 250px; margin-left: 105px"></el-input>
+        <el-input v-model="bankcardNo" placeholder="请输入内容"  style="width: 250px; margin-left: 132px"></el-input>
       </div>
-      <el-button class="combut" type="primary">保存</el-button>
+      <el-button class="combut" type="primary" @click="update_company(id)">保存</el-button>
     </div>
     <!--表格-->
     <div class="cominfo1" style="margin-top: 20px;margin-bottom: 50px">
@@ -65,7 +65,7 @@
                 border
                 style="width: 100%">
           <el-table-column
-                  prop="date"
+                  prop="name"
                   label="名称"
                   width="180">
           </el-table-column>
@@ -74,59 +74,75 @@
                   label="状态"
                   width="180">
             <template slot-scope="scope">
-              <template v-if="scope.row.name == '停用'">
-                <div style="color: red" >{{scope.row.name}}</div>
+              <template v-if="scope.row.state == 3">
+                <div style="color: red" >停用</div>
               </template>
               <template v-else>
-                <div>{{scope.row.name}}</div>
+                <div>正常</div>
               </template>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="address"
+                  prop="phone"
                   label="手机">
           </el-table-column>
           <el-table-column
-                  prop="address"
+                  prop="email"
                   label="邮箱">
           </el-table-column>
           <el-table-column
-                  prop="address"
+                  prop="sex"
                   label="性别">
+            <template slot-scope="scope">
+              <template v-if="scope.row.sex == 1">
+                <div >男</div>
+              </template>
+              <template v-else>
+                <div>女</div>
+              </template>
+            </template>
           </el-table-column>
           <el-table-column
-                  prop="address"
+                  prop="wx"
                   label="微信号">
           </el-table-column>
           <el-table-column
-                  prop="address"
+                  prop="qq"
                   label="qq">
           </el-table-column>
           <el-table-column
-                  prop="address"
+                  prop="peerUserType"
                   label="职务">
+            <template slot-scope="scope">
+              <template v-if="scope.row.peerUserType == 1">
+                <div >管理员</div>
+              </template>
+              <template v-else>
+                <div>销售人员</div>
+              </template>
+            </template>
           </el-table-column>
           <el-table-column
                   prop="qq"
                   label="操作">
             <template slot-scope="scope">
               <template>
-                <a style="color: #6AABFB">更改</a>
+                <a @click="adddialog(scope.row.id)" style="color: #6AABFB">更改</a>
               </template>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <el-button class="combut" type="primary" @click="adddialog">添加</el-button>
+      <el-button class="combut" type="primary" @click="adddialog(0)">添加</el-button>
       <div class="block" style="margin-top: 20px;margin-bottom: 20px">
         <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage4"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :current-page.sync="currentPage4"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size=pagesize
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total=total>
         </el-pagination>
       </div>
     </div>
@@ -160,8 +176,8 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="ruleForm.status" placeholder="请选择状态">
-            <el-option label="正常" value="1"></el-option>
-            <el-option label="停用" value="2"></el-option>
+            <el-option label="正常" value="2"></el-option>
+            <el-option label="停用" value="3"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="密码" prop="password" class="inpusty">
@@ -183,14 +199,15 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button  v-if="gid == 0" type="primary" @click="submitForm('ruleForm')">创建</el-button>
+          <el-button v-else type="primary" @click="submitForm('ruleForm')">修改</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+      <!--<span slot="footer" class="dialog-footer">
+        <el-button @click="submitForm('ruleForm')">取 消</el-button>
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
+      </span>-->
     </el-dialog>
 
 
@@ -202,10 +219,13 @@
   export default {
     data() {
       return {
-          input:'',
-          currentPage4: 4,
+          id:1,
+          total:0,
+          pagesize:10,
+          currentPage4: 1,
+          gid:0,
           dialogVisible:false,
-          fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+          fileList: [],
           ruleForm: {
               name: '',
               phone:'',
@@ -214,6 +234,7 @@
               vx:'',
               qq:'',
               status:'',
+              password:'',
               date1: '',
               date2: '',
               delivery: false,
@@ -256,37 +277,58 @@
                   { required: true, message: '请填写活动形式', trigger: 'blur' }
               ]
           },
-          tableData: [{
-              date: '2016-05-02',
-              name: '停用',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              qq: '',
-
-          },{
-              date: '2016-05-02',
-              name: '正常',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-              address: '上海市普陀区金沙江路 1518 弄',
-          }]
+          tableData: [],
+          company_name:"",
+          company_type:"",
+          company_time:"",
+          company_quota:"",
+          linker:'',
+          phone:'',
+          publicName:'',
+          bankName:'',
+          bankcardNo:'',
 
 
       }
     },
     methods:{
         submitForm(formName) {
+            console.log(this.ruleForm.type[0])
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    var new_type = '';
+                    if(this.ruleForm.type[0] == "管理员"){
+                        new_type = 1;
+                    }else{
+                        new_type = 2;
+                    }
+                    var that = this
+                    this.$http.post(
+                        this.GLOBAL.serverSrc + "/universal/localcomp/api/PeerUserinsert",
+                        {
+                            "object": {
+                                "id": 0,
+                                "isDeleted": 0,
+                                "name": that.ruleForm.name,
+                                "phone": that.ruleForm.phone,
+                                "email": that.ruleForm.mail,
+                                "sex": that.ruleForm.sex,
+                                "wx": that.ruleForm.vx,
+                                "qq": that.ruleForm.qq,
+                                "state": that.ruleForm.status,
+                                "passWord": that.ruleForm.password,
+                                "peerUserType":new_type,
+                                "createTime": 0,
+                                "localCompID": that.id,
+                            }
+                        }
+                    )
+                        .then(function (obj) {
+                            console.log(obj)
+                        })
+                        .catch(function (obj) {
+                        })
+
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -296,18 +338,25 @@
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
-        adddialog(){
+        adddialog(id){
+         if(id == 0){
+                this.gid = 0
+            }else{
+                this.gid = id
+                this.one_info(id)
+
+            }
+
             this.dialogVisible = true
         },
-
         handleClose(done) {
             this.$confirm('确认关闭？')
                 .then(_ => {
+                    this.gid = 0
                     done();
                 })
                 .catch(_ => {});
         },
-
         handleRemove(file, fileList) {
             console.log(file, fileList);
         },
@@ -321,13 +370,115 @@
             return this.$confirm(`确定移除 ${ file.name }？`);
         },
         handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
+            this.accout_list(this.id,0,val)
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+            this.accout_list(this.id,val,this.pagesize)
+        },
+        //获取公司信息
+        companyinfo(id){
+            var list = []
+            var that = this
+            this.$http.post(
+                this.GLOBAL.serverSrc + "/universal/localcomp/api/get",
+                {
+                    "id": id
+                },
+            )
+                .then(function (obj) {
+                    that.company_name = obj.data.object.name;
+                    if(obj.data.object.localCompType == 1){
+                        that.company_type = "同业社";
+                    }
+                    that.company_time = obj.data.object.expTime
+                    that.company_quota = obj.data.object.quota
+                    that.linker = obj.data.object.linker
+                    that.phone = obj.data.object.phone
+                    list.url = obj.data.object.imgUrl
+                    list.name = "公司logo"
+                    that.fileList.push(list)
+                    that.publicName = obj.data.object.publicName
+                    that.bankName = obj.data.object.bankName
+                    that.bankcardNo = obj.data.object.bankcardNo
+
+                })
+                .catch(function (obj) {
+                })
+        },
+        //更改公司信息
+        update_company(id){
+            var that = this
+            this.$http.post(
+                this.GLOBAL.serverSrc + "/universal/localcomp/api/save",
+                {
+                    "object": {
+                        "id": id,
+                        "name": that.company_name,
+                        "localCompType": 1,
+                        "expTime": that.company_time,
+                        "quota":that.company_quota ,
+                        "linker": that.linker,
+                        "phone":  that.phone,
+                        "publicName": that.publicName,
+                        "bankName": that.bankName,
+                        "bankcardNo": that.bankcardNo,
+                        "imgUrl": that.fileList[0].url
+                    }
+                }
+            )
+                .then(function (obj) {
+                })
+                .catch(function (obj) {
+                })
+        },
+        //同业账户列表
+        accout_list(id,index,size){
+            var that = this
+            this.$http.post(
+                this.GLOBAL.serverSrc + "/universal/localcomp/api/PeerUserPage",
+                {
+                    "pageIndex": index?index:0,
+                    "pageSize": size?size:that.pagesize,
+                    "total": 0,
+                    "object": {
+                        "peerUserType": 0,
+                        "localCompID": that.id,
+
+                    }
+                }
+            )
+                .then(function (obj) {
+                    that.tableData = obj.data.objects
+                    that.total = obj.data.total
+
+                })
+                .catch(function (obj) {
+                })
+        },
+        //获取一个用户
+        one_info(id){
+            var that = this
+            this.$http.post(
+                this.GLOBAL.serverSrc + "/universal/localcomp/api/PeerUserGetSingle",
+                {
+                    "id": id
+                }
+            )
+                .then(function (obj) {
+                  console.log(obj.data.object)
+                    that.ruleForm.name = obj.data.object.name
+                    that.ruleForm.phone = obj.data.object.phone
+                })
+                .catch(function (obj) {
+                })
         }
 
-    }
+    },
+      created(){
+          this.companyinfo(this.id);
+          this.accout_list(this.id);
+      }
   }
 
 
