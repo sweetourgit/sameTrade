@@ -40,7 +40,9 @@
       <el-table-column prop="dates" label="最早出发日期" width="120" align="center"></el-table-column>
       <el-table-column label="操作" width="120" align="center">
         <template slot-scope="scope">
-          <el-button @click="checkIncome(scope.row)" type="text" size="small" class="table_details">预订</el-button>
+          <el-button @click="checkIncome(scope.row.id)" type="text" size="small" class="table_details">详情</el-button>
+          <span class="em">|</span>
+          <el-button @click="checkIncome1(scope.row.id)" type="text" size="small" class="table_details">预订</el-button>
         </template>
       </el-table-column>
     </el-table>
