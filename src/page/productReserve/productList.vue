@@ -31,13 +31,13 @@
     </div>
     <!--表格-->
     <el-table :data="tableData"  class="labelTable" ref="multipleTable" :header-cell-style="getRowClass" border>
-      <el-table-column prop="ID" label="ID" width="80" align="center"></el-table-column>
+      <el-table-column prop="id" label="ID" width="80" align="center"></el-table-column>
       <el-table-column prop="name" label="产品名称" width="249" align="center"></el-table-column>
-      <el-table-column prop="type" label="类型" width="150" align="center"></el-table-column>
-      <el-table-column prop="place" label="出发地/目的地" width="180" align="center"></el-table-column>
-      <el-table-column prop="price" label="价格" width="120" align="center"></el-table-column>
+      <el-table-column prop="productType" label="类型" width="150" align="center"></el-table-column>
+      <el-table-column prop="destinationID" label="出发地/目的地" width="180" align="center"></el-table-column>
+      <el-table-column prop="payable" label="价格" width="120" align="center"></el-table-column>
       <el-table-column prop="days" label="天数" width="80" align="center"></el-table-column>
-      <el-table-column prop="dates" label="最早出发日期" width="120" align="center"></el-table-column>
+      <el-table-column prop="beginDate" label="最早出发日期" width="120" align="center"></el-table-column>
       <el-table-column label="操作" width="120" align="center">
         <template slot-scope="scope">
           <el-button @click="checkIncome(scope.row.id)" type="text" size="small" class="table_details">详情</el-button>
@@ -47,8 +47,9 @@
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-pagination class="pageList" :page-sizes="[10,1,30,50]" background @size-change="handleSizeChange" :page-size="pagesize" :current-page.sync="currentPage" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
-    
+    <el-pagination class="pageList" :page-sizes="[10,20,30,50]" background @size-change="handleSizeChange" :page-size="pagesize" :current-page.sync="currentPage" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
+
+
 
   </div>
 </template>
@@ -76,23 +77,7 @@
           label: '邮轮游'
         }],
         customerPrice:false,
-        tableData:[{
-          ID:'1',
-          name:'【惠游广西】跟团游',
-          type:'跟团游',
-          place:'沈阳/广西',
-          price:'9999',
-          days:'5',
-          dates:'2018-07-16'
-        },{
-          ID:'2',
-          name:'【惠游广西】跟团游',
-          type:'跟团游',
-          place:'沈阳/广西',
-          price:'9999',
-          days:'5',
-          dates:'2018-07-16'
-        }],
+        tableData:[],
         //分页
         pagesize: 10, // 设定默认分页每页显示数
         pageIndex: 1, // 设定当前页数
@@ -119,19 +104,61 @@
         }
       },
       //分页
-      handleSizeChange(page) {/*
+      handleSizeChange(page) {
         this.currentPage = 1;
         this.pagesize = page;
-        this.pageList();*/
+        this.list();
       },
       handleCurrentChange(currentPage) {
-        /*this.currentPage = currentPage;
-        this.pageList();*/
+       this.pageIndex = currentPage;
+          this.list();
       },
-      checkIncome(){
-        
+      checkIncome(id){
+          this.$router.push({
+              path: '/detailsList',
+              query: {
+                  id: id
+              }
+          })
       },
-    }
+      checkIncome1(id){
+          this.$router.push({
+              path: '/reserveList',
+              query: {
+                  id: id
+              }
+          })
+        },
+        //列表
+        list(productName,productDay,startDate,endDate,origin,destination,productType){
+            var that = this
+            this.$http.post(
+                this.GLOBAL.serverSrc + "/order/all/api/orderpage",
+                {
+                    "pageIndex": this.pageIndex,
+                    "pageSize": this.pagesize,
+                    "object": {
+                        //todo 搜索条件
+                    }
+                },
+            )
+                .then(function (obj) {
+                    console.log(obj)
+                    that.total = obj.data.total
+                    that.tableData = obj.data.objects
+                   that.tableData.forEach(function(currentValue, index, arr){
+                     that.tableData[index].days = 6
+                   })
+                })
+                .catch(function (obj) {
+                })
+        }
+
+    },
+      created(){
+         this.list();
+      }
+
   }
 
 
@@ -153,6 +180,6 @@
   /*表格*/
   .labelTable{margin: 0 30px 20px 30px; text-align: center;max-width: 1100px;}
   /*分页*/
-  .pageList{float: right; margin: 10px 20px 0 0;}
+  .pageList{float: right;margin: -13px 19px 0px 0;padding-bottom: 72px;}
 </style>
 
