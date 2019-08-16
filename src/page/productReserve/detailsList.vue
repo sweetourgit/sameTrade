@@ -51,10 +51,12 @@
             <div class="infor_title" style="width: 50px">亮点：</div>
             <div v-for="(item,i) in arr.strengths " class="fl">{{item.strength}}&nbsp</div>
           </div>
+            <br/>
           <div>
             <div class="infor_title">行程天数：</div>
             <div class="fl">{{arr.night}}晚{{arr.day}}天</div>
           </div>
+            <br/>
           <div>
             <div class="infor_title">出游人群：</div>
             <div v-if="this.arr.crowdID == 1" class="fl">亲子&nbsp</div>
@@ -63,8 +65,9 @@
             <div v-if="this.arr.crowdID == 4" class="fl">父母&nbsp</div>
             <div v-if="this.arr.crowdID == -1" class="fl">无&nbsp</div>
           </div>
+            <br/>
           <div>
-            <div class="infor_title">主题：</div>
+            <div class="infor_title" style="width: 50px;">主题：</div>
 
             <div v-if="this.arr.themeID ==1" class="fl">情侣&nbsp</div>
             <div v-if="this.arr.themeID ==2" class="fl">公园/乐园&nbsp</div>
@@ -84,6 +87,7 @@
             <div v-if="this.arr.themeID ==16" class="fl">其他&nbsp</div>
             <div v-if="this.arr.themeID ==-1" class="fl">无&nbsp</div>
           </div>
+            </br>
           <div>
             <div class="infor_title">套餐：</div>
             <div class="block">
