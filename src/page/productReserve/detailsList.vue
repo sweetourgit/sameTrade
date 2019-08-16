@@ -1,7 +1,7 @@
 <template>
   <div class="reserveList">
-    <div class="color_d7">ID:1234567</div>
-    <div class="title">沈阳往返昆明+大理+丽江玉龙雪山冰川大索道6天5晚精品跟团游（洱海吉普车旅拍越野+网红地标打卡+丽水金沙+昆大丽精华景点+泡温泉）</div>
+    <div class="color_d7">ID:{{arr.id}}</div>
+    <div class="title">{{arr.title}}</div>
     <div class="mt20">
     <!--左侧轮播图和日历-->
       <div class="picture">
@@ -48,20 +48,41 @@
         <div class="information">
         <div class="infor_bor">
           <div>
-            <div class="infor_title">亮点：</div>
-            <div class="fl">雪山登顶   昆大丽精选   吉普车环游  自由自愿消费</div>
+            <div class="infor_title" style="width: 50px">亮点：</div>
+            <div v-for="(item,i) in arr.strengths " class="fl">{{item.strength}}&nbsp</div>
           </div>
           <div>
             <div class="infor_title">行程天数：</div>
-            <div class="fl">6晚5天</div>
+            <div class="fl">{{arr.night}}晚{{arr.day}}天</div>
           </div>
           <div>
             <div class="infor_title">出游人群：</div>
-            <div class="fl">情侣</div>
+            <div v-if="this.arr.crowdID == 1" class="fl">亲子&nbsp</div>
+            <div v-if="this.arr.crowdID == 2" class="fl">情侣&nbsp</div>
+            <div v-if="this.arr.crowdID == 3" class="fl">朋友/同事&nbsp</div>
+            <div v-if="this.arr.crowdID == 4" class="fl">父母&nbsp</div>
+            <div v-if="this.arr.crowdID == -1" class="fl">无&nbsp</div>
           </div>
           <div>
             <div class="infor_title">主题：</div>
-            <div class="fl">人文/赏景</div>
+
+            <div v-if="this.arr.themeID ==1" class="fl">情侣&nbsp</div>
+            <div v-if="this.arr.themeID ==2" class="fl">公园/乐园&nbsp</div>
+            <div v-if="this.arr.themeID ==3" class="fl">人文/赏景&nbsp</div>
+            <div v-if="this.arr.themeID ==4" class="fl">健康旅游&nbsp</div>
+            <div v-if="this.arr.themeID ==5" class="fl">古镇游&nbsp</div>
+            <div v-if="this.arr.themeID ==6" class="fl">度假村&nbsp</div>
+            <div v-if="this.arr.themeID ==7" class="fl">户外&nbsp</div>
+            <div v-if="this.arr.themeID ==8" class="fl">海岛游&nbsp</div>
+            <div v-if="this.arr.themeID ==9" class="fl">温泉&nbsp</div>
+            <div v-if="this.arr.themeID ==10" class="fl">游学&nbsp</div>
+            <div v-if="this.arr.themeID ==11" class="fl">滑雪&nbsp</div>
+            <div v-if="this.arr.themeID ==12" class="fl">禅修&nbsp</div>
+            <div v-if="this.arr.themeID ==13" class="fl">自驾&nbsp</div>
+            <div v-if="this.arr.themeID ==14" class="fl">都市游&nbsp</div>
+            <div v-if="this.arr.themeID ==15" class="fl">酒店控&nbsp</div>
+            <div v-if="this.arr.themeID ==16" class="fl">其他&nbsp</div>
+            <div v-if="this.arr.themeID ==-1" class="fl">无&nbsp</div>
           </div>
           <div>
             <div class="infor_title">套餐：</div>
@@ -386,7 +407,10 @@
   export default {
     data() {
       return {
-        bannerList:["http://192.168.1.186:3009/upload/2019/4/10/6a8255d4-8270-4c25-b0ec-9af74c3be7ca.jpg","http://192.168.1.186:3009/upload/2019/5/17/a2127153-f3dd-454c-a55c-93b3f1114cab.jpg","http://192.168.1.186:3009/upload/2019/4/9/73a0f705-58f6-45fa-8a98-1f3c8a721eca.jpg"],
+          arr:"",
+          tid:1,
+          title:"沈阳往返昆明+大理+丽江玉龙雪山冰川大索道6天5晚精品跟团游（洱海吉普车旅拍越野+网红地标打卡+丽水金沙+昆大丽精华景点+泡温泉）",
+        bannerList:[],
         mark:'',
         packageList:[{
           title:'精品昆大丽豪华6日游',
@@ -550,10 +574,29 @@
            //通过id调用套餐等方法预留
            console.log(id);
          }
-      }
+      },
+        oneInfo(){
+          var that = this
+            this.$http.post(
+                this.GLOBAL.serverSrc + "/team/api/teamget",
+                {
+                    "id":this.$route.query.id
+                },
+            )
+                .then(function (obj) {
+
+                    that.arr = obj.data.object
+                    console.log(that.arr)
+
+
+                })
+                .catch(function (obj) {
+                })
+        }
     },
     created(){  
       this.initCalendarTbody();
+        this.oneInfo()
     } 
   }
 
