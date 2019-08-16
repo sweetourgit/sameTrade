@@ -329,8 +329,8 @@
         select: '0',
         value: '',
         ruleForm: {
-          user: 'tester',
-          password: '123456',
+          user: '15642947778',
+          password: '123456789',
           // verification: '',
 
 
@@ -526,7 +526,7 @@
 
               // if(res.data){
 
-                this.$http.post(this.GLOBAL.serverSrc+'/user/api/login',{
+                this.$http.post(this.GLOBAL.serverSrc+'/user/api/silogin',{
                   'userName': this.ruleForm.user,
                   'passWord': this.ruleForm.password,
                 }).then(res => {
@@ -550,20 +550,22 @@
                   } else {
                     store.save('token',res.data)
                     // console.log(token);
-                    this.$http.post(this.GLOBAL.serverSrc+'/org/api/userinfo',{
+                    this.$http.post(this.GLOBAL.serverSrc+'/universal/localcomp/api/Login',{
+                        "phone": this.ruleForm.user,
+                        "passWord": this.ruleForm.password
                     },{
                       headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token'),
                       }
                       
                     }).then(res => {
-                      sessionStorage.setItem('id',res.data.id)
-                      sessionStorage.setItem('orgID',res.data.orgID)
+                        console.log(res)
+                      sessionStorage.setItem('aid',res.data.object.localCompID)
+                      sessionStorage.setItem('id',res.data.object.id)
+                      sessionStorage.setItem('type',res.data.object.peerUserType)
                       sessionStorage.setItem('account',this.ruleForm.user)
-                      store.save('name',res.data.name)
                       this.$router.push('/productList')
                       this.$message.success('登录成功');
-                      localStorage.removeItem("code",res.data)
                     }).catch(err => {
 
                     })

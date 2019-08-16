@@ -200,7 +200,7 @@
         </el-form-item>
         <el-form-item>
           <el-button  v-if="gid == 0" type="primary" @click="submitForm('ruleForm')">创建</el-button>
-          <el-button v-else type="primary" @click="submitForm('ruleForm')">修改</el-button>
+          <el-button v-else type="primary" @click="updateForm('ruleForm')">修改</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -219,6 +219,7 @@
   export default {
     data() {
       return {
+
           id:1,
           total:0,
           pagesize:10,
@@ -227,6 +228,7 @@
           dialogVisible:false,
           fileList: [],
           ruleForm: {
+              id:'',
               name: '',
               phone:'',
               mail:'',
@@ -293,7 +295,6 @@
     },
     methods:{
         submitForm(formName) {
-            console.log(this.ruleForm.type[0])
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     var new_type = '';
@@ -328,6 +329,82 @@
                         })
                         .catch(function (obj) {
                         })
+                    this.$message({
+                        message: '恭喜你，这是一条成功消息',
+                        type: 'success'
+                    });
+                    this.dialogVisible = false
+                    this.accout_list(this.id)
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        updateForm(formName){
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    var new_type = '';
+                    if(this.ruleForm.type[0] == "管理员"){
+                        new_type = 1;
+                    }else{
+                        new_type = 2;
+                    }
+                    var xing = "";
+                    var stat="";
+                    if (this.ruleForm.sex == "男"){
+                        xing = 1
+                    } else if (this.ruleForm.sex == "女") {
+                        xing = 2
+                    }else if(this.ruleForm.sex == 1){
+                        xing = 1
+                    }else {
+                        xing = 2
+                    }
+
+                    if (this.ruleForm.status== "正常"){
+                        stat = 2
+                    } else if (this.ruleForm.status== "停用") {
+                        stat = 3
+                    }else if (this.ruleForm.status == "2") {
+                        stat = 2
+                    }else{
+                        stat = 3
+                    }
+
+
+                    var that = this
+                    this.$http.post(
+                        this.GLOBAL.serverSrc + "/universal/localcomp/api/PeerUserUpdate",
+                        {
+                            "object": {
+                                "id": that.ruleForm.id,
+                                "isDeleted": 0,
+                                "name": that.ruleForm.name,
+                                "phone": that.ruleForm.phone,
+                                "email": that.ruleForm.mail,
+                                "sex": xing,
+                                "wx": that.ruleForm.vx,
+                                "qq": that.ruleForm.qq,
+                                "state": stat,
+                                "passWord": that.ruleForm.password,
+                                "peerUserType":new_type,
+                                "createTime": 0,
+                                "localCompID": that.id,
+                            }
+                        }
+                    )
+                        .then(function (obj) {
+
+                        })
+                        .catch(function (obj) {
+                        })
+                    this.$message({
+                        message: '恭喜你，这是一条成功消息',
+                        type: 'success'
+                    });
+                    this.dialogVisible = false
+                    this.accout_list(this.id)
 
                 } else {
                     console.log('error submit!!');
@@ -336,11 +413,32 @@
             });
         },
         resetForm(formName) {
+            console.log(formName)
             this.$refs[formName].resetFields();
         },
         adddialog(id){
          if(id == 0){
                 this.gid = 0
+                 this.ruleForm={
+                         id:'',
+                         name: '',
+                         phone:'',
+                         mail:'',
+                         sex: '',
+                         vx:'',
+                         qq:'',
+                         status:'',
+                         password:'',
+                         date1: '',
+                         date2: '',
+                         delivery: false,
+                         type: [],
+                         resource: '',
+                         desc: ''
+                 }
+             if (this.$refs['ruleForm'] != undefined) {
+                 this.$refs['ruleForm'].resetFields();
+             }
             }else{
                 this.gid = id
                 this.one_info(id)
@@ -466,9 +564,29 @@
                 }
             )
                 .then(function (obj) {
-                  console.log(obj.data.object)
+                    that.ruleForm.id = obj.data.object.id
                     that.ruleForm.name = obj.data.object.name
                     that.ruleForm.phone = obj.data.object.phone
+                    that.ruleForm.mail = obj.data.object.email
+                    if(obj.data.object.sex == 1){
+                        that.ruleForm.sex = "男"
+                    }else{
+                        that.ruleForm.sex = "女"
+                    }
+                    that.ruleForm.vx = obj.data.object.wx
+                    that.ruleForm.qq = obj.data.object.qq
+                    if(obj.data.object.state == 2){
+                        that.ruleForm.status = "正常"
+                    }else{
+                        that.ruleForm.status = "停用"
+                    }
+                    that.ruleForm.password = obj.data.object.passWord
+                    if(obj.data.object.peerUserType == 1){
+                      that.ruleForm.type = ["管理员"]
+                    }else{
+                        that.ruleForm.type = ["销售员"]
+                    }
+
                 })
                 .catch(function (obj) {
                 })
@@ -476,6 +594,9 @@
 
     },
       created(){
+         var a =  sessionStorage.getItem('aid');
+         this.id = a?a:1
+         console.log(a)
           this.companyinfo(this.id);
           this.accout_list(this.id);
       }

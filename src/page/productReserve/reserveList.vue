@@ -5,41 +5,41 @@
       <el-button>取消</el-button>
     </div>
     <div class="reserveTitle">
-      <span>绝美斯米兰 蓝调普吉6晚8日游（往返转机）</span>
+      <span>{{ProductName}}</span>
     </div>
     <table class="reserveTable">
       <tr>
         <td>
           <div class="reserveTd_01">团期计划：</div>
-          <div class="reserveTd_02">TC-GTY-1001-01-180806-01</div>
+          <div class="reserveTd_02">{{ProductId}}</div>
         </td>
         <td>
           <div class="reserveTd_01">套餐名称：</div>
-          <div class="reserveTd_02">绝美斯米兰</div>
+          <div class="reserveTd_02">{{tcName}}</div>
         </td>
         <td>
           <div class="reserveTd_01">出发地：</div>
-          <div class="reserveTd_02">沈阳</div>
+          <div class="reserveTd_02">{{cfaddress}}</div>
         </td>
       </tr>
       <tr>
         <td>
           <div class="reserveTd_01">目的地：</div>
-          <div class="reserveTd_02">普吉岛</div>
+          <div class="reserveTd_02">{{mdaddress}}</div>
         </td>
         <td>
           <div class="reserveTd_01">出发日期：</div>
-          <div class="reserveTd_02">2018-06-06</div>
+          <div class="reserveTd_02">{{addDate}}</div>
         </td>
         <td>
           <div class="reserveTd_01">同业：</div>
-          <div class="reserveTd_02">国旅</div>
+          <div class="reserveTd_02">{{type}}</div>
         </td>
       </tr>
       <tr>
         <td>
           <div class="reserveTd_01">剩余额度：</div>
-          <div class="reserveTd_02">270,164.00</div>
+          <div class="reserveTd_02">{{qutoto}}</div>
         </td>
       </tr>
     </table>
@@ -114,6 +114,16 @@
   export default {
     data() {
       return {
+          ProductName:"绝美斯米兰 蓝调普吉6晚8日游（往返转机）",
+          ProductId:"TC-GTY-1001-01-180806-01",
+          tcName:"绝美斯米兰",
+          cfaddress:"沈阳",
+          mdaddress:"普吉岛",
+          addDate:"2018-06-06",
+          type:"国旅",
+          qutoto:"270,164.00",
+
+          id:0,
         tradeSales:'',//同业销售model
         manager:[{//同业销售下拉框
           value: '选项1',
@@ -158,7 +168,67 @@
       }
     },
     methods:{
-      
+      oneinfo(){
+          var that = this
+          this.$http.post(
+              this.GLOBAL.serverSrc + "/teamquery/get/api/teampreview",
+              {
+                  "id":that.id
+              },
+          )
+              .then(function (obj) {
+                that.ProductName = obj.data.object.title
+                that.ProductId = obj.data.object.groupCode
+                that.tcName = obj.data.object.package
+                that.cfaddress = obj.data.object.pod
+                that.mdaddress = obj.data.object.destination
+                that.addDate = obj.data.object.date
+
+              })
+              .catch(function (obj) {
+              })
+
+          this.$http.post(
+              this.GLOBAL.serverSrc + "/universal/localcomp/api/get",
+              {
+                  "id":sessionStorage.getItem('aid')?sessionStorage.getItem('aid'):1
+              },
+          )
+              .then(function (obj) {
+                  that.type = obj.data.object.name
+                  that.qutoto = obj.data.object.quota
+
+
+              })
+              .catch(function (obj) {
+              })
+
+          this.$http.post(
+              this.GLOBAL.serverSrc + " /universal/localcomp/api/PeerUserList",
+              {
+                  "object": {
+                      "peerUserType": 2,
+                      "localCompID": sessionStorage.getItem('aid'),
+                  }
+              },
+          )
+              .then(function (obj) {
+                  console.log(obj)
+
+
+              })
+              .catch(function (obj) {
+              })
+
+
+
+      }
+
+
+    },
+    created(){
+       this.id =  this.$route.query.id;
+        this.oneinfo()
     }
   }
 

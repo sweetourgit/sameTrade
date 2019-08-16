@@ -40,8 +40,6 @@
       <el-table-column prop="beginDate" label="最早出发日期" width="120" align="center"></el-table-column>
       <el-table-column label="操作" width="120" align="center">
         <template slot-scope="scope">
-          <el-button @click="checkIncome(scope.row.id)" type="text" size="small" class="table_details">详情</el-button>
-          <span class="em">|</span>
           <el-button @click="checkIncome1(scope.row.id)" type="text" size="small" class="table_details">预订</el-button>
         </template>
       </el-table-column>
@@ -113,7 +111,7 @@
        this.pageIndex = currentPage;
           this.list();
       },
-      checkIncome(id){
+      checkIncome1(id){
           this.$router.push({
               path: '/detailsList',
               query: {
@@ -121,14 +119,14 @@
               }
           })
       },
-      checkIncome1(id){
+     /* checkIncome1(id){
           this.$router.push({
               path: '/reserveList',
               query: {
                   id: id
               }
           })
-        },
+        },*/
         //列表
         list(productName,productDay,startDate,endDate,origin,destination,productType){
             var that = this
