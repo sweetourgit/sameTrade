@@ -1,7 +1,7 @@
 <template>
   <div class="reserveList">
-    <div class="color_d7">ID:{{arr.id}}</div>
-    <div class="title">{{arr.title}}</div>
+    <div class="color_d7">ID:{{ruleForm.id}}</div>
+    <div class="title">{{ruleForm.title}}</div>
     <div class="mt20">
     <!--左侧轮播图和日历-->
       <div class="picture">
@@ -48,52 +48,52 @@
         <div class="information">
         <div class="infor_bor">
           <div>
-            <div class="infor_title" style="width: 50px">亮点：</div>
-            <div v-for="(item,i) in arr.strengths " class="fl">{{item.strength}}&nbsp</div>
+            <div class="infor_title">亮点：</div>
+            <div v-for="(item,i) in ruleForm.strengths" :key="i" class="fl">{{item.strength}}&nbsp;</div>
           </div>
             <br/>
           <div>
             <div class="infor_title">行程天数：</div>
-            <div class="fl">{{arr.night}}晚{{arr.day}}天</div>
+            <div class="fl">{{ruleForm.night}}晚{{ruleForm.day}}天</div>
           </div>
             <br/>
           <div>
             <div class="infor_title">出游人群：</div>
-            <div v-if="this.arr.crowdID == 1" class="fl">亲子&nbsp</div>
-            <div v-if="this.arr.crowdID == 2" class="fl">情侣&nbsp</div>
-            <div v-if="this.arr.crowdID == 3" class="fl">朋友/同事&nbsp</div>
-            <div v-if="this.arr.crowdID == 4" class="fl">父母&nbsp</div>
-            <div v-if="this.arr.crowdID == -1" class="fl">无&nbsp</div>
+            <div v-show="this.ruleForm.crowdID == 1" class="fl">亲子&nbsp;</div>
+            <div v-show="this.ruleForm.crowdID == 2" class="fl">情侣&nbsp;</div>
+            <div v-show="this.ruleForm.crowdID == 3" class="fl">朋友/同事&nbsp;</div>
+            <div v-show="this.ruleForm.crowdID == 4" class="fl">父母&nbsp;</div>
+            <div v-show="this.ruleForm.crowdID == -1" class="fl">无&nbsp;</div>
           </div>
             <br/>
           <div>
-            <div class="infor_title" style="width: 50px;">主题：</div>
+            <div class="infor_title">主题：</div>
 
-            <div v-if="this.arr.themeID ==1" class="fl">情侣&nbsp</div>
-            <div v-if="this.arr.themeID ==2" class="fl">公园/乐园&nbsp</div>
-            <div v-if="this.arr.themeID ==3" class="fl">人文/赏景&nbsp</div>
-            <div v-if="this.arr.themeID ==4" class="fl">健康旅游&nbsp</div>
-            <div v-if="this.arr.themeID ==5" class="fl">古镇游&nbsp</div>
-            <div v-if="this.arr.themeID ==6" class="fl">度假村&nbsp</div>
-            <div v-if="this.arr.themeID ==7" class="fl">户外&nbsp</div>
-            <div v-if="this.arr.themeID ==8" class="fl">海岛游&nbsp</div>
-            <div v-if="this.arr.themeID ==9" class="fl">温泉&nbsp</div>
-            <div v-if="this.arr.themeID ==10" class="fl">游学&nbsp</div>
-            <div v-if="this.arr.themeID ==11" class="fl">滑雪&nbsp</div>
-            <div v-if="this.arr.themeID ==12" class="fl">禅修&nbsp</div>
-            <div v-if="this.arr.themeID ==13" class="fl">自驾&nbsp</div>
-            <div v-if="this.arr.themeID ==14" class="fl">都市游&nbsp</div>
-            <div v-if="this.arr.themeID ==15" class="fl">酒店控&nbsp</div>
-            <div v-if="this.arr.themeID ==16" class="fl">其他&nbsp</div>
-            <div v-if="this.arr.themeID ==-1" class="fl">无&nbsp</div>
+            <div v-show="this.ruleForm.themeID ==1" class="fl">情侣&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==2" class="fl">公园/乐园&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==3" class="fl">人文/赏景&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==4" class="fl">健康旅游&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==5" class="fl">古镇游&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==6" class="fl">度假村&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==7" class="fl">户外&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==8" class="fl">海岛游&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==9" class="fl">温泉&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==10" class="fl">游学&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==11" class="fl">滑雪&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==12" class="fl">禅修&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==13" class="fl">自驾&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==14" class="fl">都市游&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==15" class="fl">酒店控&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==16" class="fl">其他&nbsp;</div>
+            <div v-show="this.ruleForm.themeID ==-1" class="fl">无&nbsp;</div>
           </div>
-            </br>
+          <br/>
           <div>
             <div class="infor_title">套餐：</div>
-            <div class="block">
-              <div class="package_01" v-for="item in packageList">
-                <div class="package_01_title">{{item.title}}</div>
-                <div class="tc">出发地：{{item.origin}}</div>
+            <div class="block" >
+              <div :id="isBlock == i ? 'isBlock' : ''" class="package_01" v-for="(item, i) in ruleForm.package" :key="i" @click="clickPackage(i)">
+                <div class="package_01_title">{{item.name}}</div>
+                <div class="tc">出发地：{{item.pod}}</div>
                 <div class="tc">目的地：{{item.destination}}</div>
               </div>
             </div>
@@ -102,6 +102,7 @@
             <div class="infor_title">出行日期：</div>
             <div class="fl">2019-05-28</div>
           </div>
+          <br/>
           <div>
             <div class="adult">
               <div>成人￥16999.00*{{adult}}</div>
@@ -118,7 +119,7 @@
       </div>
       <div class="price">
           <div class="price_text">总价：32980.00</div>
-          <el-button class="price_button" type="primary">预订</el-button>
+          <el-button class="price_button" type="primary" @click="handeSave">预订</el-button>
       </div>
       </div>
     </div>
@@ -411,9 +412,11 @@
   export default {
     data() {
       return {
-          arr:"",
-          tid:1,
-          title:"沈阳往返昆明+大理+丽江玉龙雪山冰川大索道6天5晚精品跟团游（洱海吉普车旅拍越野+网红地标打卡+丽水金沙+昆大丽精华景点+泡温泉）",
+        a: '',
+        isBlock: '',
+        ruleForm:"",
+        tid:1,
+        title:"沈阳往返昆明+大理+丽江玉龙雪山冰川大索道6天5晚精品跟团游（洱海吉普车旅拍越野+网红地标打卡+丽水金沙+昆大丽精华景点+泡温泉）",
         bannerList:[],
         mark:'',
         packageList:[{
@@ -478,6 +481,16 @@
         },
         {
           Month:'11',
+          Year:'2019',
+          list:[{
+            CKPrice:'8999.00',
+            DepartureDate:"2019-11-18",
+            ID:1,
+            surplus:4
+          }]
+        },
+        {
+          Month:'12',
           Year:'2019',
           list:[{
             CKPrice:'8999.00',
@@ -579,28 +592,78 @@
            console.log(id);
          }
       },
-        oneInfo(){
-          var that = this
-            this.$http.post(
-                this.GLOBAL.serverSrc + "/team/api/teamget",
-                {
-                    "id":this.$route.query.id
-                },
-            )
-                .then(function (obj) {
+      clickPackage(k) {
+        this.isBlock = k;
+        let month = new Date().getMonth()+1 < 10 ? '0' + (new Date().getMonth()+1) : new Date().getMonth()+1;
+        this.$http.post(this.GLOBAL.serverSrc + '/team/calendar/api/get', {
+          'object': {
+            'packageID': this.ruleForm.package[k].id,
+            'year': new Date().getFullYear(),
+            'month': month
+          }
+        }).then(res => {
+          this.a = res.data.objects;
+          console.log(res)
+          // this.calendarDate = res.data.objects.map(v => {
+            
+          // })
+          console.log(this.calendarDate)
+          // for(let i=0; i< )
 
-                    that.arr = obj.data.object
-                    console.log(that.arr)
 
-
-                })
-                .catch(function (obj) {
-                })
-        }
+// this.calendarDate.push({
+//               'Year': String(v.date).substring(0, 4),
+//               'Month': String(v.date).substring(4, 6),
+//               'list': v
+//             })
+        //   {
+        //   Month:'08',
+        //   Year:'2019',
+        //   list:[{
+        //     CKPrice:'8999.00',
+        //     DepartureDate:"2019-08-10",
+        //     ID:1,
+        //     surplus:4
+        //   },{
+        //     CKPrice:'8999.00',
+        //     DepartureDate:"2019-08-18",
+        //     ID:2,
+        //     surplus:4
+        //   },
+        //   {
+        //     CKPrice:'9299.00',
+        //     DepartureDate:"2019-08-22",
+        //     ID:3,
+        //     surplus:0
+        //   }]
+        // }
+        })
+        
+      },
+      handeSave() {
+        this.$router.push({
+          path: '/reserveList',
+          params: {
+            page: this.a
+          },
+          query: {
+            id: this.$route.query.id
+          }
+        })
+      },
+      oneInfo(){
+        this.$http.post(this.GLOBAL.serverSrc + "/team/api/teamget",{
+          "id":this.$route.query.id
+        }).then(res => {
+          this.ruleForm = res.data.object
+          this.clickPackage(0);
+          console.log(this.ruleForm)
+        })
+      }
     },
     created(){  
       this.initCalendarTbody();
-        this.oneInfo()
+      this.oneInfo()
     } 
   }
 
@@ -631,9 +694,10 @@ ul{list-style-type: none;}
 .information{width: 500px; border: 1px solid #e6e6e6;margin: 0 0 0 25px;line-height: 30px; overflow: hidden;}
 .infor_bor{width: 470px; margin: 15px 15px 0 15px;}
 .infor_title{width: 80px; float: left;}
-.package_01{width: 180px; border:1px solid #e6e6e6; float: left; margin: 0 10px 0 0;cursor:pointer;}
+.package_01{width: 180px; border:1px solid #e6e6e6; float: left; margin: 10px 10px 0 0;cursor:pointer;}
 .package_01_title{margin: 0 0 0 10px;}
-.block{width:390px; overflow:hidden; float:left; margin:10px 0 10px 0;}
+.block{width:390px; overflow:hidden; float:left; margin:0 0 10px 0;}
+#isBlock{border: solid 1px #409EFF !important;}
 .adult{float: left; margin: 0 25px 30px 0;}
 .price{border-left: 1px solid #f6f6f6;border-right: 1px solid #f6f6f6;border-bottom: 1px solid #f6f6f6;height: 60px; clear: both; width: 500px;margin: 0 0 0 25px;}
 .price_text{margin: 0 0 0 15px; float: left;line-height: 60px; font-weight: bold; color: #000;}
