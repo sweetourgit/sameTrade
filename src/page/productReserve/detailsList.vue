@@ -28,15 +28,17 @@
           </ul>
           <ul class="days">
             <!--显示日期-->
-            <li v-for="(item,index) in arrDay" v-bind:class="{active:chooseDate==currentYear+'-'+currentMonth+'-'+item}">             
+            <li v-for="(item,index) in arrDay" v-bind:class="{active:chooseDate==currentYear+currentMonth+item}">             
               <div class="tc">{{item}}</div>
               <!--判断是否是当前年和月份-->
-              <div v-for="date in calendarDate" v-if="date.Year==currentYear||date.Month==currentMonth">
+              <div v-for="date in calendarDate" v-if="date.Year==currentYear&&date.Month==currentMonth">
+                <!-- {{date.list}} -->
                 <!--判断当前日期是否有计划，有则显示-->
-                <div v-for="day in date.list" v-bind:class="{price_color:day.surplus==0}" v-if="day.DepartureDate==currentYear+'-'+currentMonth+'-'+item" @click="chooseDateMes(day.DepartureDate,day.surplus,day.ID)">
-                  <div>{{day.CKPrice}}</div>
-                  <div v-if="day.surplus==0">已售罄</div>
-                  <div v-else>余位{{day.surplus}}</div>
+                <!-- surplus为0余位才是0 -->
+                <div v-for="day in date.list" v-bind:class="{price_color:day.surplus==1}" v-if="day.date==currentYear+currentMonth+item" @click="chooseDateMes(day.date,day.surplus,day)">
+                  <div>{{day.plan_Enrolls[0].price_02}}</div>
+                  <div v-if="day.surplus==1">已售罄</div>
+                  <div v-else>余位100</div>
                 </div>
               </div>
             </li>
@@ -100,25 +102,26 @@
           </div>
           <div style="clear:both;">
             <div class="infor_title">出行日期：</div>
-            <div class="fl">2019-05-28</div>
+            <div class="fl">{{rowDate.travelTime}}</div>
           </div>
           <br/>
           <div>
-            <div class="adult">
-              <div>成人￥16999.00*{{adult}}</div>
-              <div><el-input-number v-model="adult" :min="0" :max="10" label="描述文字" size="mini"></el-input-number></div>
+            <div class="adult" v-for="(item, k) in rowDate.plan_Enrolls" :key="k">
+              <div>{{item.enrollName}}￥{{item.price_02}}*{{item.adult}}</div>
+              <div><el-input-number v-model="item.adult" :min="0" :max="10" label="描述文字" size="mini" @change="handleChange(item)"></el-input-number></div>
+              
             </div>
-            <div class="adult">
+            <!-- <div class="adult">
               <div>儿童￥16999.00*{{children}}</div>
               <div><el-input-number v-model="children" :min="0" :max="10" label="描述文字" size="mini"></el-input-number></div>
-            </div>
-            <div class="adult">单房差￥16999.00*2</div>
+            </div> -->
+            <!-- <div class="adult">单房差￥16999.00*2</div> -->
           </div>
         </div>
         
       </div>
       <div class="price">
-          <div class="price_text">总价：32980.00</div>
+          <div class="price_text">总价：{{rowDate.Total}}</div>
           <el-button class="price_button" type="primary" @click="handeSave">预订</el-button>
       </div>
       </div>
@@ -412,7 +415,6 @@
   export default {
     data() {
       return {
-        a: '',
         isBlock: '',
         ruleForm:"",
         tid:1,
@@ -435,75 +437,16 @@
         calendarDate:[{
           Month:'08',
           Year:'2019',
-          list:[{
-            CKPrice:'8999.00',
-            DepartureDate:"2019-08-10",
-            ID:1,
-            surplus:4
-          },{
-            CKPrice:'8999.00',
-            DepartureDate:"2019-08-18",
-            ID:2,
-            surplus:4
-          },
-          {
-            CKPrice:'9299.00',
-            DepartureDate:"2019-08-22",
-            ID:3,
-            surplus:0
-          }]
-        },
-        {
-          Month:'09',
-          Year:'2019',
-          list:[{
-            CKPrice:'8999.00',
-            DepartureDate:"2019-09-18",
-            ID:1,
-            surplus:4
-          },
-          {
-            CKPrice:'9299.00',
-            DepartureDate:"2019-09-22",
-            ID:2,
-            surplus:0
-          }]
-        },
-        {
-          Month:'10',
-          Year:'2019',
-          list:[{
-            CKPrice:'8999.00',
-            DepartureDate:"2019-10-18",
-            ID:1,
-            surplus:4
-          }]
-        },
-        {
-          Month:'11',
-          Year:'2019',
-          list:[{
-            CKPrice:'8999.00',
-            DepartureDate:"2019-11-18",
-            ID:1,
-            surplus:4
-          }]
-        },
-        {
-          Month:'12',
-          Year:'2019',
-          list:[{
-            CKPrice:'8999.00',
-            DepartureDate:"2019-11-18",
-            ID:1,
-            surplus:4
-          }]
-        }],
+          list:[]}],
         currentYear: 0, // 当前月的年份
         currentMonth: 0,// 当前月的月份
         arrDay:[], //日历日期
         currentIndex:0,//当前选中月份索引
         chooseDate:0,//选中团期
+        rowDate: {
+          'travelTime': '----年--月--日',
+          'Total': 0
+        },
         ulLeft:0,
       }
     },
@@ -530,6 +473,7 @@
         }
         this.currentYear=this.calendarDate[this.currentIndex].Year;
         this.currentMonth=this.calendarDate[this.currentIndex].Month;
+        this.clickPackage(this.isBlock);
         this.initCalendarTbody();
       },
       sider(type){  //滑动效果
@@ -584,13 +528,22 @@
             this.arrDay[i + new Date(this.currentYear, this.currentMonth - 1, 1).getDay()] = i + 1;  //判断1号是星期几确定日期从第几个表格开始显示
         }
       },
+      handleChange(item) {
+        let numberNum = 0;
+        this.rowDate.plan_Enrolls.forEach(v => numberNum += v.adult * v.price_02)
+        this.rowDate.Total = numberNum
+      },
       //选择团期
-      chooseDateMes(dep,surplus,id){  //dep：计划日期,surplus：选中日期余位，id：团期计划id
-         if(surplus!=0){
-           this.chooseDate=dep;
-           //通过id调用套餐等方法预留
-           console.log(id);
-         }
+      chooseDateMes(dep,surplus,item){  //dep：计划日期,surplus：选中日期余位，id：团期计划id
+      // surplus为0余位才是0
+        if(surplus!=1){
+          this.chooseDate=dep;
+          item.Total = 0;
+          item.travelTime = String(item.date).substring(0, 4) + '年' + String(item.date).substring(4, 6) + '月' + String(item.date).substring(6) + '日';
+
+          this.rowDate = item;
+          //通过id调用套餐等方法预留
+        }
       },
       clickPackage(k) {
         this.isBlock = k;
@@ -598,51 +551,31 @@
         this.$http.post(this.GLOBAL.serverSrc + '/team/calendar/api/get', {
           'object': {
             'packageID': this.ruleForm.package[k].id,
-            'year': new Date().getFullYear(),
-            'month': month
+            'year': this.currentYear,
+            'month': this.currentMonth
           }
         }).then(res => {
-          this.a = res.data.objects;
-          console.log(res)
-          // this.calendarDate = res.data.objects.map(v => {
-            
-          // })
+          let calendarDate = this.calendarDate;
+          res.data.objects.map(v => {
+            v.plan_Enrolls.map(k => {
+              k.adult = 0;
+            })
+          })
+
+          calendarDate.forEach((item,k) => {
+            if(item.Year == this.currentYear && item.Month == this.currentMonth) {
+              item.list = res.data.objects;
+            }
+          })
+          this.calendarDate = [];
+          this.calendarDate = calendarDate
           console.log(this.calendarDate)
-          // for(let i=0; i< )
 
-
-// this.calendarDate.push({
-//               'Year': String(v.date).substring(0, 4),
-//               'Month': String(v.date).substring(4, 6),
-//               'list': v
-//             })
-        //   {
-        //   Month:'08',
-        //   Year:'2019',
-        //   list:[{
-        //     CKPrice:'8999.00',
-        //     DepartureDate:"2019-08-10",
-        //     ID:1,
-        //     surplus:4
-        //   },{
-        //     CKPrice:'8999.00',
-        //     DepartureDate:"2019-08-18",
-        //     ID:2,
-        //     surplus:4
-        //   },
-        //   {
-        //     CKPrice:'9299.00',
-        //     DepartureDate:"2019-08-22",
-        //     ID:3,
-        //     surplus:0
-        //   }]
-        // }
         })
-        
       },
       handeSave() {
         this.$router.push({
-          path: '/reserveList',
+          name: '详情预定',
           params: {
             page: this.a
           },
@@ -656,14 +589,35 @@
           "id":this.$route.query.id
         }).then(res => {
           this.ruleForm = res.data.object
+          for(let i=0; i<=10; i++) {
+            let month = new Date().getMonth()+1 < 10 ? '0' + (new Date().getMonth()+1+i) : new Date().getMonth()+1;
+              // console.log(month)
+
+            if(Number(month)+1 > 13) {
+              let k = Number(month) - 12;
+              let months =  k < 10 ? '0' + k : String(k);
+              this.calendarDate[i] = {
+                'Year': new Date().getFullYear()+1,
+                'Month': months,
+                'list': []
+              }
+            } else {
+              this.calendarDate[i] = {
+                'Year': new Date().getFullYear(),
+                'Month': month,
+                'list': []
+              }
+            }
+          }
+
           this.clickPackage(0);
           console.log(this.ruleForm)
         })
       }
     },
     created(){  
-      this.initCalendarTbody();
       this.oneInfo()
+      this.initCalendarTbody();
     } 
   }
 
@@ -681,15 +635,15 @@
 .w570{width: 570px; overflow: hidden;position: relative;}
 .mouth{list-style-type: none;padding:0;margin-left: 25px;margin-top: 30px;display:flex;width:100%;position: absolute;left:0;}
 ul{list-style-type: none;}
-.mouth_fl{position: absolute;left:0;top:30px;font-size: 16px;font-weight:bold;}
-.mouth_fr{position: absolute;right:0;top:30px;font-size: 16px;font-weight:bold;}
+.mouth_fl{position: absolute;left:0;top:30px;font-size: 16px;font-weight:bold;cursor:pointer;}
+.mouth_fr{position: absolute;right:0;top:30px;font-size: 16px;font-weight:bold;cursor:pointer;}
 
-.mouth_date{float: left;width: 130px;text-align: center;flex-shrink:0;}
+.mouth_date{float: left;width: 130px;text-align: center;flex-shrink:0;cursor:pointer;}
 
 .week{ width: 570px; height: 30px; line-height: 30px; background: #f6f6f6; overflow: hidden;margin:65px 0 0 -40px;}
 .week li{width: 80px; float: left; text-align: center;}
 .days{width:570px;margin:10px 0 0 -40px;}
-.days li{width: 80px; height: 80px;line-height: 25px; float: left;}
+.days li{width: 80px; height: 80px;line-height: 25px; float: left;cursor:pointer;}
 .tc{text-align: center;}
 .information{width: 500px; border: 1px solid #e6e6e6;margin: 0 0 0 25px;line-height: 30px; overflow: hidden;}
 .infor_bor{width: 470px; margin: 15px 15px 0 15px;}

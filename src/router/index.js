@@ -25,7 +25,7 @@ export default new Router({
     }, {
       path: '/reserveList',
       component: reserveList,
-      name: '产品预定',
+      name: '详情预定',
       meta: {
         keepAlive: true,
         auth:true}
