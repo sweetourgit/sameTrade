@@ -577,7 +577,7 @@
         this.$router.push({
           name: '详情预定',
           params: {
-            page: this.a
+            page: this.rowDate
           },
           query: {
             id: this.$route.query.id
