@@ -218,8 +218,8 @@
           <!--日程信息-->
           <div class="schedule" v-for="(item, k) in ruleForm.package[this.isPage].schedules" :key="k">
             <div>
-              <div class="dateDays">1</div>
-              <div class="fl lh50">沈阳-昆明</div>
+              <div class="dateDays">{{k + 1}}</div>
+              <div class="fl lh50">{{scheduleRow.pod}}-{{scheduleRow.destination}}</div>
             </div>
             <div class="schedule_hotel">
               <div class="w60">酒店：</div>
@@ -227,32 +227,34 @@
             </div>
             <div class="schedule_hotel">
               <div class="food">餐饮：</div>
-              <div class="ml60">
-                <div>早餐：自理</div>
-                <div>午餐：自理</div>
-                <div>晚餐：自理</div>
+              <div class="ml60" v-for="(data, i) in JSON.parse(item.ext_Meals)" :key="i">
+                <div>{{data.label}}：{{data.Myself}}</div>
               </div>
             </div>
             <div class="schedule_hotel">
               <div class="food">详情：</div>
-              <div class="ml60">位于苏州古城西北，东西红尘中“一二等富贵风流之地”阊门，西至“吴中第一名胜”虎丘，全长约3600米，约合七华里，故称“七里山塘到虎丘”。白居易在《武丘寺路》中写道：“自开山寺路，水陆往来频。银勒牵骄马，花船载丽人。芰荷生欲遍，桃李种仍新。好住湖堤上，长留一道春。”白居易堪称“山塘始祖”。</div>
+              <div class="ml60" v-html="item.info"></div>
             </div>
             <div class="schedule_hotel">
               <div class="food">活动：</div>
-              <div class="bc_f2">
+              <div class="bc_f2" v-for="(row, r) in item.activitys" :key="r">
                 <div>
-                  <div class="fl ml20"><span class="fb">类型：</span>景点</div>
+                  <div class="fl ml20"><span class="fb">类型：</span>
+                    <span v-show="row.activityType == 0">景点</span>
+                    <span v-show="row.activityType == 1">购物</span>
+                    <span v-show="row.activityType == 2">自费</span>
+                  </div>
                   <div class="fl ml20"><span class="fb">城市：</span>昆明</div>
-                  <div class="fl ml20"><span class="fb">景点名称：</span>木渎景区</div>
-                  <div class="fl ml20"><span class="fb">活动时间：</span>2小时</div>
+                  <div class="fl ml20"><span class="fb">景点名称：</span>{{row.name}}</div>
+                  <div class="fl ml20"><span class="fb">活动时间：</span>{{row.time}}</div>
                 </div>
                 <div style="clear:both;">
                   <div class="w80">详情说明：</div>
-                  <div class="w700">位于苏州城西，太湖之滨，是江南著名古镇。，在木渎内您既可感受到【虹饮山房】内如皇家园林般的恢弘气势、亦可感受到【严家花园】内私家园林的精巧与细致境内风光秀丽，物产丰饶，又恰在天平、灵岩、狮山、七子等吴中名山环抱之中，故有“聚宝盆”之称。</div>
+                  <div class="w700" v-html="row.details"></div>
                 </div>
                 <div style="clear:both;">
                   <div class="w80">景点简介：</div>
-                  <div class="w700">清代乾隆南巡六下江南，六次来到木渎，其中有乾隆亲题的御码头，乾隆与他的老师沈德潜吟诗唱和，与他的好友徐士元茶棋相娱，留下了一个个脍炙人口的传说。至今木渎古镇内仍保存完好的明清江南园林随处可见</div>
+                  <div class="w700" v-html="row.memo"></div>
                 </div>
                 <div style="clear:both;">
                   <div class="w80">图片：</div>
@@ -262,7 +264,7 @@
                   </div>
                 </div>
               </div>
-              <div class="bc_f2">
+              <!-- <div class="bc_f2">
                 <div>
                   <div class="fl ml20"><span class="fb">类型：</span>购物</div>
                   <div class="fl ml20"><span class="fb">名称：</span>昆明土特产</div>
@@ -284,8 +286,8 @@
                     <div class="fl"><img style="width:300px; height200px; margin:0 0 0 10px" src="http://192.168.1.186:3009/upload/2019/4/10/6a8255d4-8270-4c25-b0ec-9af74c3be7ca.jpg"></div>
                   </div>
                 </div>
-              </div>
-              <div class="bc_f2">
+              </div> -->
+              <!-- <div class="bc_f2">
                 <div>
                   <div class="fl ml20"><span class="fb">类型：</span>自费项目</div>
                   <div class="fl ml20"><span class="fb">名称：</span>昆明方特</div>
@@ -307,7 +309,7 @@
                     <div class="fl"><img style="width:300px; height200px; margin:0 0 0 10px" src="http://192.168.1.186:3009/upload/2019/4/10/6a8255d4-8270-4c25-b0ec-9af74c3be7ca.jpg"></div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
           
@@ -328,48 +330,14 @@
           <div class="nav_left_02">自费项目</div>
         </div>
         <div class="cost">
-          <div class="schedule">
-            <div class="cost_title">#费用包含</div>
+          <div class="schedule" v-for="(list, index) in ruleForm.instructions" :key="index">
+            <div class="cost_title">#{{list.title}}</div>
             <ul>
-              <li>交通：沈阳-上海往返经济舱含税机票（不含您家往返您当地机场的交通费，为了节省您的出行成本，产品展示报价为系统默认预定实时低价航班组合，多为夜航或廉价航空，若您对航班以及时间有特殊要求或指定，请出票前联系客服补差价，团队机票一经开出，不退，不改，不签！行程中披露航班时间仅供参考，以实际出票为准！具体航班信息请参考出团通知书。）； 普通航班含行李托运20KG（部分廉航除外） ，乘坐廉价航空（如春秋，九元，联航等）的旅客，可免费携带一件重量不超过5KG的非托运行李进入客舱，其体积不得超过20×40×55厘米。逾重行李请旅客自行到各机场值机柜台购买，提前到达机场，预留逾重购买行李额的时间。</li>
-              <li>123</li>
+              <li v-html="list.content"></li>
+              <!-- <li>123</li> -->
             </ul>
           </div>
-          <div class="schedule">
-            <div class="cost_title">#费用不包含</div>
-            <ul>
-              <li>交通：沈阳-上海往返经济舱含税机票（不含您家往返您当地机场的交通费，为了节省您的出行成本，产品展示报价为系统默认预定实时低价航班组合，多为夜航或廉价航空，若您对航班以及时间有特殊要求或指定，请出票前联系客服补差价，团队机票一经开出，不退，不改，不签！行程中披露航班时间仅供参考，以实际出票为准！具体航班信息请参考出团通知书。）； 普通航班含行李托运20KG（部分廉航除外） ，乘坐廉价航空（如春秋，九元，联航等）的旅客，可免费携带一件重量不超过5KG的非托运行李进入客舱，其体积不得超过20×40×55厘米。逾重行李请旅客自行到各机场值机柜台购买，提前到达机场，预留逾重购买行李额的时间。</li>
-              <li>123</li>
-            </ul>
-          </div>
-          <div class="schedule">
-            <div class="cost_title">#温馨提示</div>
-            <ul>
-              <li>交通：沈阳-上海往返经济舱含税机票（不含您家往返您当地机场的交通费，为了节省您的出行成本，产品展示报价为系统默认预定实时低价航班组合，多为夜航或廉价航空，若您对航班以及时间有特殊要求或指定，请出票前联系客服补差价，团队机票一经开出，不退，不改，不签！行程中披露航班时间仅供参考，以实际出票为准！具体航班信息请参考出团通知书。）； 普通航班含行李托运20KG（部分廉航除外） ，乘坐廉价航空（如春秋，九元，联航等）的旅客，可免费携带一件重量不超过5KG的非托运行李进入客舱，其体积不得超过20×40×55厘米。逾重行李请旅客自行到各机场值机柜台购买，提前到达机场，预留逾重购买行李额的时间。</li>
-              <li>123</li>
-            </ul>
-          </div>
-          <div class="schedule">
-            <div class="cost_title">#儿童政策</div>
-            <ul>
-              <li>交通：沈阳-上海往返经济舱含税机票（不含您家往返您当地机场的交通费，为了节省您的出行成本，产品展示报价为系统默认预定实时低价航班组合，多为夜航或廉价航空，若您对航班以及时间有特殊要求或指定，请出票前联系客服补差价，团队机票一经开出，不退，不改，不签！行程中披露航班时间仅供参考，以实际出票为准！具体航班信息请参考出团通知书。）； 普通航班含行李托运20KG（部分廉航除外） ，乘坐廉价航空（如春秋，九元，联航等）的旅客，可免费携带一件重量不超过5KG的非托运行李进入客舱，其体积不得超过20×40×55厘米。逾重行李请旅客自行到各机场值机柜台购买，提前到达机场，预留逾重购买行李额的时间。</li>
-              <li>123</li>
-            </ul>
-          </div>
-          <div class="schedule">
-            <div class="cost_title">#购物场所</div>
-            <ul>
-              <li>交通：沈阳-上海往返经济舱含税机票（不含您家往返您当地机场的交通费，为了节省您的出行成本，产品展示报价为系统默认预定实时低价航班组合，多为夜航或廉价航空，若您对航班以及时间有特殊要求或指定，请出票前联系客服补差价，团队机票一经开出，不退，不改，不签！行程中披露航班时间仅供参考，以实际出票为准！具体航班信息请参考出团通知书。）； 普通航班含行李托运20KG（部分廉航除外） ，乘坐廉价航空（如春秋，九元，联航等）的旅客，可免费携带一件重量不超过5KG的非托运行李进入客舱，其体积不得超过20×40×55厘米。逾重行李请旅客自行到各机场值机柜台购买，提前到达机场，预留逾重购买行李额的时间。</li>
-              <li>123</li>
-            </ul>
-          </div>
-          <div class="schedule">
-            <div class="cost_title">#自费项目</div>
-            <ul>
-              <li>交通：沈阳-上海往返经济舱含税机票（不含您家往返您当地机场的交通费，为了节省您的出行成本，产品展示报价为系统默认预定实时低价航班组合，多为夜航或廉价航空，若您对航班以及时间有特殊要求或指定，请出票前联系客服补差价，团队机票一经开出，不退，不改，不签！行程中披露航班时间仅供参考，以实际出票为准！具体航班信息请参考出团通知书。）； 普通航班含行李托运20KG（部分廉航除外） ，乘坐廉价航空（如春秋，九元，联航等）的旅客，可免费携带一件重量不超过5KG的非托运行李进入客舱，其体积不得超过20×40×55厘米。逾重行李请旅客自行到各机场值机柜台购买，提前到达机场，预留逾重购买行李额的时间。</li>
-              <li>123</li>
-            </ul>
-          </div>
+      
         </div>
       </div>
     </div>
@@ -377,12 +345,12 @@
     <div style="clear:both;">
       <div class="survey">预订须知</div>
       <div class="line"></div>
-      <div style="margin:20px 0 0 0;">
+      <div style="margin:20px 0 0 0;" v-for="(list, index) in ruleForm.others" :key="index">
         <div class="cost_01 schedule">
-          <div class="cost_title">#行前准备</div>
+          <div class="cost_title">#{{list.title}}</div>
           <ul>
-            <li>交通：沈阳-上海往返经济舱含税机票（不含您家往返您当地机场的交通费，为了节省您的出行成本，产品展示报价为系统默认预定实时低价航班组合，多为夜航或廉价航空，若您对航班以及时间有特殊要求或指定，请出票前联系客服补差价，团队机票一经开出，不退，不改，不签！行程中披露航班时间仅供参考，以实际出票为准！具体航班信息请参考出团通知书。）； 普通航班含行李托运20KG（部分廉航除外） ，乘坐廉价航空（如春秋，九元，联航等）的旅客，可免费携带一件重量不超过5KG的非托运行李进入客舱，其体积不得超过20×40×55厘米。逾重行李请旅客自行到各机场值机柜台购买，提前到达机场，预留逾重购买行李额的时间。</li>
-            <li>123</li>
+            <li v-html="list.content"></li>
+            <!-- <li>123</li> -->
           </ul>
         </div>
       </div>
@@ -411,6 +379,7 @@
         isBlock: '', // 套餐
         isPage: 0, // 行程信息
         isSchedules: '',
+        scheduleRow: '',
         ruleForm: {
           package:[{
             traffic: [{}]
@@ -580,6 +549,7 @@
       // 参团游下的套餐
       clickPage(k) {
         this.isPage = k;
+        // this.scheduleRow = this.ruleForm.package[this.isPage];
       },
       // 行程
       changeSched(k) {
@@ -602,6 +572,7 @@
           "id":this.$route.query.id
         }).then(res => {
           this.ruleForm = res.data.object
+          this.scheduleRow = this.ruleForm.package[0];
           for(let i=0; i<=10; i++) {
             let month = new Date().getMonth()+1 < 10 ? '0' + (new Date().getMonth()+1+i) : new Date().getMonth()+1;
 

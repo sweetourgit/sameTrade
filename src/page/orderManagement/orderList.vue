@@ -221,6 +221,7 @@
         this.beginDate='';
         this.endDate='';
         this.productType='';  //产品类型
+        this.pageIndex = 1;
         this.initData();
       },
       getRowClass({ row, column, rowIndex, columnIndex }) {
