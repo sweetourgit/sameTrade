@@ -284,7 +284,7 @@ export default {
       let numberNum = 0;
       this.ruleForm.arr.forEach(v => numberNum+=v.number);
       if(numberNum >= this.ruleForm.guests.length) {
-        for(let i=this.ruleForm.guests.length; i<value; i++) {
+        for(let i=this.ruleForm.guests.length; i<numberNum; i++) {
           this.ruleForm.guests.push({
             'id': 0,
             'cnName': '',

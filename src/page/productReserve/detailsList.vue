@@ -109,13 +109,7 @@
             <div class="adult" v-for="(item, k) in rowDate.plan_Enrolls" :key="k">
               <div>{{item.enrollName}}￥{{item.price_02}}*{{item.adult}}</div>
               <div><el-input-number v-model="item.adult" :min="0" :max="10" label="描述文字" size="mini" @change="handleChange(item)"></el-input-number></div>
-              
             </div>
-            <!-- <div class="adult">
-              <div>儿童￥16999.00*{{children}}</div>
-              <div><el-input-number v-model="children" :min="0" :max="10" label="描述文字" size="mini"></el-input-number></div>
-            </div> -->
-            <!-- <div class="adult">单房差￥16999.00*2</div> -->
           </div>
         </div>
         
@@ -129,31 +123,45 @@
     <div style="clear:both">
       <div class="survey">产品概况</div>
       <div class="line"></div>
-      <div style="width:1050px; height:300px; margin:20px 0 0 20px;background:#f6f6f6;"></div>
+      <div style="width:1050px; height:300px; margin:20px 0 0 20px;background:#f6f6f6;padding: 10px" v-html="ruleForm.mark"></div>
     </div>
     <div style="clear:both">
       <div class="survey">行程信息</div>
       <div class="line"></div>
       <div style="margin:0 0 0 94px;">
-        <div class="package_02" v-for="item in packageList">
-          <div class="package_01_title">{{item.title}}</div>
-          <div class="tc">出发地：{{item.origin}}</div>
+        <div :id="isPage == k ? 'isPage' : ''" class="package_02" v-for="(item, k) in ruleForm.package" :key="k" @click="clickPage(k)">
+          <div class="package_01_title">{{item.name}}</div>
+          <div class="tc">出发地：{{item.pod}}</div>
           <div class="tc">目的地：{{item.destination}}</div>
         </div>
       </div>
       <div class="nav">
         <div class="nav_left">
-          <div class="nav_left_01">出行信息</div>
-          <div class="nav_left_02">酒店信息</div>
-          <div class="nav_left_02">日程信息</div>
+          <div :id="isSchedules == k ? 'isSchedules': ''" class="nav_left_02" v-for="(item, k) in scheduleData" @click="changeSched(k)" :key="k">{{item.name}}</div>
         </div>
         <div class="travel">
           <!--出行信息-->
           <div class="travel_bc">
             <div class="nav_right">
-              <div>
-                <div class="nav_days">第一天</div>
+              <div style="clear:both; padding:30px 0 0 60px;" v-for="(item, k) in ruleForm.package[this.isPage].traffic" :key="k">
+                <div class="nav_days">第{{item.day}}天</div>
                 <div class="fl">
+                  <div class="nav_travel">{{item.podCity}}-{{item.arriveCity}}</div>
+                  <div class="airport">
+                    <div class="fb">{{item.podTime}}</div>
+                    <div class="airport01">{{item.podPlace}}</div>
+                  </div>
+                  <div class="aviation">
+                    <div class="aviation_01">{{item.company}}{{item.theNumber}}</div>
+                    <div class="aviation_line"></div>
+                    <div class="fb" v-if="item.ext_Stopover != ''">经停：{{item.ext_Stopover}}</div>
+                  </div>
+                  <div class="airport">
+                    <div class="fb">{{item.arriveTime}}</div>
+                    <div class="airport01">{{item.arrivePlace}}</div>
+                  </div>
+                </div>
+                <!-- <div style="clear:both; padding:30px 0 0 60px;">
                   <div class="nav_travel">沈阳-上海</div>
                   <div class="airport">
                     <div class="fb">08:15</div>
@@ -168,25 +176,9 @@
                     <div class="fb">10:55</div>
                     <div class="airport01">上海浦东国际机场</div>
                   </div>
-                </div>
-                <div style="clear:both; padding:30px 0 0 60px;">
-                  <div class="nav_travel">沈阳-上海</div>
-                  <div class="airport">
-                    <div class="fb">08:15</div>
-                    <div class="airport01">沈阳桃仙国际机场</div>
-                  </div>
-                  <div class="aviation">
-                    <div class="aviation_01">港龙航空KA905</div>
-                    <div class="aviation_line"></div>
-                    <div class="fb">经停：烟台3小时</div>
-                  </div>
-                  <div class="airport">
-                    <div class="fb">10:55</div>
-                    <div class="airport01">上海浦东国际机场</div>
-                  </div>
-                </div>
+                </div> -->
               </div>
-              <div style="clear:both; padding:30px 0 0 0;">
+              <!-- <div style="clear:both; padding:30px 0 0 0;">
                 <div class="nav_days">第六天</div>
                 <div class="fl">
                   <div class="nav_travel">沈阳-上海</div>
@@ -204,7 +196,7 @@
                     <div class="airport01">上海浦东国际机场</div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
           <!--酒店信息-->
@@ -318,6 +310,7 @@
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
@@ -415,21 +408,26 @@
   export default {
     data() {
       return {
-        isBlock: '',
-        ruleForm:"",
+        isBlock: '', // 套餐
+        isPage: 0, // 行程信息
+        isSchedules: '',
+        ruleForm: {
+          package:[{
+            traffic: [{}]
+          }]
+        },
         tid:1,
         title:"沈阳往返昆明+大理+丽江玉龙雪山冰川大索道6天5晚精品跟团游（洱海吉普车旅拍越野+网红地标打卡+丽水金沙+昆大丽精华景点+泡温泉）",
+        scheduleData: [{
+          name: '出行信息'
+        }, {
+          name: '酒店信息'
+        },{
+          name: '日程信息'
+        }],
         bannerList:[],
         mark:'',
-        packageList:[{
-          title:'精品昆大丽豪华6日游',
-          origin:'沈阳',
-          destination:'昆明'
-        },{
-          title:'精品昆大丽豪华6日游',
-          origin:'沈阳',
-          destination:'昆明'
-        },],
+        packageList:[],
         adult: 0,//成人计数器
         children:0,//儿童计数器
         tabPosition:'left',
@@ -545,7 +543,14 @@
           //通过id调用套餐等方法预留
         }
       },
+      // 按套餐获取详情数据
       clickPackage(k) {
+        this.chooseDate=0;
+        this.rowDate = {
+          'travelTime': '----年--月--日',
+          'Total': 0
+        };
+
         this.isBlock = k;
         let month = new Date().getMonth()+1 < 10 ? '0' + (new Date().getMonth()+1) : new Date().getMonth()+1;
         this.$http.post(this.GLOBAL.serverSrc + '/team/calendar/api/get', {
@@ -555,6 +560,7 @@
             'month': this.currentMonth
           }
         }).then(res => {
+          // 处理日历数据
           let calendarDate = this.calendarDate;
           res.data.objects.map(v => {
             v.plan_Enrolls.map(k => {
@@ -569,10 +575,17 @@
           })
           this.calendarDate = [];
           this.calendarDate = calendarDate
-          console.log(this.calendarDate)
-
         })
       },
+      // 参团游下的套餐
+      clickPage(k) {
+        this.isPage = k;
+      },
+      // 行程
+      changeSched(k) {
+        this.isSchedules = k;
+      },
+      // 预定按钮
       handeSave() {
         this.$router.push({
           name: '详情预定',
@@ -591,7 +604,6 @@
           this.ruleForm = res.data.object
           for(let i=0; i<=10; i++) {
             let month = new Date().getMonth()+1 < 10 ? '0' + (new Date().getMonth()+1+i) : new Date().getMonth()+1;
-              // console.log(month)
 
             if(Number(month)+1 > 13) {
               let k = Number(month) - 12;
@@ -609,7 +621,6 @@
               }
             }
           }
-
           this.clickPackage(0);
           console.log(this.ruleForm)
         })
@@ -652,23 +663,24 @@ ul{list-style-type: none;}
 .package_01_title{margin: 0 0 0 10px;}
 .block{width:390px; overflow:hidden; float:left; margin:0 0 10px 0;}
 #isBlock{border: solid 1px #409EFF !important;}
+#isPage{border: solid 1px #87695e;}
 .adult{float: left; margin: 0 25px 30px 0;}
 .price{border-left: 1px solid #f6f6f6;border-right: 1px solid #f6f6f6;border-bottom: 1px solid #f6f6f6;height: 60px; clear: both; width: 500px;margin: 0 0 0 25px;}
 .price_text{margin: 0 0 0 15px; float: left;line-height: 60px; font-weight: bold; color: #000;}
 .price_button{float: right;margin: 10px 15px 0 0;}
 .survey{padding: 20px 0 0 10px; overflow: hidden;height: 40px; font-size: 16px;}
 .line{width: 1080px; text-align: center; height: 1px; background: #e5e5e5; overflow: hidden; margin: 0 0 0 10px;}
-.package_02{border:1px solid #e6e6e6; float: left; margin: 20px 20px 0 0;cursor:pointer;padding: 10px;}
+.package_02{border:1px solid #e6e6e6; float: left; margin: 20px 20px 0 0;cursor:pointer;padding: 10px;width:135px;}
 .travel{float:left; margin:0 0 0 40px;}
 .travel_bc{width:930px; height:465px; background:#f2f2f2; border-radius:5px;overflow: hidden;}
 .nav{clear:both; padding:40px 0 0 0;}
 .nav_left{line-height:40px; text-align:center; float:left; width: 94px;}
-.nav_left_01{ width:94px; border-right:2px solid #87695e;cursor:pointer}
+#isSchedules{ width:94px; border-right:2px solid #87695e;cursor:pointer}
 .nav_left_02{ width:94px; border-right:2px solid #d8d8d8;cursor:pointer}
 .nav_right{margin:50px 50px 50px 80px;}
 .nav_days{float:left; font-weight:bold; font-size:18px; margin:30px 0 0 0; width:60px;}
 .fl{float: left;}
-.nav_travel{float:left; margin:30px 80px 0 80px;}
+.nav_travel{float:left; margin:30px 80px 0 80px; width: 100px;}
 .airport{float:left; margin:0 0 0 10px; width:60px; text-align:center; line-height:25px;}
 .fb{font-weight: bold;}
 .airport01{font-weight:bold; width:60px;}
