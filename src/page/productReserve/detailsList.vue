@@ -216,7 +216,7 @@
             </div>
           </div>
           <!--日程信息-->
-          <div class="schedule">
+          <div class="schedule" v-for="(item, k) in ruleForm.package[this.isPage].schedules" :key="k">
             <div>
               <div class="dateDays">1</div>
               <div class="fl lh50">沈阳-昆明</div>

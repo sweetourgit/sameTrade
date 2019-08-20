@@ -61,7 +61,7 @@
       <div class="mb10">
         <div class="adult" v-for="item in arrprice" >
             <div class="ml10">{{item.enrollName}}￥{{item.price_02}}.00*{{item.adult}}</div>
-          <div class="ml10"><el-input-number @change="handleChange(value,item.enrollName)" v-model="item.adult" :min="0" :max="10" label="描述文字" size="mini"></el-input-number></div>
+          <div class="ml10"><el-input-number @change="handleChange(item.adult,item.enrollName,item.price_02)" v-model="item.adult" :min="0" :max="10" label="描述文字" size="mini"></el-input-number></div>
           <div>余位：9</div>
         </div>
         <!--<div class="children">单房差￥16999.00*2</div>-->
@@ -261,7 +261,7 @@
             });
             this.$router.push({
                 path: '/productList',
-                
+
             })
         },
         otheriput(){
@@ -384,7 +384,7 @@
               }
           })
         },
-      handleChange(value,name){
+      handleChange(value,name,price){
           let numberNum = 0;
           this.arrprice.forEach(v => numberNum+=v.adult);
           console.log(numberNum)
@@ -399,10 +399,10 @@
                       'idCard': '',
                       'sex': '',
                       'isDeleted': 0,
-                      'enrollPrice': v.price_02,
+                      'enrollPrice': price,
                       'productType': 1,
                       'enrollID': 1,
-                      'singlePrice': v.price_02,
+                      'singlePrice': price,
                       'bornDate': 0,
                       'credType': 0,
                       'credCode': 0,
