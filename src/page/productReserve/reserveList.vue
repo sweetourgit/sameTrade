@@ -1,12 +1,13 @@
 <template>
   <div class="reserveList">
     <div style="float:right;">
-      <el-button type="primary">预订</el-button>
+      <el-button type="primary" @click="submit">预订</el-button>
       <el-button>取消</el-button>
     </div>
     <div class="reserveTitle">
       <span>{{ProductName}}</span>
     </div>
+    {{this.find}}
     <table class="reserveTable">
       <tr>
         <td>
@@ -58,24 +59,19 @@
       <div class="line"></div>
       <div><span class="table_details_01">*</span>报名人数</div>
       <div class="mb10">
-        <div class="adult">
-          <div class="ml10">成人￥16999.00*{{adult}}</div>
-          <div class="ml10"><el-input-number v-model="adult" :min="0" :max="10" label="描述文字" size="mini"></el-input-number></div>
+        <div class="adult" v-for="item in arrprice" >
+            <div class="ml10">{{item.enrollName}}￥{{item.price_02}}.00*{{item.adult}}</div>
+          <div class="ml10"><el-input-number @change="handleChange(value,item.enrollName)" v-model="item.adult" :min="0" :max="10" label="描述文字" size="mini"></el-input-number></div>
           <div>余位：9</div>
         </div>
-        <div class="children">
-          <div class="ml10">儿童￥16999.00*{{children}}</div>
-          <div class="ml10"><el-input-number v-model="children" :min="0" :max="10" label="描述文字" size="mini"></el-input-number></div>
-          <div>余位：9</div>
-        </div>
-        <div class="children">单房差￥16999.00*2</div>
+        <!--<div class="children">单房差￥16999.00*2</div>-->
         <div class="order">
           <div class="ml10">其他费用</div>
           <div class="ml10">
-            <el-input class="order_input01"></el-input>
-            <el-input class="order_input02"></el-input> 
+            <el-input class="order_input01" v-model="other_price" @change="otheriput"></el-input>
+            <el-input class="order_input02" v-model="other_note"></el-input>
           </div>
-          <div class="fr">总价：11111</div>
+          <div class="fr">总价：{{Total}}</div>
         </div>
         <div class="line"></div>
         <div><span class="table_details_01">*</span>下单方式</div>
@@ -90,20 +86,39 @@
     <div class="switchText mb10">
       <div class="people">
         <div><span class="table_details_01">*</span>订单联系人</div>
-        <el-input class="ml10 w300"></el-input>
+        <el-input v-model="ordertinker" class="ml10 w300"></el-input>
       </div>
       <div class="people">
         <div><span class="table_details_01">*</span>联系电话</div>
-        <el-input class="ml10 w300"></el-input>
+        <el-input v-model="orderphone" class="ml10 w300"></el-input>
       </div>
       <div class="line"></div>
-      <el-table :data="tableData" class="tableData" border style="margin:20px 0 20px 10px">
-        <el-table-column prop="name" label="姓名" width="180" align="center"></el-table-column>
-        <el-table-column prop="type" label="报名类型" width="180" align="center"></el-table-column>
-        <el-table-column prop="phone" label="电话" width="180" align="center"></el-table-column>
-        <el-table-column prop="IDcard" label="身份证" width="180" align="center"></el-table-column>
-        <el-table-column prop="sex" label="性别" width="180" align="center"></el-table-column>
-      </el-table>
+      <table cellpadding="5" cellspacing="0" width="100%" class="tour-list">
+        <tr bgcolor="#f7f7f7">
+          <td width="100">姓名</td>
+          <td width="160">报名类型</td>
+          <td width="160">电话</td>
+          <td>身份证</td>
+          <td width="100">性别</td>
+        </tr>
+        <tr v-for="(item, index) in ruleForm.guests" :key="index" @click="handleDelete(index)">
+          <td><el-input v-model="item.cnName"></el-input></td>
+          <td><el-input v-model="item.enrollName" disabled></el-input></td>
+          <td><el-input v-model="item.mobile"></el-input></td>
+          <td><el-input v-model="item.idCard"></el-input></td>
+          <td>
+            <el-select v-model="item.sex" placeholder="请选择">
+              <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+              </el-option>
+            </el-select>
+          </td>
+        </tr>
+      </table>
+
     </div>
     
 
@@ -114,6 +129,28 @@
   export default {
     data() {
       return {
+          planID:'',
+          ruleForm:{
+              guests:[
+
+              ]
+          },
+          options: [{
+              value: 1,
+              label: '男'
+          },{
+              value: 2,
+              label: '女'
+          },{
+              value: 3,
+              label: '未知'
+          }],
+          ordertinker:'',
+          orderphone:'',
+          Total:'',
+          other_price:'',
+          other_note:'',
+          arrprice:"",
           ProductName:"绝美斯米兰 蓝调普吉6晚8日游（往返转机）",
           ProductId:"TC-GTY-1001-01-180806-01",
           tcName:"绝美斯米兰",
@@ -163,11 +200,73 @@
           phone: '15624542154',
           IDcard:'215468198703154568',
           sex:'男'
-        }]
+        }],
+          find:{}
 
       }
     },
     methods:{
+        submit(){
+            //联系人信息
+            var tinker = {}
+            var cout = ""
+            tinker.Name = this.ordertinker
+            tinker.Tel = this.orderphone
+                this.arrprice.forEach(v =>{
+                  cout+= parseInt(v.adult)
+            })
+            var that = this
+            this.$http.post(
+                this.GLOBAL.serverSrc + "/order/all/api/siorderinsert",
+                {
+                    "object": {
+                        "teamID":that.$route.query.id,
+                        "planID":that.planID,
+                        "orderStatus": 1,
+                        "refundStatus": 1,
+                        "occupyStatus": that.order,
+                        "payable": that.Total,
+                        "favourable": [
+                            {
+                                "id": 0,
+                                "createTime": 0,
+                                "orderID": 0,
+                                "price": that.other_price,
+                                "title": that.other_note,
+                                "favMode": 1,
+                                "mark": "string"
+                            }
+                        ],
+                        "contact": JSON.stringify(tinker),
+                        "endTime": 0,
+                        "orderChannel": 1,
+                        "orgID": sessionStorage.getItem('aid'),
+                        "userID": that.tradeSales,
+                        "guest": that.ruleForm.guests,
+                        "number": cout,
+                        "productType": 1,
+                        "remark": "string"
+                    }
+                },
+            )
+                .then(function (obj) {
+                    console.log(obj)
+
+                })
+                .catch(function (obj) {
+                })
+            this.$message({
+                message: '恭喜你，这是一条成功消息',
+                type: 'success'
+            });
+            this.$router.push({
+                path: '/productList',
+                
+            })
+        },
+        otheriput(){
+            this.changecout()
+        },
       oneinfo(){
           var that = this
           this.$http.post(
@@ -222,13 +321,148 @@
 
 
 
-      }
+      },
+      saverlist(){
+          var att = []
+          var that = this
+            this.$http.post(
+                this.GLOBAL.serverSrc + "/universal/localcomp/api/PeerUserList",
+                {
+                    "object": {
 
+                        "peerUserType": 2,
+                        "localCompID":  sessionStorage.getItem('aid'),
+
+                    }
+                },
+            )
+                .then(function (obj) {
+                   console.log(obj.data.objects)
+                    that.manager  = obj.data.objects.map(v => {
+                        return {
+                            'label': v.name,
+                            'value': v.id
+                        }
+                    })
+                })
+                .catch(function (obj) {
+                })
+        },
+      changeinfo(date){
+        console.log(date)
+          this.planID = date.planID
+         this.addDate = date.date
+         this.Total = date.Total
+         this.arrprice = date.plan_Enrolls
+          console.log(this.arrprice)
+          this.arrprice.forEach(v => {
+              for (var i= 0; i< v.adult; i++){
+                  this.ruleForm.guests.push({
+                      'cnName': '',
+                      'enName': 0,
+                      'enrollName': v.enrollName,
+                      'mobile': '',
+                      'idCard': '',
+                      'sex': '',
+                      'isDeleted': 0,
+                      'enrollPrice': v.price_02,
+                      'productType': 1,
+                      'enrollID': 1,
+                      'singlePrice': v.price_02,
+                      'bornDate': 0,
+                      'credType': 0,
+                      'credCode': 0,
+                      'credTOV': 0,
+                      'orderID': 0,
+                      'orgID': sessionStorage.getItem('aid'),
+                      'userID': 1,
+                      "teamID":this.$route.query.id,
+                      "planID":this.planID,
+                      'createTime': Date.parse(new Date()),
+                      'code': 0
+                  })
+              }
+          })
+        },
+      handleChange(value,name){
+          let numberNum = 0;
+          this.arrprice.forEach(v => numberNum+=v.adult);
+          console.log(numberNum)
+          if(numberNum >= this.ruleForm.guests.length) {
+              for(let i=this.ruleForm.guests.length; i<numberNum; i++) {
+
+                  this.ruleForm.guests.push({
+                      'cnName': '',
+                      'enName': 0,
+                      'enrollName': name,
+                      'mobile': '',
+                      'idCard': '',
+                      'sex': '',
+                      'isDeleted': 0,
+                      'enrollPrice': v.price_02,
+                      'productType': 1,
+                      'enrollID': 1,
+                      'singlePrice': v.price_02,
+                      'bornDate': 0,
+                      'credType': 0,
+                      'credCode': 0,
+                      'credTOV': 0,
+                      'orderID': 0,
+                      'orgID': sessionStorage.getItem('aid'),
+                      'userID': 1,
+                      "teamID":this.$route.query.id,
+                      "planID":this.planID,
+                      'createTime': Date.parse(new Date()),
+                      'code': 0
+                  })
+              }
+              console.log(this.ruleForm.guests)
+
+          } else {
+              // let isNum = this.ruleForm.guests.length;
+              // for(let i=0; i<(isNum-value); i++) {
+              //   this.ruleForm.guests.pop();
+              // }
+          }
+
+          //总价
+            this.changecout()
+        },
+        changecout(){
+            var cout = 0;
+
+            this.arrprice.forEach( v=>{
+                cout += v.adult * v.price_02
+            })
+            cout += parseInt(this.other_price)
+            this.Total = cout
+        },
+        handleDelete(key) {
+            let numberNum = 0;
+            this.arrprice.forEach(v => numberNum+=v.adult);
+            if(numberNum < this.ruleForm.guests.length) {
+                this.$confirm('是否删除该条信息', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.ruleForm.guests.splice(key, 1);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            }
+        },
 
     },
     created(){
        this.id =  this.$route.query.id;
         this.oneinfo()
+        this.saverlist()
+        this.changeinfo(this.$route.params.page)
+
     }
   }
 
@@ -252,7 +486,7 @@
 .line{width: 1080px; text-align: center; height: 1px; background: #e5e5e5; overflow: hidden; margin: 0 0 0 10px;}
 .mb10{margin-bottom:10px; }
 .ml10{margin-left:10px; }
-.adult{float:left; width:150px; text-align:center;}
+.adult{float:left; width:200px; text-align:center;}
 .children{float:left; width:150px; text-align:center; margin:0 0 0 30px;}
 .order{float:left;margin:0 0 0 30px;}
 .fr{float:right}
