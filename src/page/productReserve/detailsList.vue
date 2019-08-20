@@ -161,22 +161,6 @@
                     <div class="airport01">{{item.arrivePlace}}</div>
                   </div>
                 </div>
-                <!-- <div style="clear:both; padding:30px 0 0 60px;">
-                  <div class="nav_travel">沈阳-上海</div>
-                  <div class="airport">
-                    <div class="fb">08:15</div>
-                    <div class="airport01">沈阳桃仙国际机场</div>
-                  </div>
-                  <div class="aviation">
-                    <div class="aviation_01">港龙航空KA905</div>
-                    <div class="aviation_line"></div>
-                    <div class="fb">经停：烟台3小时</div>
-                  </div>
-                  <div class="airport">
-                    <div class="fb">10:55</div>
-                    <div class="airport01">上海浦东国际机场</div>
-                  </div>
-                </div> -->
               </div>
               <!-- <div style="clear:both; padding:30px 0 0 0;">
                 <div class="nav_days">第六天</div>
