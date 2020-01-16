@@ -535,7 +535,6 @@
                     console.log("出错了")
                     this.ruleForm.password = "";
                     this.ruleForm.verification = "";
-                     
                       // this.$http.post(this.GLOBAL.serverSrc+'/code/api/getguid',{
 
                       // }).then(res => {
@@ -549,7 +548,7 @@
                     
                   } else {
                     store.save('token',res.data)
-                    // console.log(token);
+                    //localStorage.setItem('token',JSON.parse(res.data).access_token)
                     this.$http.post(this.GLOBAL.serverSrc+'/universal/localcomp/api/Login',{
                         "phone": this.ruleForm.user,
                         "passWord": this.ruleForm.password
@@ -557,7 +556,7 @@
                       headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token'),
                       }
-                      
+
                     }).then(res => {
                         console.log(res)
                       sessionStorage.setItem('aid',res.data.object.localCompID)
