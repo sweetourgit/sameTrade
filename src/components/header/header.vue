@@ -15,24 +15,24 @@
 
 <script>
     export default {
-    	data () {
-    	    return {
-            name: ''
-	    }
+    	data(){
+    	  return{
+          name: ''
+	      }
 	    },
-      created (){
-        this.name = localStorage.getItem('name')
+      created(){
+        this.name = JSON.parse(sessionStorage.getItem('tyUserInfo')).name;
       },
-	    methods: {
-          submit:function() {
-            this.$router.push({ path: '/login' })
-            localStorage.clear()
-            sessionStorage.clear()
-          },
-          listUser() {
-            this.$router.push({ path: '/accountInfor' })
-          }
-	        }
+	    methods:{
+        submit:function(){
+          this.$router.push({path: '/login'});
+          sessionStorage.removeItem('tyToken');
+          sessionStorage.removeItem('tyUserInfo');
+        },
+        listUser(){
+          this.$router.push({path: '/accountInfor'})
+        }
+	    }
     }
 
 </script>

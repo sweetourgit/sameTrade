@@ -3,12 +3,20 @@
        <!--备注信息弹窗-->
        <el-dialog title="备注" :visible.sync="dialogFormMark" class="city_list" width="780px" @close="close">
           <el-form :model="markFormAdd" :rules="rules" ref="markFormAdd" label-width="80px" class="demo-ruleForm">
-               <el-form-item label="备注" prop="Mark">            
-                  <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 6}" class="remark" placeholder="请输入备注" v-model="markFormAdd.Mark"></el-input>
+               <div v-for="item in markForms">
+               <el-form-item :label="name">            
+                  <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 6}" class="remark" placeholder="请输入内容" v-model="item.content" :disabled="true"></el-input>
+                  <div class="time">{{item.CreateTime}}</div>
                </el-form-item>
-               <el-form-item class="submitMark">                               
-                  <el-button @click="close">取消</el-button>
-                  <el-button type="primary" @click="submitMark">保存</el-button>
+               </div>
+               <el-form-item label="填写备注" prop="content">            
+                  <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 6}" class="remark" placeholder="请输入内容" v-model="markFormAdd.content"></el-input>
+               </el-form-item>
+               <el-form-item>
+                  <el-button type="info" size="medium" class="submitMark" @click="submitMark">提交备注</el-button>
+               </el-form-item>
+               <el-form-item>
+                  <el-button class="colse" @click="close">关闭</el-button>
                </el-form-item>
           </el-form>
        </el-dialog>
@@ -24,14 +32,15 @@ export default {
   },
   data() {
     return {
-      a: '',
+       name:JSON.parse(sessionStorage.getItem('tyUserInfo')).name,
        //备注信息弹窗
        dialogFormMark:false,     
        markFormAdd:{
-        Mark:''
+         'content':'',
        },
+       markForms:[],
        rules:{      
-         Mark: [{ required: true, message: '请填写备注信息', trigger: 'blur' }]
+         content: [{ required: true, message: '请填写备注信息', trigger: 'blur' }]
        }
     }
   },
@@ -39,50 +48,60 @@ export default {
   },
   watch: {
       variable:function(){        
-        if(this.dialogType==3){
-          //this.orderGet(this.orderId);
+        if(this.dialogType==2){
+          this.getCommentList();
           this.dialogFormMark=true;    
         }
      }
   },
   methods: {
+      getCommentList(orderId){
+        //查询一条订单信息
+        this.$http.post(this.GLOBAL.serverSrc + '/indirect/orderquery/get/GetOrderCommentList',{
+             "orderCode": this.orderData.orderCode
+          }).then(res => {
+            if(res.data.isSuccess == true){
+               this.markForms = res.data.objects;
+            }
+          }).catch(err => {
+        })
+      },
       close(){
         this.dialogFormMark=false;
         this.$refs['markFormAdd'].resetFields();
       },
-      // 返回 类似 2016-01-02 格式的字符串
-      formatDate(year, month, day) {
-        var y = year;
-        var m = month;
-        if (m < 10) m = "0" + m;
-        var d = day;
-        if (d < 10) d = "0" + d;
-        return y + "-" + m + "-" + d;
+      formatDate(date){
+       var y = date.getFullYear();  
+       var m = date.getMonth() + 1;  
+           m = m < 10 ? ('0' + m) : m;  
+       var d = date.getDate();  
+           d = d < 10 ? ('0' + d) : d;  
+       var h = date.getHours();  
+           h=h < 10 ? ('0' + h) : h;  
+       var minute = date.getMinutes();  
+           minute = minute < 10 ? ('0' + minute) : minute;  
+       var second=date.getSeconds();  
+           second=second < 10 ? ('0' + second) : second;  
+           return y + '-' + m + '-' + d +' '+ h + ':' + minute + ':' + second;
       },
       submitMark(){
-        let time = this.formatDate(
-          new Date(Date.parse(new Date())).getFullYear(),
-          new Date(Date.parse(new Date())).getMonth() + 1,
-          new Date(Date.parse(new Date())).getDate())
         this.$refs['markFormAdd'].validate((valid) => {
-          this.$http.post(this.GLOBAL.serverSrc + '/orderquery/get/api/InserOrderComment', {
-            'object': {
-              'id': this.orderData.id,
-              'userID': sessionStorage.getItem('id'), 
-              'orderCode': this.orderData.orderCode,
-              'content': this.markFormAdd.Mark,
-              'createTime': time,
-              'isDeleted': 0
-            }
-          }).then(res => {
-            console.log(res)
-            this.dialogFormMark = false;
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            });
-          })
-        });     
+          if (valid) {
+            this.$http.post(this.GLOBAL.serverSrc + '/indirect/orderquery/get/inserordercomment', {
+              'object': {
+                'id': this.orderData.id,
+                'userID': JSON.parse(sessionStorage.getItem('tyUserInfo')).id, 
+                'orderCode': this.orderData.orderCode,
+                'content': this.markFormAdd.content,
+                'createTime': new Date(),
+                'isDeleted': 0
+              }
+            }).then(res => {
+              this.dialogFormMark = false;
+              this.$message.success('保存成功');
+            })
+          }
+        })     
       },
     }
 }
@@ -91,5 +110,7 @@ export default {
 <style scoped>
    .demo-ruleForm{margin-top: 20px}
    .remark{width: 600px}
-   .submitMark{text-align: right;margin-right: 60px}
+   .time{margin-right: 60px;text-align: right;color: #999}
+   .submitMark{float: right;margin-right: 60px}
+   .colse{margin-left: 230px;width: 100px}
 </style>

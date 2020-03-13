@@ -63,7 +63,7 @@ html{
 .page-header{height:auto !important;padding:0px !important}
 .container{height: 100%;}
 .navigation{width:222px !important;}
-.content-body{margin-left: -22px; background: #F7F7F7; line-height: 100%; }
+.content-body{margin-left: -22px; background: #f7f7f7; line-height: 100%; }
 .content-body1{margin: 18px 0 0 3px; background: #FFF; line-height: 100%; min-height: 94%;width:99.6%;}
 .content-position{border-left: 3px solid #F38F00; text-align: left; padding-left: 20px; font-size: 16px;height: 23px;line-height: 23px;margin: -3px 0 0 3px;}
 .el-message-box.delete_country p{margin: 0 0 0 50px;}  /* 城市列表删除 */

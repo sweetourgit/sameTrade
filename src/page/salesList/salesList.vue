@@ -1,132 +1,94 @@
 <template>
   <div>
-    <div >
-      <div class="borderstyle" style="margin-left: 20px">
-          <el-button type="success" icon="el-icon-check"  class="iconstyle" circle></el-button>
-          <span style="    float: left;margin-left: 46px;margin-top: 31px;">本月下单</span>
-          <span style="    float: left;margin-top: 60px;margin-left: -60px;font-size: 25px;">4</span>
-          <i class="el-icon-caret-bottom" style="color: red; float: left;margin-top: 86px;margin-left: -66px;"></i>
-          <span style="color: red; float: left;margin-top: 85px;margin-left: -42px;">10%</span>
-          <span style=" float: left;margin-left: 2px;margin-top: 85px;">同比上月</span>
-      </div>
-        <div class="borderstyle" style="margin-left: 100px">
-            <el-button type="success" icon="el-icon-check"  class="iconstyle" circle></el-button>
-            <span style="    float: left;margin-left: 46px;margin-top: 31px;">本月销售额</span>
-            <span style="    float: left;margin-top: 60px;margin-left: -78px;font-size: 25px;">54,323</span>
-            <i class="el-icon-caret-bottom" style="color: red; float: left;margin-top: 86px;margin-left: -80px;"></i>
-            <span style="color: red; float: left;margin-top: 85px;margin-left: -60px;">10%</span>
-            <span style=" float: left;margin-left: -9px;margin-top: 85px;">同比上月</span>
-        </div>
-        <div class="borderstyle" style="margin-left: 150px">
-            <el-button type="success" icon="el-icon-check"  class="iconstyle" circle></el-button>
-            <span style="    float: left;margin-left: 46px;margin-top: 31px;">退款订单(个)</span>
-            <span style="    float: left;margin-top: 60px;margin-left: -78px;font-size: 25px;">6</span>
-            <i class="el-icon-caret-bottom" style="color: red; float: left;margin-top: 86px;margin-left: -80px;"></i>
-            <span style="color: red; float: left;margin-top: 85px;margin-left: -60px;">10%</span>
-            <span style=" float: left;margin-left: -9px;margin-top: 85px;">同比上月</span>
-        </div>
-    </div>
-    <div class="search">
-        <div style="margin-top: 30px;margin-left: 45px">
-            <span>销售:</span>
-            <el-select v-model="value" placeholder="请选择">
-                <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
-            <el-button type="primary" round style="    margin-left: 70px;">搜索</el-button>
-            <el-button plain>重置</el-button>
-        </div>
-    </div>
-      <div style="float: left;width: 900px; margin-left: 20px;margin-top: 20px">
-        <el-button type="primary">导出excel</el-button>
-      </div>
-
-      <div style=" width: 1160px;margin-left: 20px;margin-top: 20px">
-          <div style="float:left; margin-top: 10px">
-              <span>日期选择</span>
-              <el-select v-model="value" placeholder="请选择">
-                  <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                  </el-option>
-              </el-select>
-          </div>
-
-          <div style=" margin-top: 20px; float:left; width: 1500px">
-              2016-01 <span style=" margin-left: 20px;">年度销售总额:</span> <span style=" font-size: 18px">123.90元:</span>
-              <span style=" margin-left: 20px;">年度总订单数:</span> <span style=" font-size: 18px">12笔:</span>
-              <span style=" margin-left: 20px;">本月销售总额:</span> <span style=" font-size: 18px">123.90元:</span>
-              <span style=" margin-left: 20px;">本月销售总额:</span><span style=" font-size: 18px">12笔:</span>
-          </div>
-          <div style="float:left; margin-top: 20px">
-            <el-table
-                  :data="tableData"
-                  border
-                  style="width: 100%;">
-              <el-table-column
-                      prop="date"
-                      label="订单号"
-                      width="180">
-              </el-table-column>
-              <el-table-column
-                      prop="name"
-                      label="商品名称"
-                      width="180">
-              </el-table-column>
-              <el-table-column
-                      prop="address"
-                      label="订单金额">
-              </el-table-column>
-              <el-table-column
-                      prop="address"
-                      label="销售">
-              </el-table-column>
-              <el-table-column
-                      prop="address"
-                      label="数量">
-              </el-table-column>
-              <el-table-column
-                      prop="address"
-                      label="订单联系人">
-              </el-table-column>
-              <el-table-column
-                      prop="address"
-                      label="订单状态">
-              </el-table-column>
-              <el-table-column
-                      prop="address"
-                      label="订单创建日期">
-              </el-table-column>
-              <el-table-column
-                      prop="address"
-                      label="操作">
-                  <template slot-scope="scope">
-                      <template>
-                          <a style="color: #6AABFB">查看订单</a>
-                      </template>
-                  </template>
-              </el-table-column>
-          </el-table>
-          </div>
-          <div style="    margin-bottom: 65px;float: left;margin-top: 20px;">
-              <el-pagination
-
-                      @size-change="handleSizeChange"
-                      @current-change="handleCurrentChange"
-                      :current-page="currentPage4"
-                      :page-sizes="[100, 200, 300, 400]"
-                      :page-size="100"
-                      layout="total, sizes, prev, pager, next, jumper"
-                      :total="400">
-              </el-pagination>
+      <div class="borderstyle ml20">
+          <div class="iconstyle icon1"></div>
+          <div class="icon-left">
+            <div class="title">本月下单</div>
+            <div class="sums">4</div>
+            <div class="persent">
+                <span class="tip">▼10%</span>
+                <span>同比上月</span>
+            </div>
           </div>
       </div>
+      <div class="borderstyle ml100">
+          <div class="iconstyle icon2"></div>
+          <div class="icon-left">
+            <div class="title">本月销售额</div>
+            <div class="sums">54,323</div>
+            <div class="persent">
+                <span class="tip">▼10%</span>
+                <span>同比上月</span>
+            </div>
+          </div>
+      </div>
+      <div class="borderstyle ml100">
+          <div class="iconstyle icon3"></div>
+          <div class="icon-left">
+            <div class="title">退款订单(个)</div>
+            <div class="sums">5</div>
+            <div class="persent">
+                <span class="tip">▼10%</span>
+                <span>同比上月</span>
+            </div>
+          </div>
+      </div>
+      <div class="search">
+           <span class="search-title">同业销售</span>
+           <el-select v-model="tradeSales" placeholder="全部">
+             <el-option v-for="item in manager" :key="item.value" :label="item.name" :value="item.value"></el-option>
+           </el-select>
+           <el-button class="ml20" type="primary" @click="initData(1,pageSize)">搜索</el-button>
+           <el-button @click="tradeSales=''">重置</el-button>
+      </div>
+      <el-button class="excel" type="primary" @click="">导出excel</el-button>
+      
+      <div class="ml20">
+         <span class="ml20">2016-01</span>
+         <span class="line">|</span>
+         <span>年度销售总额 :</span>
+         <span class="color-blue">123.90元</span>
+         <span class="line">|</span>
+         <span>年度总订单数 :</span>
+         <span class="color-blue">12笔</span>
+         <span class="line">|</span>
+         <span>本月销售总额 :</span>
+         <span class="color-blue">123.90元</span>
+         <span class="line">|</span>
+         <span>本月总订单数 :</span>
+         <span class="color-blue">12笔</span>  
+      </div>
+
+      <el-table :data="saleList" ref="multipleTable" class="table" :header-cell-style="getRowClass" border>
+         <el-table-column  prop="id" label="ID" width="80" align="center"></el-table-column>
+         <el-table-column  prop="title" label="产品名称" min-width="230" align="center"></el-table-column>
+         <el-table-column  prop="productType" label="类型" width="90" align="center"></el-table-column>
+         <el-table-column  prop="place" label="出发地/目的地" width="135" align="center"></el-table-column>
+         <el-table-column  prop="total" label="价格" width="100" align="center"></el-table-column>
+         <el-table-column  prop="orderStatus" label="订单状态" width="120" align="center"></el-table-column>
+         <el-table-column  prop="op" label="操作人" width="120" align="center"></el-table-column>
+         <el-table-column  prop="createTime" label="下单时间" width="180" align="center"></el-table-column>
+         <el-table-column  label="操作" width="100" align="center">
+             <template slot-scope="scope">
+                <span class="cursor blue" @click="operation(scope.row,1)">查看订单</span>
+             </template> 
+         </el-table-column>
+       </el-table>
+       <!--分页-->
+       <div style="width:1160px;margin-left:20px;overflow:hidden">
+         <el-pagination v-if="pageshow" class="pagination"
+            @size-change="handleSizeChange"
+            background
+            @current-change="handleCurrentChange"
+            :current-page="1" 
+            :page-sizes="[10, 30, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+         </el-pagination>
+       </div>
+       <order-detail :orderData="saleList" :variable="variable" :dialogType="dialogType"></order-detail>
+
 
 
 
@@ -134,54 +96,70 @@
 </template>
 
 <script>
+  import orderDetail from '../orderManagement/orderDetail';
   export default {
-    data() {
+    components:{
+      "order-detail":orderDetail
+  },
+  data() {
       return {
-          currentPage4: 4,
-          tableData: [{
-              date: '2016-05-02',
-              name: '王小虎',
-              address: '上海市普陀'
-          }, {
-              date: '2016-05-04',
-              name: '王小虎',
-              address: '上海市普陀区金'
-          }, {
-              date: '2016-05-01',
-              name: '王小虎',
-              address: '上海市普陀区金'
-          }, {
-              date: '2016-05-03',
-              name: '王小虎',
-              address: '上海市普陀区金沙'
-          }],
-          options: [{
-              value: '选项1',
-              label: '黄金糕'
-          }, {
-              value: '选项2',
-              label: '双皮奶'
-          }, {
-              value: '选项3',
-              label: '蚵仔煎'
-          }, {
-              value: '选项4',
-              label: '龙须面'
-          }, {
-              value: '选项5',
-              label: '北京烤鸭'
-          }],
-          value: ''
-
+         tradeSales:"",
+         manager:[],
+         saleList:[],
+         pageshow:true,
+         pageSize: 10, 
+         pageIndex: 1,
+         total: 0,
+         variable:0,   //设置一个变量展示弹窗
+         dialogType:0, //弹窗类型  1：订单详细  2：修改订单
       }
     },
+    mounted() {
+      this.initData();
+    },
     methods:{
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-        }
+         operation(order,i){
+            this.orderData = order;
+            this.variable++;
+            this.dialogType=i;        
+         },
+         getRowClass({ row, column, rowIndex, columnIndex }) {
+            if (rowIndex == 0) {
+              return 'background:#f7f7f7;height:60px;textAlign:center;color:#333;fontSize:15px'
+            } else {
+              return ''
+            }
+         },
+         handleSizeChange(val){
+            this.pageSize = val;
+            this.pageIndex = 1;
+            this.initData(1,val);
+         },
+         handleCurrentChange(val){
+            this.initData(val,this.pageSize);
+            this.pageIndex=val;
+         },
+         initData(pageIndex=this.pageIndex,pageSize=this.pageSize,tradeSales=this.tradeSales){
+            this.$http.post(this.GLOBAL.serverSrc + '/orderquery/get/api/sipage',{
+              "pageIndex": pageIndex,
+              "pageSize": pageSize,
+              "object": {
+                }
+            }).then(res => {
+              this.saleList=[];
+              this.saleList = res.data.objects;
+              this.total = res.data.total;
+              this.$nextTick(() => {
+                  this.pageshow = true;
+              })
+            })
+          },
+
+
+
+
+
+
 
     }
   }
@@ -191,27 +169,26 @@
 </script>
 
 <style scoped>
-    .borderstyle{
-        width: 300px;
-        height: 120px;
-        border: 1px solid #E8E8E8;
-        float: left;
-    }
-    .iconstyle{
-        width: 83px;
-        height: 80px;
-        margin-left: 10px;
-        margin-top: 20px;
-        float: left;
-    }
-    .search{
-        height: 105px;
-        width: 1160px;
-        background-color: #F7F7F7;
-        float: left;
-        margin-left: 20px;
-        margin-top: 19px;
-
-    }
+ .borderstyle{width:315px;height:120px;border:1px solid #E8E8E8;float:left;margin-bottom: 30px}
+ .ml20{margin-left:20px}
+ .ml100{margin-left:104px}
+ .iconstyle{width: 70px;height: 70px;margin-left: 10px;margin-top: 25px;float:left;}
+ .icon1{background-image:url('../../../static/sale/icon1.png')}
+ .icon2{background-image:url('../../../static/sale/icon2.png')}
+ .icon3{background-image:url('../../../static/sale/icon3.png')}
+ .icon-left{float:left;margin-left:20px}
+ .title{margin-top:25px;clear:both;font-size: 14px}
+ .sums{margin-top:10px;font-size: 26px}
+ .persent{margin-top:10px;font-size: 14px}
+ .tip{color:red}
+ .search{background-color: #eee;width: 1160px;height: 68px;clear: both;margin-left: 20px;padding-top: 25px}
+ .search-title{font-size: 14px;margin:0 15px 0 30px}
+ .excel{margin:30px 20px 20px 20px}
+ .line{margin: 10px}
+ .color-blue{color: #409EFF}
+ .table{border:1px solid #e6e6e6;border-bottom: 0;background-color: #F7F7F7;width:1160px;margin: 20px 0 0 20px}
+ .pagination{text-align:center;margin:40px 0}
+ .blue{color: #2e94f9}
+ .cursor{cursor: pointer}
 </style>
 
