@@ -82,8 +82,10 @@
         <div><span class="table_details_01">*</span>下单方式</div>
         <div class="ml10">
           <el-radio v-model="order" label="3">确认占位</el-radio>
+          <!--
           <el-radio v-model="order" label="2">预订占位</el-radio>
           <el-radio v-model="order" label="1">预订不占位</el-radio>
+          -->
         </div>
       </div>
     </div>
@@ -198,7 +200,7 @@
           otherPrice:'',
           otherNote:'',
           total:0,
-          order:'1',//下单方式
+          order:'3',//下单方式
           contact:{
             Name:'',
             Tel:'',

@@ -72,7 +72,7 @@
            <el-table-column  label="状态" min-width="80" align="center">
               <template slot-scope="scope">
                 <div v-if="scope.row.state == 3" class="red">停用</div>
-                <div v-else>正常</div>
+                <div v-if="scope.row.state == 2">正常</div>
               </template>
            </el-table-column>
            <el-table-column  prop="phone" label="手机" width="150" align="center"></el-table-column>
@@ -88,13 +88,13 @@
            <el-table-column  prop="qq" label="qq" width="120" align="center"></el-table-column>
            <el-table-column label="职务" width="120" align="center">
                <template slot-scope="scope">
-                 <div v-if="scope.row.state == 1" class="red">管理员</div>
-                 <div v-else>销售人员</div>
+                 <div v-if="scope.row.peerUserType == 1">管理员</div>
+                 <div v-if="scope.row.peerUserType == 2">旅游顾问</div>
                </template>
            </el-table-column>
            <el-table-column  label="操作" align="center">
                <template slot-scope="scope">
-                  <span class="cursor blue" @click="operation(2,scope.row.id)">更改</span>
+                  <span class="cursor blue" @click="operation(2,scope.row.phone)">更改</span>
                </template>
            </el-table-column>
          </el-table>

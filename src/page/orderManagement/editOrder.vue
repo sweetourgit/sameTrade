@@ -118,12 +118,12 @@ export default {
                 message: "姓（拼音）格式不正确"
               }
             ],
-            sex: [{ required: true, message: "请选择性别", trigger: "change" }],
+            sex: [{ required: true, message: "请选择性别", trigger: "blur" }],
             mobile: [
               { required: true, message: "请输入手机号", trigger: "blur" },
               {
                 pattern: /^(13[0-9]|14[5|7|9]|15[0|1|2|3|5|6|7|8|9]|16[6]|17[0|1|2|3|5|6|7|8]|18[0-9]|19[8|9])\d{8}$/,
-                message: "手机号格式不正确"
+                message: "手机号格式不正确", trigger: "blur"
               }
             ],
         }
@@ -163,18 +163,21 @@ export default {
     close(){
       this.dialogFormMark=false;
       this.$refs['contact'].resetFields();
+      this.orderForm={};
+      this.guests=[];
     },
     fillTour(index){
       this.dialogFormTour = true;
       this.winTitle=this.guests[index].enrollName;
       this.conForm=JSON.parse(JSON.stringify(this.guests[index]));
+      if(this.conForm.sex==3){
+        this.conForm.sex='';
+      }
       this.guestsi=index;
     },
     cancelInfo(formName) {
       this.dialogFormTour = false;
       this.$refs[formName].resetFields();
-      this.orderForm={};
-      this.guests=[];
     },
     subInfo(formName){
       this.$refs[formName].validate(valid => {

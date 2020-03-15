@@ -25,8 +25,8 @@
                   <el-input v-model="ruleForm.qq"></el-input>
                </el-form-item>
                <el-form-item label="状态" prop="state">
-                  <el-select v-model="ruleForm.state" placeholder="请选择性别">
-                    <el-option label="正常" :value="0"></el-option>
+                  <el-select v-model="ruleForm.state" placeholder="请选择状态">
+                    <el-option label="正常" :value="2"></el-option>
                     <el-option label="停用" :value="3"></el-option>
                   </el-select>
                </el-form-item>
@@ -34,19 +34,10 @@
                   <el-input v-model="ruleForm.passWord"></el-input>
                </el-form-item>
                <el-form-item label="职务" prop="peerUserType">
-                  <el-checkbox-group v-model="ruleForm.peerUserType">
-                    <el-checkbox :label="'1'" :key="'1'">管理员</el-checkbox>
-                    <el-checkbox :label="'2'" :key="'2'">产品负责人</el-checkbox>
-                    <el-checkbox :label="3" :key="1">旅游顾问</el-checkbox>
-                    <el-checkbox :label="4" :key="1">财务</el-checkbox>
-                    <el-checkbox :label="5" :key="1">管理人员</el-checkbox>
-                    <el-checkbox :label="5" :key="1">销售员</el-checkbox>
-                    <el-checkbox :label="6" :key="1">计调员</el-checkbox>
-                    <el-checkbox :label="7" :key="1">客服</el-checkbox>
-                    <el-checkbox :label="8" :key="1">运营人员</el-checkbox>
-                    <el-checkbox :label="9" :key="1">组织经理</el-checkbox>
-                    <el-checkbox :label="10" :key="1">其他</el-checkbox>
-                  </el-checkbox-group>
+                  <el-select v-model="ruleForm.peerUserType" placeholder="请选择状态">
+                    <el-option label="管理员" :value="1"></el-option>
+                    <el-option label="旅游顾问" :value="2"></el-option>
+                  </el-select>
                </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -67,8 +58,21 @@ export default {
     return{
       dialogForm:false,
       title:"",
-
       ruleForm: {
+        "id": 0,
+        "isDeleted": 0,
+        "name": "",
+        "userCode": "",
+        "phone": "",
+        "email": "",
+        "sex": "",
+        "wx": "",
+        "qq": "",
+        "passWord": "",
+        "createTime": 0,
+        "localCompID": JSON.parse(sessionStorage.getItem('tyUserInfo')).localCompID,
+        "mark": "",
+        "localCompName": JSON.parse(sessionStorage.getItem('tyUserInfo')).localCompName
       },
       rules:{
         name: [
@@ -80,7 +84,7 @@ export default {
 
         ],
         sex: [
-            { required: true, message: '请选择性别', trigger: 'change' }
+            { required: true, message: '请选择性别', trigger: 'blur' }
         ],
         state: [
             { required: true, message: '请选择状态', trigger: 'change' }
@@ -108,29 +112,49 @@ export default {
   },
   methods: {
     getData(){
-        this.$http.post(this.GLOBAL.serverSrc + '/universal/localcomp/api/PeerUserGetSingle',{
-             "id": this.accountId
+        this.$http.post(this.GLOBAL.serverSrc + '/indirect/localcomp/api/peeruserpage',{
+             "pageIndex": 1,
+             "pageSize": 10,
+             "object":{
+              'phone':this.accountId
+             }
             }).then(res => {
               this.ruleForm={};
               if(res.data.isSuccess == true){
-                 this.ruleForm=res.data.object;
+                this.ruleForm=res.data.objects[0];
+                if(this.ruleForm.sex==3){
+                   this.ruleForm.sex="";
+                }
               }
         })
     },
     close(){
       this.dialogForm=false;
       this.$refs["ruleForm"].resetFields();
+      this.ruleForm={};
     },
     save(){
-      this.close();
-
-      
+      let url='';
+      if(this.accountId==0){
+        url="/indirect/localcomp/api/peeruserinsert";
+      }else{
+        url="/indirect/localcomp/api/peeruserupdate";
+      }
+      this.$refs['ruleForm'].validate(valid => {
+        if(valid) {
+          this.$http.post(this.GLOBAL.serverSrc + url, {
+              "object":this.ruleForm
+          }).then(res => {
+              if(res.data.isSuccess == true){
+                this.$message.success("提交成功");
+                this.close();
+                this.$parent.accoutList();
+              }
+          })
+        }
+      })
     }
-
-
-
-
-    }
+  }
 }
 </script>
 
