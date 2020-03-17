@@ -7,15 +7,20 @@
         <table>
           <tr>
             <td width="75">名称：</td>
-            <td width="270">{{localcompInfo.name}}</td>
-            <td>类型：</td>
-            <td width="270">{{localcompInfo.localCompType == 1?"同业社":""}}</td>
+            <td width="300">{{localcompInfo.name}}</td>
+            <td width="80" align="right">类型：</td>
+            <td width="270">
+              <span v-if="localcompInfo.localCompType == 1">门店</span>
+              <span v-if="localcompInfo.localCompType == 2">同业社</span>
+              <span v-if="localcompInfo.localCompType == 3">翻牌门店</span>
+              <span v-if="localcompInfo.localCompType == 4">个体分销</span>
+            </td>
             <td>到期时间：</td>
             <td width="270">{{localcompInfo.expTime}}</td>
           </tr>
           <tr>
             <td>剩余额度：</td>
-            <td colspan="4">{{localcompInfo.quota}}</td>
+            <td colspan="4">{{localcompInfo.balance}}</td>
           </tr>
         </table>
       </div>
@@ -36,6 +41,7 @@
           <p>公司LOGO</p>
           <el-upload
                 class="upload-demo w250"
+                ref="upload"
                 :action="GLOBAL.serverSrc + '/upload/obs/api/picture'"
                 :on-success="handleSuccess"
                 :before-remove="beforeRemove"
@@ -62,7 +68,7 @@
           <el-input v-model="localcompInfo.bankcardNo" placeholder="请输入内容" class="w250"></el-input>
         </div>
       </div>
-      <el-button class="button" type="primary" @click="">保存</el-button>
+      <el-button class="button" type="primary" @click="saveLocalcompInfo">保存</el-button>
     </div>
     <!--账户信息-->
     <div class="cominfo" style="margin-bottom:70px">
@@ -128,7 +134,7 @@
     data() {
       return {
         tyUserInfo:{},
-        localcompInfo:[],
+        localcompInfo:{},
         fileList: [],
         acconutList:[],
         pageSize: 10, 
@@ -140,29 +146,36 @@
     },
     mounted(){
       this.tyUserInfo=JSON.parse(sessionStorage.getItem('tyUserInfo'));
-      //this.companyinfo(sessionStorage.getItem('aid')?sessionStorage.getItem('aid'):2);
+      this.companyinfo();
       this.accoutList();
     },
     methods:{
         //获取公司信息
-        companyinfo(id){
-          this.$http.post(this.GLOBAL.serverSrc + "/universal/localcomp/api/get",{
-            "id": id
+        companyinfo(){
+          this.$http.post(this.GLOBAL.serverSrc + "/indirect/localcomp/api/get",{
+            "id": this.tyUserInfo.id
             }).then(res=> {
-                this.localcompInfo=[];
-                this.localcompInfo=res.data.object;
-                if(this.localcompInfo.imgUrl){
-                  let list={};
-                  list.url = this.localcompInfo.imgUrl;
-                  list.name = "公司logo";
-                  this.fileList.push(list);
+                this.localcompInfo={};
+                if(res.data.isSuccess==true){
+                  this.localcompInfo=res.data.object;
+                  if(this.localcompInfo.fileUrl){
+                    let list={
+                      url:this.localcompInfo.fileUrl,
+                      name:"公司logo"
+                    };
+                    this.fileList.push(list);
+                  }
                 }
             })
             .catch(res=>{
             })
         },
-        handleSuccess(res, file ,fileList){
+        saveLocalcompInfo(){
 
+        },
+        handleSuccess(res, file ,fileList){
+          this.fileList[0].name = JSON.parse(fileList[0].response).paths[0].Name;
+          this.fileList[0].url = JSON.parse(fileList[0].response).paths[0].Url;
         },
         handleRemove(file, fileList) {
 
