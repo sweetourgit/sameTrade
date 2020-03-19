@@ -45,7 +45,7 @@
                     router:'/orderManagement'
                 },
                 {
-                    value: '账户信息',
+                    value: '账户信息1',
                     router:'/userList'
                 }//,{
                  //   value: '销售统计',
