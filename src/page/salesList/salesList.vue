@@ -115,7 +115,7 @@
       }
     },
     mounted() {
-      this.initData();
+      //this.initData();
     },
     methods:{
          operation(order,i){

@@ -47,10 +47,10 @@
                 {
                     value: '账户信息',
                     router:'/userList'
-                },{
-                    value: '销售统计',
-                    router:'/salesList'
-                }
+                }//,{
+                 //   value: '销售统计',
+                 //   router:'/salesList'
+                //}
               ]
             },
         ],

@@ -31,25 +31,28 @@
       <div class="comContent">
         <div class="com-info">
           <p>联系人名称</p>
-          <el-input v-model="localcompInfo.linker" placeholder="请输入内容" class="w250"></el-input>
+          <el-input v-model="localcompInfo.linker" placeholder="请输入内容" class="w250" :disabled="peerUser"></el-input>
         </div>
         <div class="com-info">
           <p>电话</p>
-          <el-input v-model="localcompInfo.phone" placeholder="请输入内容" class="w250"></el-input>
+          <el-input v-model="localcompInfo.phone" placeholder="请输入内容" class="w250" :disabled="peerUser"></el-input>
         </div>
         <div class="com-info">
           <p>公司LOGO</p>
           <el-upload
+                :disabled="peerUser"
                 class="upload-demo w250"
+                name="files"
                 ref="upload"
                 :action="GLOBAL.serverSrc + '/upload/obs/api/picture'"
+                multiple
                 :on-success="handleSuccess"
                 :before-remove="beforeRemove"
                 :limit="1"
                 :on-exceed="handleExceed"
                 :file-list="fileList"
                 list-type="picture">
-          <el-button size="small" type="primary">点击上传</el-button>
+          <el-button size="small" type="primary" :disabled="peerUser">点击上传</el-button>
         </el-upload>        
         </div>
       </div>
@@ -57,18 +60,18 @@
       <div class="comContent">
         <div class="com-info">
           <p>对公户名</p>
-          <el-input v-model="localcompInfo.publicName" placeholder="请输入内容" class="w250"></el-input>
+          <el-input v-model="localcompInfo.publicName" placeholder="请输入内容" class="w250" :disabled="peerUser"></el-input>
         </div>
         <div class="com-info">
           <p>开户行</p>
-          <el-input v-model="localcompInfo.bankName" placeholder="请输入内容" class="w250"></el-input>
+          <el-input v-model="localcompInfo.bankName" placeholder="请输入内容" class="w250" :disabled="peerUser"></el-input>
         </div>
         <div class="com-info">
           <p>对公账号</p>
-          <el-input v-model="localcompInfo.bankcardNo" placeholder="请输入内容" class="w250"></el-input>
+          <el-input v-model="localcompInfo.bankcardNo" placeholder="请输入内容" class="w250" :disabled="peerUser"></el-input>
         </div>
       </div>
-      <el-button class="button" type="primary" @click="saveLocalcompInfo">保存</el-button>
+      <el-button v-if="!peerUser" class="button" type="primary" @click="saveLocalcompInfo">保存</el-button>
     </div>
     <!--账户信息-->
     <div class="cominfo" style="margin-bottom:70px">
@@ -117,7 +120,7 @@
               :total="total">
            </el-pagination>
          </div>
-         <el-button class="button" type="primary" @click="operation(1)">添加</el-button>
+         <el-button v-if="!peerUser" class="button" type="primary" @click="operation(1)">添加</el-button>
       </div>
       <add-user :accountId="accountId" :variable="variable"></add-user>
 
@@ -142,10 +145,12 @@
         total: 0,
         accountId:0,
         variable:0,
+        peerUser:false
       }
     },
     mounted(){
       this.tyUserInfo=JSON.parse(sessionStorage.getItem('tyUserInfo'));
+      this.peerUser=this.tyUserInfo.peerUserType==1?false:true;
       this.companyinfo();
       this.accoutList();
     },
@@ -161,7 +166,7 @@
                   if(this.localcompInfo.fileUrl){
                     let list={
                       url:this.localcompInfo.fileUrl,
-                      name:"公司logo"
+                      //name:"公司logo"
                     };
                     this.fileList.push(list);
                   }
@@ -171,10 +176,19 @@
             })
         },
         saveLocalcompInfo(){
-
+            this.localcompInfo.fileUrl=this.fileList[0].url;
+            this.$http.post(this.GLOBAL.serverSrc + "/indirect/universal/localcomp/save",{
+              "object":this.localcompInfo
+            }).then(res=> {
+                if(res.data.isSuccess==true){
+                  this.$message.success("提交成功")
+                }
+            })
+            .catch(res=>{
+            })
         },
         handleSuccess(res, file ,fileList){
-          this.fileList[0].name = JSON.parse(fileList[0].response).paths[0].Name;
+          //this.fileList[0].name = JSON.parse(fileList[0].response).paths[0].Name;
           this.fileList[0].url = JSON.parse(fileList[0].response).paths[0].Url;
         },
         handleRemove(file, fileList) {
@@ -184,7 +198,7 @@
             this.$message.error(`只能上传一个文件`);
         },
         beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${ file.name }？`);
+            return this.$confirm(`确定移除公司logo？`);
         },
         getRowClass({ row, column, rowIndex, columnIndex }) {
             if (rowIndex == 0) {
