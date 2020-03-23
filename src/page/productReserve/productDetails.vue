@@ -2,7 +2,7 @@
   <div class="reserveList">
     <div class="color_d7">ID:{{ruleForm.id}}</div>
     <div class="title">{{ruleForm.title}}</div>
-    <div class="mt20">
+    <div class="mt20 oh">
     <!--左侧轮播图和日历-->
       <div class="picture">
         <!--图片轮播-->
@@ -97,23 +97,25 @@
       <div class="line"></div>
       <div class="mark" v-html="ruleForm.mark"></div>
     </div>
-    <div style="clear:both">
+    <div class="cb oh">
       <div class="survey">行程信息</div>
-      <div class="line"></div>
-      <div style="margin-left:94px;">
+      <div class="line content-day"></div>
+      <div style="margin-left:94px;" class="oh">
         <div class="package_02" v-bind:class="{border_blue:currentPIndex==index}" v-for="(item, index) in ruleForm.package" :key="index" @click="clickPackage(index)">
            <div class="package_01_title">{{item.name}}</div>
            <div class="tc">出发地：{{item.pod}}</div>
            <div class="tc">目的地：{{item.destination}}</div>
         </div>
       </div>
-      <div class="nav">
-        <div class="nav_left">
-          <div class="nav_left_02" v-for="(item, k) in scheduleData">{{item.name}}</div>
+      <div class="oh">
+        <div class="nav">
+        <div v-bind:class="['nav_left',{'fx':fixed===true}]">
+          <div v-bind:class="['nav_left_02',{navactive:active===k}]" v-for="(item, k) in scheduleData" @click="scrollTo(k,1)">{{item.name}}</div>
+        </div>
         </div>
         <div class="travel">
           <!--出行信息-->
-          <div class="travel_bc">
+          <div class="travel_bc oh">
             <div class="nav_right">
               <div style="clear:both; padding:20px 0 80px 30px;" v-for="(item, k) in this.packageInfo.traffic" :key="k">
                 <div class="nav_days">第{{item.day}}天</div>
@@ -137,7 +139,7 @@
             </div>
           </div>
           <!--酒店信息-->
-          <div class="hotel" v-if="false">
+          <div class="hotel content-day" v-if="true">
             <div class="mt20">
               <div class="hotel_img"></div>
               <div class="holiday">
@@ -153,6 +155,7 @@
             </div>
           </div>
           <!--日程信息-->
+          <div class="content-day h50"></div>
           <div class="schedule" v-for="(item, k) in this.packageInfo.schedules" :key="k">
             <div>
               <div class="dateDays">{{k + 1}}</div>
@@ -208,20 +211,21 @@
               </div>
             </div>
           </div>
-          
         </div>
       </div>
     </div>
     <!--费用说明-->
-    <div class="cb">
+    <div class="cb" ref="instructions">
       <div class="survey">费用说明</div>
       <div class="line"></div>
-      <div style="margin:20px 0 0 0;">
-        <div class="nav_left">
-          <div class="nav_left_02" v-for="(list, index) in ruleForm.instructions" :key="index">{{list.title}}</div>
+      <div style="margin:20px 0 0 0">
+        <div class="nav">
+        <div v-bind:class="['nav_left',{'fx':fixed1===true}]">
+          <div v-bind:class="['nav_left_02',{navactive:active1===index}]" v-for="(list, index) in ruleForm.instructions" :key="index" @click="scrollTo(index,2)">{{list.title}}</div>
+        </div>
         </div>
         <div class="cost">
-          <div class="schedule" v-for="(list, index) in ruleForm.instructions" :key="index">
+          <div class="schedule content-schedule" v-for="(list, index) in ruleForm.instructions" :key="index">
             <div class="cost_title">#{{list.title}}</div>
             <ul>
               <li v-html="list.content"></li>
@@ -231,7 +235,7 @@
       </div>
     </div>
     <!--预订须知-->
-    <div class="cb">
+    <div class="cb" ref="instructions1">
       <div class="survey">预订须知</div>
       <div class="line"></div>
       <div style="margin:20px 0 0 0;" v-for="(list, index) in ruleForm.others" :key="index">
@@ -288,9 +292,15 @@
           'Total': 0
         },
         ulLeft:0,
+        fixed:false,
+        active: 0, // 当前激活的导航索引
+        fixed1:false,
+        active1: 0 
       }
     },
     mounted(){  
+      document.getElementById("viewBox").addEventListener('scroll', this.onScroll)
+      document.getElementById("viewBox").addEventListener('scroll', this.onScroll1)
       this.getCrowdlist();
       this.getThemelist();
       setTimeout(() => {
@@ -298,6 +308,110 @@
       },300);
     },
     methods:{
+      onScroll(){
+        // 获取所有锚点元素
+        const navContents = document.querySelectorAll('.content-day')
+        // 所有锚点元素的 offsetTop
+        const offsetTopArr = []
+        navContents.forEach(item => {
+          offsetTopArr.push(item.offsetTop)
+        })
+        const scrollTop = document.getElementById("viewBox").scrollTop 
+        // 定义当前点亮的导航下标
+        let navIndex = 0
+        if(scrollTop >= offsetTopArr[0]&&scrollTop <= this.$refs['instructions'].offsetTop-180){
+            this.fixed=true;
+          }else{
+            this.fixed=false;
+        }
+        for (let n = 0; n < offsetTopArr.length; n++) {
+          // 如果 scrollTop 大于等于第 n 个元素的 offsetTop 则说明 n-1 的内容已经完全不可见
+          // 那么此时导航索引就应该是 n 了     
+          if (scrollTop >= offsetTopArr[n]) {
+            navIndex = n; 
+          }
+        }
+        // 把下标赋值给 vue 的 data
+        this.active = navIndex;
+      },
+      onScroll1(){
+        // 获取所有锚点元素
+        const navContents = document.querySelectorAll('.content-schedule')
+        // 所有锚点元素的 offsetTop
+        const offsetTopArr = []
+        navContents.forEach(item => {
+          offsetTopArr.push(item.offsetTop)
+        })
+        const scrollTop = document.getElementById("viewBox").scrollTop 
+        // 定义当前点亮的导航下标
+        let navIndex = 0
+        if(scrollTop >= offsetTopArr[0]&&scrollTop <= this.$refs['instructions1'].offsetTop-180){
+            this.fixed1=true;
+          }else{
+            this.fixed1=false;
+        }
+        for (let n = 0; n < offsetTopArr.length; n++) {
+          // 如果 scrollTop 大于等于第 n 个元素的 offsetTop 则说明 n-1 的内容已经完全不可见
+          // 那么此时导航索引就应该是 n 了     
+          if (scrollTop >= offsetTopArr[n]) {
+            navIndex = n; 
+          }
+        }
+        // 把下标赋值给 vue 的 data
+        this.active1 = navIndex;
+      },
+      scrollTo(index,i) {
+      // 获取目标的 offsetTop
+      // css选择器是从 1 开始计数，我们是从 0 开始，所以要 +1
+      let targetOffsetTop = 0;
+      if(i==1){
+        targetOffsetTop = document.querySelectorAll('.content-day')[index].offsetTop
+      }else{
+        targetOffsetTop = document.querySelectorAll('.content-schedule')[index].offsetTop
+      }
+      
+      // 获取当前 offsetTop
+      let scrollTop = document.getElementById("viewBox").scrollTop
+      // 定义一次跳 50 个像素，数字越大跳得越快
+      const STEP = 50
+      // 判断是往下滑还是往上滑
+      if (scrollTop > targetOffsetTop) {
+        // 往上滑
+        smoothUp()
+      } else {
+        // 往下滑
+        smoothDown()
+      }
+      // 定义往下滑函数
+      function smoothDown() {
+          // 如果当前 scrollTop 小于 targetOffsetTop 说明视口还没滑到指定位置
+          if (scrollTop < targetOffsetTop) {
+            // 如果和目标相差距离大于等于 STEP 就跳 STEP
+            // 否则直接跳到目标点，目标是为了防止跳过了。
+            if (targetOffsetTop - scrollTop >= STEP) {
+              scrollTop += STEP
+            } else {
+              scrollTop = targetOffsetTop
+            }
+            document.getElementById("viewBox").scrollTop = scrollTop
+            // 屏幕在绘制下一帧时会回调传给 requestAnimationFrame 的函数
+            // 关于 requestAnimationFrame 可以自己查一下，在这种场景下，相比 setInterval 性价比更高
+            requestAnimationFrame(smoothDown)
+          }
+        }
+        // 定义往上滑函数
+        function smoothUp() {
+          if (scrollTop > targetOffsetTop) {
+            if (scrollTop - targetOffsetTop >= STEP) {
+              scrollTop -= STEP
+            } else {
+              scrollTop = targetOffsetTop
+            }
+            document.getElementById("viewBox").scrollTop = scrollTop
+            requestAnimationFrame(smoothUp)
+          }
+        }
+      },
       getCrowdlist(){
         this.$http.post(this.GLOBAL.serverSrc + "/indirect/universal/crowd/crowdlist",{
          'object':{isDeleted: 0}
@@ -498,6 +612,10 @@
       }
     }
   }
+
+
+
+  
 </script>
 <style scoped>
 .reserveList{ width: 1100px; overflow: hidden; font-size: 14px; margin: 0 0 100px 0;}
@@ -536,12 +654,12 @@ ul{list-style-type: none}
 .price_button{float: right;margin: 10px 15px 0 0;}
 .survey{padding: 20px 0 0 10px; overflow: hidden;height: 40px; font-size: 16px;}
 .line{width: 1080px; text-align: center; height: 1px; background: #e5e5e5; overflow: hidden; margin: 0 0 0 10px;}
-.travel{float:left; margin:0 0 0 40px;}
+.travel{float:left; margin:0 0 0 140px;}
 .travel_bc{width:930px;background:#f2f2f2; border-radius:5px;overflow: hidden;}
-.nav{clear:both; padding:20px 0 0 0;}
-.nav_left{line-height:40px; text-align:center; float:left; width: 94px;}
+.nav{clear:both; padding:20px 0 0 0;position: relative;}
+.nav_left{line-height:40px; text-align:center;width: 94px;position: absolute;top:0;left:0;}
 #isSchedules{ width:94px; border-right:2px solid #87695e;cursor:pointer}
-.nav_left_02{ width:94px; border-right:2px solid #d8d8d8;cursor:pointer;overflow: hidden;line-height: 20px;padding-top: 20px}
+.nav_left_02{ width:94px; border-right:2px solid #d8d8d8;cursor:pointer;overflow: hidden;line-height: 20px;padding:10px 0}
 .nav_right{margin:50px 50px 50px 80px;}
 .nav_days{float:left; font-weight:bold; font-size:18px; margin:30px 0 0 0; width:60px;}
 .fl{float: left;}
@@ -568,14 +686,18 @@ ul{list-style-type: none}
 .ml20{margin: 10px 40px 0 20px;}
 .w80{width: 80px; float: left;font-weight: bold; margin: 0 0 0 20px;}
 .w700{width: 700px; overflow: hidden;}
-.cost{float: left; margin: 0 0 0 40px;}
+.cost{float: left; margin: 0 0 0 140px;}
 .cost_title{ color: #87695e; font-size: 20px;font-weight: bold; line-height: 40px; }
 .schedule ul{ margin: 0 0 0 -40px;list-style:decimal none outside;}
 .schedule ul li{display:list-item;text-align:-webkit-match-parent;}
 .cost_01{margin: 0 0 0 134px;}
+.oh{overflow: hidden;}
 /*日历*/
 .current{color: #2e94f9}
 .price_color{color:#b5b5b6;}
 .active{border:1px solid #2e94f9;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;}
+.navactive{background-color: #eee}
+.fx{position:fixed;left:240px;top:60px;z-index: 100}
+.h50{height: 50px}
 </style>
 
