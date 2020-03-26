@@ -37,7 +37,7 @@
               img: 'account.png',
               items: [
                 {
-                  value: '产品预定',
+                  value: '产品列表',
                   router:'/productList'
                 },
                 {
