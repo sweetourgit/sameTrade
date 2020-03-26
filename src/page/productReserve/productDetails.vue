@@ -139,7 +139,7 @@
             </div>
           </div>
           <!--酒店信息-->
-          <div class="hotel content-day" v-if="true">
+          <div class="hotel content-day" v-if="false">
             <div class="mt20">
               <div class="hotel_img"></div>
               <div class="holiday">
@@ -272,13 +272,11 @@
         ruleForm:{},
         packageInfo: '', //选中的套餐
         currentPIndex:0, //选中的套餐index
-        scheduleData: [{
-          name: '出行信息'
-        }, {
-          name: '酒店信息'
-        },{
-          name: '日程信息'
-        }],
+        scheduleData: [
+        {name: '出行信息'},
+        //{name: '酒店信息'},
+        {name: '日程信息'}
+        ],
         //日历
         monthsTitle:[],
         calendarDate:[],
