@@ -39,9 +39,7 @@
       <el-table-column prop="id" label="ID" width="80" align="center"></el-table-column>
       <el-table-column prop="title" label="产品名称" width="249" align="center"></el-table-column>
       <el-table-column prop="productType" label="类型" width="150" align="center">
-         <template slot-scope="scope">
-            <span v-show="scope.row.productType == 1">跟团游</span>
-         </template>
+         <template slot-scope="scope">跟团游</template>
       </el-table-column>
       <el-table-column prop="place" label="出发地/目的地" width="180" align="center"></el-table-column>
       <el-table-column label="价格" width="120" align="center">
@@ -143,6 +141,7 @@
         this.destination = '';
         this.destinationID = 0;
         this.productType = '';
+        this.list(1,this.pageSize);
       },
       getRowClass({ row, column, rowIndex, columnIndex }) {//表格头部颜色
         if (rowIndex == 0) {
@@ -288,7 +287,7 @@
   /*搜索栏*/
   .searchbox{width: 1150px;}
   .input{margin:10px 5px;width: 200px;}
-  .input_01{margin:10px 5px;width: 150px;}
+  .input_01{margin:10px 5px;width: 150px !important}
   .search-title{font-size: 14px;margin-left:5px;display: inline-block;width: 100px;text-align: right;}
   .dateline{ margin: 0 5px 0 5px; }
   .productButton{overflow: hidden; margin: 10px 20px 0 0;display: inline-block; float: right;}

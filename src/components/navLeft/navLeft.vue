@@ -33,11 +33,11 @@
     return {
         category: [
             {
-              name: '同业系统',
+              name: '同业系统', 
               img: 'account.png',
               items: [
                 {
-                  value: '产品列表',
+                  value: '产品预订',
                   router:'/productList'
                 },
                 {

@@ -114,6 +114,7 @@
           {lable:'全部订单',orderStatus:'0'},
           {lable:'未确认',orderStatus:'7'},
           {lable:'补充资料',orderStatus:'1'},
+          {lable:'签署合同',orderStatus:'8'},
           {lable:'待出行',orderStatus:'3'},
           {lable:'出行中',orderStatus:'4'},
           {lable:'订单完成',orderStatus:'6'},

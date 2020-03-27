@@ -18,7 +18,7 @@ export default new Router({
     }, {
       path: '/productList',
       component: productList,
-      name: '产品列表',
+      name: '产品预订',
       meta: {
         keepAlive: true,
         auth:true}
@@ -30,7 +30,7 @@ export default new Router({
         keepAlive: true,
         auth:true}
     }, {
-      path: '/productDetails',
+      path: '/productDetails', 
       component: productDetails,
       name: '产品详情',
       meta: {
