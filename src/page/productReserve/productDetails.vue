@@ -48,9 +48,11 @@
         <div class="infor_bor">
           <div>
             <div class="infor_title">亮点：</div>
-            <div v-for="(item,i) in ruleForm.strengths" :key="i" class="fl">{{item.strength}} &nbsp;</div>
-          </div><br/>
-          <div>
+            <div class="strengths">
+              <div v-for="(item,i) in ruleForm.strengths" :key="i" class="fl">{{item.strength}} &nbsp;</div>
+            </div>
+          </div>
+          <div class="cb">
             <div class="infor_title">行程天数：</div>
             <div class="fl">{{ruleForm.day}}天{{ruleForm.night}}晚</div>
           </div><br/>
@@ -705,5 +707,6 @@ ul{list-style-type: none}
 .navactive{background-color: #eee}
 .fx{position:fixed;left:240px;top:60px;z-index: 100}
 .h50{height: 50px}
+.strengths{width:380px;float:left}
 </style>
 
