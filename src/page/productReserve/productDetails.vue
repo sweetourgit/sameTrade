@@ -579,7 +579,9 @@
       },
       handleChange(item) {
         let numberNum = 0;
-        this.rowDate.enrolls.forEach(v => numberNum += v.adult * v.price_02)
+        this.rowDate.enrolls.forEach(v => 
+          numberNum += v.adult *(this.$route.query.customerPrice==true?v.price_01:v.price_02)
+        )
         this.rowDate.Total = numberNum
       },
       //选择团期
