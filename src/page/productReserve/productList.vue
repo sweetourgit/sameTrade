@@ -164,7 +164,8 @@
         this.$router.push({
           path: '/productDetails',
           query: {
-              id: id
+              id: id,
+              customerPrice:this.customerPrice
           }
         })
       },

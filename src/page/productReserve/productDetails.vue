@@ -34,7 +34,7 @@
                 <!--判断当前日期是否有计划，有则显示-->
                 <!-- surplus为0余位才是0 -->
                 <div v-for="day in calendarDate" v-bind:class="{price_color:day.remaining==0}" v-if="day.date==currentYear+currentMonth+(item<10?'0'+item:item)" @click="chooseDateMes(day.date,day.surplus,day)">
-                  <div>{{day.enrolls[0].price_02}}</div>
+                  <div>{{$route.query.customerPrice?day.enrolls[0].price_01:day.enrolls[0].price_02}}</div>
                   <div v-if="day.remaining==0">已售罄</div>
                   <div v-else>余位{{day.remaining}}</div>
                 </div>
@@ -79,7 +79,7 @@
           <br/>
           <div>
             <div class="adult" v-for="(item, k) in rowDate.enrolls" :key="k">
-              <div>{{item.enrollName}}￥{{item.price_02}}*{{item.adult}}</div>
+              <div>{{item.enrollName}}￥{{$route.query.customerPrice?item.price_01:item.price_02}}*{{item.adult}}</div>
               <div><el-input-number v-model="item.adult" :min="0" :max="item.quota==0?rowDate.remaining:item.quota" size="mini" @change="handleChange(item)"></el-input-number></div>
             </div>
           </div>

@@ -55,10 +55,12 @@
           </el-form-item>
         </el-form>
       </div>
+      <!--
       <div class="table_details">
         <div><span class="table_details_01">*</span>直客价：</div>
         <div class="table_details_02"><el-switch class="switchButton" v-model="customerPrice"></el-switch></div>
       </div>
+      -->
       <div class="line"></div>
       <!--报名人数-->
       <div><span class="table_details_01">*</span>报名人数</div>
@@ -193,7 +195,7 @@
           tourInfo:{},
           tourInfoCopy:{},
           localcomp:{},
-          customerPrice:true,//直客价开关
+          customerPrice:false,//直客价开关
           sales:{
             tradeSales:'' //同业销售model
           },
