@@ -34,7 +34,7 @@
                 <!--判断当前日期是否有计划，有则显示-->
                 <!-- surplus为0余位才是0 -->
                 <div v-for="day in calendarDate" v-bind:class="{price_color:day.remaining==0}" v-if="day.date==currentYear+currentMonth+(item<10?'0'+item:item)" @click="chooseDateMes(day.date,day.surplus,day)">
-                  <div>{{$route.query.customerPrice?day.enrolls[0].price_01:day.enrolls[0].price_02}}</div>
+                  <div>{{customerPrice==true?day.enrolls[0].price_01:day.enrolls[0].price_02}}</div>
                   <div v-if="day.remaining==0">已售罄</div>
                   <div v-else>余位{{day.remaining}}</div>
                 </div>
@@ -79,7 +79,7 @@
           <br/>
           <div>
             <div class="adult" v-for="(item, k) in rowDate.enrolls" :key="k">
-              <div>{{item.enrollName}}￥{{$route.query.customerPrice?item.price_01:item.price_02}}*{{item.adult}}</div>
+              <div>{{item.enrollName}}￥{{customerPrice==true?item.price_01:item.price_02}}*{{item.adult}}</div>
               <div><el-input-number v-model="item.adult" :min="0" :max="item.quota==0?rowDate.remaining:item.quota" size="mini" @change="handleChange(item)"></el-input-number></div>
             </div>
           </div>
@@ -116,8 +116,12 @@
         <div class="travel">
           <!--出行信息-->
           <div class="travel_bc oh">
-            <div class="nav_right">
-              <div style="clear:both; padding:20px 0 80px 30px;" v-for="(item, k) in this.packageInfo.traffic" :key="k">
+            <div class="nav_right" v-if="packageInfo.briefMark!=''">
+               <div>简要说明：</div>
+               <div v-html="packageInfo.briefMark"></div>
+            </div>
+            <div class="nav_right" v-else>
+              <div style="clear:both; padding:20px 0 80px 30px;" v-for="(item, k) in packageInfo.traffic" :key="k">
                 <div class="nav_days">第{{item.day}}天</div>
                 <div class="fl">
                   <div class="nav_travel">{{item.podCity}}-{{item.arriveCity}}</div>
@@ -156,7 +160,7 @@
           </div>
           <!--日程信息-->
           <div class="content-day h50"></div>
-          <div class="schedule" v-for="(item, k) in this.packageInfo.schedules" :key="k">
+          <div class="schedule" v-for="(item, k) in packageInfo.schedules" :key="k">
             <div>
               <div class="dateDays">{{k + 1}}</div>
               <div class="fl lh50">{{item.subject}}</div>
@@ -172,7 +176,7 @@
                   <span v-if="i==0">早餐：</span>
                   <span v-if="i==1">午餐：</span>
                   <span v-if="i==2">晚餐：</span>
-                  <span v-if="data.Myself==1">{{data.Detail}}</span>
+                  <span v-if="data.Myself==1">自理</span>
                   <span v-if="data.Myself==0">{{data.Detail}}</span>          
                 </div>
               </div>
@@ -293,10 +297,12 @@
         fixed:false,
         active: 0, // 当前激活的导航索引
         fixed1:false,
-        active1: 0 
+        active1: 0,
+        customerPrice:false
       }
     },
     mounted(){  
+      this.customerPrice=this.$route.query.customerPrice;
       document.getElementById("viewBox").addEventListener('scroll', this.onScroll)
       document.getElementById("viewBox").addEventListener('scroll', this.onScroll1)
       this.getCrowdlist();
@@ -580,7 +586,7 @@
       handleChange(item) {
         let numberNum = 0;
         this.rowDate.enrolls.forEach(v => 
-          numberNum += v.adult *(this.$route.query.customerPrice==true?v.price_01:v.price_02)
+          numberNum += v.adult *(this.customerPrice==true?v.price_01:v.price_02)
         )
         this.rowDate.Total = numberNum
       },

@@ -53,13 +53,15 @@
              <template slot-scope="scope">
                 <span class="cursor blue" @click="operation(scope.row,1)">详情</span>
                 <span class="em">|</span>
-                <template v-if="scope.row.orderStatus != 9&&scope.row.orderStatus != 4&&scope.row.orderStatus != 6">
+                <template v-if="scope.row.orderStatus != 9&&scope.row.orderStatus != 4&&scope.row.orderStatus != 5&&scope.row.orderStatus != 6">
                   <span class="cursor red" @click="cancelOrder(scope.row)">取消订单</span>
                   <span class="em">|</span>
                 </template>                
                 <span class="cursor blue" @click="operation(scope.row,2)">备注</span>
-                <span class="em">|</span>
-                <span class="cursor blue" @click="operation(scope.row,3)">修改</span>
+                <template v-if="scope.row.orderStatus != 9&&scope.row.orderStatus != 4&&scope.row.orderStatus != 5&&scope.row.orderStatus != 6">
+                  <span class="em">|</span>
+                  <span class="cursor blue" @click="operation(scope.row,3)">修改</span>
+                </template>          
              </template> 
          </el-table-column>
      </el-table>
