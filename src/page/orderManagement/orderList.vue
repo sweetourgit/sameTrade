@@ -221,7 +221,7 @@
               "orderStatus": 9
             }).then(res => {
               if(res.data.isSuccess==true){
-                this.initData(this.pageIndex,this.pageSize)
+                this.initData(1,this.pageSize)
               }else{
                 this.$message.error(res.data.result.message); 
               }
