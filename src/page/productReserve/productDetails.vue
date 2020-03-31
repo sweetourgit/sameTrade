@@ -84,6 +84,7 @@
               <div>{{item.enrollName}}￥{{customerPrice==true?item.price_01:item.price_02}}*{{item.adult}}</div>
               <div><el-input-number v-model="item.adult" :min="0" :max="item.quota==0?rowDate.remaining:item.quota" size="mini" @change="handleChange(item)"></el-input-number></div>
             </div>
+            <div class="color-red"><span v-show="ifMsg">{{msg}}</span></div>
           </div>
         </div>
       </div>
@@ -300,7 +301,9 @@
         active: 0, // 当前激活的导航索引
         fixed1:false,
         active1: 0,
-        customerPrice:false
+        customerPrice:false,
+        ifMsg:false,
+        msg:"",
       }
     },
     mounted(){  
@@ -481,6 +484,7 @@
       },
       // 按套餐获取详情数据
       clickPackage(index) {
+        this.ifMsg=false;
         this.currentPIndex=index;
         this.packageInfo=this.ruleForm.package[index];
         this.getCalendarDate();
@@ -590,10 +594,11 @@
         this.rowDate.enrolls.forEach(v => 
           numberNum += v.adult *(this.customerPrice==true?v.price_01:v.price_02)
         )
-        this.rowDate.Total = numberNum
+        this.rowDate.Total = numberNum;
       },
       //选择团期
       chooseDateMes(dep,surplus,item){  //dep：计划日期,surplus：选中日期余位
+         this.ifMsg=false;
       // surplus为0余位才是0
         if(surplus!=0){
           this.chooseDate=dep;
@@ -604,10 +609,26 @@
       },    
       // 预定按钮
       handeSave(){  
+        console.log(this.rowDate)
         if(this.chooseDate==0){
           this.$message.error("请选择团期");
           return;
-        } 
+        }
+        this.ifMsg=false;
+        let num=0;
+        this.rowDate.enrolls.forEach(v => 
+          num += v.adult
+        )
+        if(num==0){
+          this.ifMsg=true;
+          this.msg="报名类型个数为0,不能下单";
+          return;
+        }
+        if(num>this.rowDate.remaining){
+          this.ifMsg=true;
+          this.msg="报名总人数不能超过余位";
+          return;
+        }
         this.$router.push({
           name: '详情预定',
           params: {
@@ -656,7 +677,7 @@ ul{list-style-type: none}
 .block{width:390px; overflow:hidden; float:left; margin:0 0 10px 0;}
 #isBlock{border: solid 1px #409EFF !important;}
 #isPage{border: solid 1px #87695e;}
-.adult{float: left; margin: 0 25px 30px 0;}
+.adult{float: left; margin: 0 25px 15px 0;}
 .price{border-left: 1px solid #f6f6f6;border-right: 1px solid #f6f6f6;border-bottom: 1px solid #f6f6f6;height: 60px; clear: both; width: 500px;margin: 0 0 0 25px;}
 .price_text{margin: 0 0 0 15px; float: left;line-height: 60px; font-weight: bold; color: #000;}
 .price_button{float: right;margin: 10px 15px 0 0;}
@@ -708,5 +729,6 @@ ul{list-style-type: none}
 .fx{position:fixed;left:240px;top:60px;z-index: 100}
 .h50{height: 50px}
 .strengths{width:380px;float:left}
+.color-red{height: 40px;color: #ff0000;clear: both;}
 </style>
 

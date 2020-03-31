@@ -36,8 +36,12 @@
           <div class="reserveTd_02">{{localcomp.name}}</div>
         </td>
       </tr>
-      <tr v-if="localcomp.settlementType==1">
+      <tr>
         <td>
+          <div class="reserveTd_01">余位：</div>
+          <div class="reserveTd_02">{{tourInfo.remaining}}</div>
+        </td>
+        <td colspan="2" v-if="localcomp.settlementType==1">
           <div class="reserveTd_01">剩余额度：</div>
           <div class="reserveTd_02">{{localcomp.quota}}</div>
         </td>
@@ -68,7 +72,7 @@
         <div class="adult" v-for="(item,index) in tourInfo.enrolls" >
             <div class="ml10">{{item.enrollName}}￥{{customerPrice==true?item.price_01:item.price_02}}*{{item.adult}}</div>
             <div class="ml10"><el-input-number @change="handleChange(item,index)" v-model="item.adult" :min="0" :max="item.quota==0?tourInfo.remaining:item.quota" size="mini"></el-input-number></div>
-            <div>余位：{{item.quota==0?tourInfo.remaining:item.quota}}</div>
+            <div class="color-red" v-if="index==0"><span v-show="ifMsg">{{msg}}</span></div>
         </div>
         <!--<div class="children">单房差￥16999.00*2</div>-->
         <div class="order">
@@ -213,6 +217,8 @@
           conForm:{},
           guestsi:0,
           guestsk:0,
+          ifMsg:false,
+          msg:"",
           rules: {
             Name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
             Tel: [{ required: true, message: "请输入电话", trigger: "blur" }],
@@ -427,18 +433,26 @@
               b=false
             }
           })
-          if(a==false||b==false){
-            return
-          }
+          
           let cout = 0;
           this.tourInfo.enrolls.forEach(v =>{
               cout+= parseInt(v.adult)
           });
+          
+          this.ifMsg=false;
           if(cout==0){
-            this.$message.error('报名类型个数为0,不能下单');
+            this.ifMsg=true;
+            this.msg="报名类型个数为0,不能下单";
             return;
           }
-
+          if(cout>this.tourInfo.remaining){
+            this.ifMsg=true;
+            this.msg="报名总人数不能超过余位";
+            return;
+          }
+          if(a==false||b==false){
+            return
+          }
           if(this.localcomp.settlementType==1){
              if(this.total>this.localcomp.quota){
                this.$message.error('剩余额度小于订单总额');
@@ -570,6 +584,7 @@
 .tableData{width: 901px; clear: both;overflow: hidden;}
 .tour-list{margin: 10px;text-align: center;background-color:#eaeaea}
 .color-blue{color: #409EFF}
+.color-red{height: 40px;color: #ff0000}
 .w200{width: 200px}
 .dialog-footer{position: absolute;top: 8px;right: 15px}
 .total{float: right;margin-right: 20px;margin-top: 50px;line-height: 25px}

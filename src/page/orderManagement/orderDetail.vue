@@ -55,6 +55,10 @@
                   <td>{{orderForm.op}}</td>
               </tr>
               <tr>
+                  <td>同业销售：</td>
+                  <td>{{orderForm.saler}}</td>
+              </tr>
+              <tr>
                   <td>商户销售：</td>
                   <td>{{orderForm.saler}}</td>
               </tr>
