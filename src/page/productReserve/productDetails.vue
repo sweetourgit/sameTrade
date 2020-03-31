@@ -590,6 +590,7 @@
         }
       },
       handleChange(item) {
+        this.ifMsg=false;
         let numberNum = 0;
         this.rowDate.enrolls.forEach(v => 
           numberNum += v.adult *(this.customerPrice==true?v.price_01:v.price_02)

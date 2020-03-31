@@ -337,6 +337,7 @@
           this.tourInfoCopy=JSON.parse(JSON.stringify(this.tourInfo));
       },
       handleChange(val,index){
+          this.ifMsg=false;
           if(val.adult > this.tourInfoCopy.enrolls[index].adult) {
                   this.guests[index].push({
                       'cnName': '',
