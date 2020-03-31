@@ -43,7 +43,7 @@
         </td>
         <td colspan="2" v-if="localcomp.settlementType==1">
           <div class="reserveTd_01">剩余额度：</div>
-          <div class="reserveTd_02">{{localcomp.quota}}</div>
+          <div class="reserveTd_02">{{localcomp.balance}}</div>
         </td>
       </tr>
     </table>
@@ -83,7 +83,7 @@
           </div>
 
         </div>
-        <div class="total"><span class="total-price">总价：￥{{total}}</span></br><span v-if="localcomp.settlementType==1">剩余预存款和额度：{{localcomp.quota}}</span></div>
+        <div class="total"><span class="total-price">总价：￥{{total}}</span></br><span v-if="localcomp.settlementType==1">剩余预存款和额度：{{localcomp.balance}}</span></div>
         <div class="line"></div>
         <div><span class="table_details_01">*</span>下单方式</div>
         <div class="ml10">
@@ -284,7 +284,7 @@
       },
       getLocalcomp(){  //获取同业社名称额度
           this.$http.post(this.GLOBAL.serverSrc + "/indirect/localcomp/api/get",{
-             "id":this.tyUserInfo.id
+             "id":this.tyUserInfo.localCompID
             },
           ).then(res => {
               this.localcomp = res.data.object;
@@ -455,7 +455,7 @@
             return
           }
           if(this.localcomp.settlementType==1){
-             if(this.total>this.localcomp.quota){
+             if(this.total>this.localcomp.balance){
                this.$message.error('剩余额度小于订单总额');
                return;
              }

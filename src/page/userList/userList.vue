@@ -158,7 +158,7 @@
         //获取公司信息
         companyinfo(){
           this.$http.post(this.GLOBAL.serverSrc + "/indirect/localcomp/api/get",{
-            "id": this.tyUserInfo.id
+            "id": this.tyUserInfo.localCompID
             }).then(res=> {
                 this.localcompInfo={};
                 if(res.data.isSuccess==true){
