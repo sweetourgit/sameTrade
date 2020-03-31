@@ -489,12 +489,19 @@
                   "favourable": [
                     {
                       "id": 0,
-                      "createTime": 0,
                       "orderID": 0,
                       "price": this.otherPrice?this.otherPrice:0,
-                      "title": this.otherNote,
+                      "title": "其他费用",
                       "favMode": 1,
-                      "mark": "string"
+                      "mark": this.otherNote
+                    },
+                    {
+                      "id": 0,
+                      "orderID": 0,
+                      "price": 0,
+                      "title": "整体优惠",
+                      "favMode": 2,
+                      "mark": ""
                     }
                   ],
                   "contact": JSON.stringify(this.contact),
