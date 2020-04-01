@@ -135,7 +135,9 @@
                   <div class="aviation">
                     <div class="aviation_01">{{item.company}}{{item.theNumber}}</div>
                     <div class="aviation_line"></div>
-                    <div class="fb" v-if="item.ext_Stopover != '[]'">经停：{{item.ext_Stopover}}</div>
+                    <div class="fb" v-if="item.ext_Stopover.length != 0" v-for="(stopover, s) in item.ext_Stopover">
+                       经停：{{stopover.stopCity}} {{stopover.stopDate}}分钟
+                    </div>
                   </div>
                   <div class="airport">
                     <div class="fb">{{item.arriveTime}}</div>
@@ -487,6 +489,9 @@
         this.ifMsg=false;
         this.currentPIndex=index;
         this.packageInfo=this.ruleForm.package[index];
+        this.packageInfo.traffic.forEach(v => 
+          v.ext_Stopover=JSON.parse(v.ext_Stopover)
+        )
         this.getCalendarDate();
       },
       //获取日历数据
