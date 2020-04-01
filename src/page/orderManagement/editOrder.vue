@@ -16,7 +16,8 @@
              </el-form-item>
           </div>
         </el-form>
-          <el-table :data="guests" ref="multipleTable" class="table" :header-cell-style="getRowClass" border :cell-style="getCellClass">   <el-table-column  prop="cnName" label="姓名" width="100"></el-table-column>
+          <el-table :data="guests" ref="multipleTable" class="table" :header-cell-style="getRowClass" border :cell-style="getCellClass">   
+             <el-table-column  prop="cnName" label="姓名" width="100"></el-table-column>
              <el-table-column  prop="enrollName" label="报名类型" width="120"></el-table-column>
              <el-table-column  prop="mobile" label="电话" width="120"></el-table-column>
              <el-table-column  prop="idCard" label="身份证" min-width="160"></el-table-column>
@@ -27,7 +28,12 @@
                      <span v-if="scope.row.sex===3">未选择</span>
                 </template>
              </el-table-column>
-             <el-table-column prop="idCard" label="签署状态" min-width="120"></el-table-column>
+             <el-table-column label="签署状态" min-width="120">
+                <template slot-scope="scope">
+                     <span v-if="scope.row.sex===1||scope.row.sex===7||scope.row.sex===9||scope.row.sex===1||scope.row.sex===0">未签</span>
+                     <span v-if="scope.row.sex===2||scope.row.sex===3||scope.row.sex===4||scope.row.sex===5||scope.row.sex===6||scope.row.sex===8">已签</span>
+                </template>
+             </el-table-column>
              <el-table-column prop="idCard" label="操作" min-width="120">
                 <template slot-scope="scope">
                    <span class="color-blue" @click="fillTour(scope.$index)">编辑</span>
