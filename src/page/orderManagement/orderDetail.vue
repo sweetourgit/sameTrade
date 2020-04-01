@@ -74,9 +74,13 @@
                   <td>数量：</td>
                   <td>{{orderForm.enrollDetail}}</td>
               </tr>
-              <tr v-for="(item, index) in orderForm.favourable" :key="index">
-                  <td>{{item.title}}</td>
-                  <td><span class="table_span">{{item.mark}} {{item.price}}</span></td>
+              <tr>
+                  <td>其他费用：</td>
+                  <td v-for="(item,index) in orderForm.favourable" v-if="index==0"><span class="table_span">{{item.mark}} {{item.price}}</span></td>
+              </tr>
+              <tr>
+                  <td>整体优惠：</td>
+                  <td v-for="(item,index) in orderForm.favourable" v-if="index==1"><span class="table_span">{{item.mark}} {{item.price}}</span></td>
               </tr>
               <tr>
                   <td>订单总额：</td>
