@@ -31,9 +31,11 @@
                   <td v-show="orderForm.orderStatus == 4">旅游中</td>
                   <td v-show="orderForm.orderStatus == 5">待评价</td>
                   <td v-show="orderForm.orderStatus == 6">完成</td>
-                  <td v-show="orderForm.orderStatus == 0 && orderForm.occupyStatus == 1">预定不占</span>
-                  <td v-show="orderForm.orderStatus == 0 && orderForm.occupyStatus == 2">预定占位</span>
-                  <td v-show="orderForm.orderStatus == 0 && orderForm.occupyStatus == 3">确认占位</span>
+                  <!--
+                   <span v-show="scope.row.orderStatus == 7 && scope.row.occupyStatus == 1">预定不占</span>
+                   <span v-show="scope.row.orderStatus == 7 && scope.row.occupyStatus == 2">预定占位</span>
+                   <span v-show="scope.row.orderStatus == 7 && scope.row.occupyStatus == 3">确认占位</span>
+                  -->
                   <td v-show="orderForm.orderStatus == 8">签署合同</td>
                   <td v-show="orderForm.orderStatus == 9">作废订单</td>
                   <td v-show="orderForm.orderStatus == 10">确认占位</td>
