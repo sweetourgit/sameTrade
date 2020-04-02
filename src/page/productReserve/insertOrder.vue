@@ -525,13 +525,6 @@
           ).then(res=>{
              if(res.data.isSuccess==true){
                this.$message.success("提交成功");
-               let data = JSON.parse(res.data.result.details);
-               this.startUpWorkFlowForJQ(
-                  data.OrderID,
-                  data.FlowModel,
-                  data.FlowModelName,
-                  data.Usercode
-               );
                this.cancel();
              }else{
                this.$message.error(res.data.result.message); 
@@ -539,27 +532,6 @@
           })
         
      },
-     //启动工作流
-      startUpWorkFlowForJQ(OrderID, FlowModel, FlowModelName, Usercode) {
-        this.$http.post(this.GLOBAL.jqUrl + "/JQ/StartUpWorkFlowForJQ", {
-            jQ_ID: OrderID,
-            jQ_Type: FlowModel,
-            workflowCode: FlowModelName,
-            userCode: Usercode
-          })
-          .then(res => {
-            this.submitWAForJQ(Usercode, JSON.parse(res.data).data.workItemID);
-          });
-      },
-      //提交工作任务
-      submitWAForJQ(Usercode, workItemID) {
-        this.$http.post(this.GLOBAL.jqUrl + "/JQ/SubmitWorkAssignmentsForJQ", {
-            userCode: Usercode,
-            workItemID: workItemID,
-            commentText: "测试"
-          })
-          .then(res => {});
-      },
     }
   }
 </script>
