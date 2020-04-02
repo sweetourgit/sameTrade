@@ -30,8 +30,8 @@
              </el-table-column>
              <el-table-column label="签署状态" min-width="120">
                 <template slot-scope="scope">
-                     <span v-if="scope.row.sex===1||scope.row.sex===7||scope.row.sex===9||scope.row.sex===1||scope.row.sex===0">未签</span>
-                     <span v-if="scope.row.sex===2||scope.row.sex===3||scope.row.sex===4||scope.row.sex===5||scope.row.sex===6||scope.row.sex===8">已签</span>
+                     <span v-if="scope.row.orderStatus===1||scope.row.orderStatus===7||scope.row.orderStatus===9||scope.row.orderStatus===1||scope.row.orderStatus===0">未签</span>
+                     <span v-if="scope.row.orderStatus===2||scope.row.orderStatus===3||scope.row.orderStatus===4||scope.row.orderStatus===5||scope.row.orderStatus===6||scope.row.orderStatus===8">已签</span>
                 </template>
              </el-table-column>
              <el-table-column prop="idCard" label="操作" min-width="120">

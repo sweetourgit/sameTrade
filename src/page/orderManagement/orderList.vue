@@ -34,9 +34,11 @@
              <span v-show="scope.row.orderStatus == 4">旅游中</span>
              <span v-show="scope.row.orderStatus == 5">待评价</span>
              <span v-show="scope.row.orderStatus == 6">完成</span>
-             <span v-show="scope.row.orderStatus == 0 && scope.row.occupyStatus == 1">预定不占</span>
-             <span v-show="scope.row.orderStatus == 0 && scope.row.occupyStatus == 2">预定占位</span>
-             <span v-show="scope.row.orderStatus == 0 && scope.row.occupyStatus == 3">确认占位</span>
+             <!--
+             <span v-show="scope.row.orderStatus == 7 && scope.row.occupyStatus == 1">预定不占</span>
+             <span v-show="scope.row.orderStatus == 7 && scope.row.occupyStatus == 2">预定占位</span>
+             <span v-show="scope.row.orderStatus == 7 && scope.row.occupyStatus == 3">确认占位</span>
+             -->
              <span v-show="scope.row.orderStatus == 8">签署合同</span>
              <span v-show="scope.row.orderStatus == 9">作废订单</span>
              <span v-show="scope.row.orderStatus == 10">确认占位</span>
@@ -114,7 +116,7 @@
         orderStatus: 0,
         elTabs:[
           {lable:'全部订单',orderStatus:'0'},
-          {lable:'未确认',orderStatus:'7'},
+          {lable:'未确认',orderStatus:'10'},
           {lable:'补充资料',orderStatus:'1'},
           {lable:'签署合同',orderStatus:'8'},
           {lable:'待出行',orderStatus:'3'},
