@@ -489,9 +489,11 @@
         this.ifMsg=false;
         this.currentPIndex=index;
         this.packageInfo=this.ruleForm.package[index];
-        this.packageInfo.traffic.forEach(v => 
-          v.ext_Stopover=JSON.parse(v.ext_Stopover)
-        )
+        if(typeof(this.packageInfo.traffic[0].ext_Stopover)=='string'){      
+          this.packageInfo.traffic.forEach(v =>        
+              v.ext_Stopover=JSON.parse(v.ext_Stopover)         
+          )
+        }
         this.getCalendarDate();
       },
       //获取日历数据
