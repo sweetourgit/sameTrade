@@ -89,6 +89,10 @@
               <tr>
                   <td>欠款金额：</td>
                   <td>{{orderForm.payable - orderForm.paid}}</td>
+                  <!--
+                    退款完成：this.nonPayment = this.refundList.payable - (this.refundList.paid - this.refundList.realRefundPrice);
+                              this.nonPayment = this.refundList.payable - this.refundList.paid;
+                  -->
               </tr>
               <tr>
                   <td>还款日期：</td>
