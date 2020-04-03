@@ -463,19 +463,21 @@
           let details="";//成人 3000.00 * 2 儿童 3000.00*1
 
           let guestAll=[];
-          for(let i = 0;i < this.guests.length;i++){
+          let guest=JSON.parse(JSON.stringify(this.guests));
+          for(let i = 0;i < guest.length;i++){
               details+=this.tourInfo.enrolls[i].enrollName;
               details+=this.customerPrice == true?this.tourInfo.enrolls[i].price_01:this.tourInfo.enrolls[i].price_02;
-              details+='*'+this.guests[i].length;
-              for(let j = 0;j < this.guests[i].length;j++) {
+              details+='*'+guest[i].length;
+              for(let j = 0;j < guest[i].length;j++) {
                 if(this.customerPrice == true) {
-                  this.guests[i][j].singlePrice = this.tourInfo.enrolls[i].price_01;
+                  guest[i][j].singlePrice = this.tourInfo.enrolls[i].price_01;
                 }else{
-                  this.guests[i][j].singlePrice = this.tourInfo.enrolls[i].price_02;
+                  guest[i][j].singlePrice = this.tourInfo.enrolls[i].price_02;
                 }
-                this.guests[i][j].orgID=this.tyUserInfo.localCompID;
-                this.guests[i][j].userID=this.tyUserInfo.id;
-                guestAll.push(this.guests[i][j]);
+                guest[i][j].orgID=this.tyUserInfo.localCompID;
+                guest[i][j].userID=this.tyUserInfo.id;
+                guest[i][j].bornDate=new Date(guest[i][j].bornDate).getTime();
+                guestAll.push(guest[i][j]);
               }
           };
           this.$http.post(this.GLOBAL.serverSrc + "/indirect/order/mobile/insert",

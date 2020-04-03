@@ -24,14 +24,14 @@
              <el-table-column  prop="sex" label="性别" width="80">
                 <template slot-scope="scope">
                      <span v-if="scope.row.sex===0">男</span>
-                     <span v-if="scope.row.sex===1">女</span>
+                     <span v-if="scope.row.sex===1">女</span> 
                      <span v-if="scope.row.sex===3">未选择</span>
                 </template>
              </el-table-column>
              <el-table-column label="签署状态" min-width="120">
                 <template slot-scope="scope">
-                     <span v-if="orderForm.orderStatus===1||orderForm.orderStatus===7||orderForm.orderStatus===9||orderForm.orderStatus===10">未签</span>
-                     <span v-if="orderForm.orderStatus===2||orderForm.orderStatus===3||orderForm.orderStatus===4||orderForm.orderStatus===5||orderForm.orderStatus===6||orderForm.orderStatus===8">已签</span>
+                     <span v-if="orderForm.orderStatus===1||orderForm.orderStatus===7||orderForm.orderStatus===9||orderForm.orderStatus===10||orderForm.orderStatus===8">未签</span>
+                     <span v-if="orderForm.orderStatus===2||orderForm.orderStatus===3||orderForm.orderStatus===4||orderForm.orderStatus===5||orderForm.orderStatus===6">已签</span>   
                 </template>
              </el-table-column>
              <el-table-column prop="idCard" label="操作" min-width="120">
@@ -183,7 +183,9 @@ export default {
     },
     cancelInfo(formName) {
       this.dialogFormTour = false;
-      this.$refs[formName].resetFields();
+      setTimeout(() => {
+        this.$refs[formName].resetFields();
+      },300);  
     },
     subInfo(formName){
       this.$refs[formName].validate(valid => {
@@ -196,6 +198,10 @@ export default {
     save(){
       this.$refs['contact'].validate(valid => {
         if(valid) {
+          let guest=JSON.parse(JSON.stringify(this.guests));
+          for(let i = 0;i < guest.length;i++){
+                guest[i].bornDate=new Date(guest[i].bornDate).getTime();
+          };
           this.$http.post(this.GLOBAL.serverSrc + '/indirect/order/mobile/update', {
               "object":{
                 "orderCode":this.orderForm.orderCode,
@@ -203,7 +209,7 @@ export default {
                   "groupCode":this.orderForm.groupCode
                 },
                 "favourable":this.orderForm.favourable,
-                "guests":this.guests,
+                "guests":guest,
                 "number":this.orderForm.number,
                 "id":this.orderForm.id,
                 "payable": this.orderForm.payable,
