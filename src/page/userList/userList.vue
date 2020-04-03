@@ -103,7 +103,8 @@
            </el-table-column>
            <el-table-column  label="操作" align="center">
                <template slot-scope="scope">
-                  <span class="cursor blue" @click="operation(2,scope.row.phone)">更改</span>
+                  <span class="cursor blue" v-if="!peerUser" @click="operation(2,scope.row.phone)">更改</span>
+                  <span class="gray" v-if="peerUser">更改</span>
                </template>
            </el-table-column>
          </el-table>
@@ -241,8 +242,6 @@
               this.accountId = 0;
             }
          }
-
-
     }    
   }
 </script>
@@ -260,15 +259,7 @@
   .blue{color: #2e94f9}
   .cursor{cursor: pointer}
   .red{color: red}
+  .gray{color: #cacaca}
   .button{margin:10px 0 20px 20px}
-
-
-
-
-
-
-
-
-
 </style>
 

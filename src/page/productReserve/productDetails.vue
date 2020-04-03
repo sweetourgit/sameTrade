@@ -508,15 +508,19 @@
           'object': {
             'packageID': this.ruleForm.package[this.currentPIndex].id
           }
-        }).then(res => {
-          // 处理日历数据
-          res.data.objects.map(v => {
-            v.enrolls.map(k => {
-              k.adult = 0;
-            })
-          })
+        }).then(res => {         
           this.calendarDate = [];
-          this.calendarDate = res.data.objects.reverse();
+          if(res.data.objects.length!==0){
+             // 处理日历数据
+              res.data.objects.map(v => {
+                v.enrolls.map(k => {
+                  k.adult = 0;
+                })
+              })          
+              this.calendarDate = res.data.objects.reverse();
+          }else{
+              this.$message.error("请先设置套餐团号");
+          }
           this.getMonths();
         })
       },
