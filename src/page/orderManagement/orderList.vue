@@ -26,7 +26,7 @@
          <el-table-column  prop="productTypeCN" label="类型" width="90" align="center"></el-table-column>
          <el-table-column  prop="place" label="出发地/目的地" width="135" align="center"></el-table-column>
          <el-table-column  prop="total" label="价格" width="100" align="center"></el-table-column>
-         <el-table-column  prop="orderStatus" label="订单状态" min-width="100" align="center">
+         <el-table-column  prop="orderStatus" label="订单状态" width="100" align="center">
            <template slot-scope="scope">
              <span v-show="scope.row.orderStatus == 1">补充游客材料</span>
              <span v-show="scope.row.orderStatus == 2">电子合同</span>
@@ -44,14 +44,14 @@
              <span v-show="scope.row.orderStatus == 10">确认占位</span>
            </template>
          </el-table-column>
-         <el-table-column  prop="op" label="操作人" width="120" align="center"></el-table-column>
+         <el-table-column  prop="op" label="操作人" width="100" align="center"></el-table-column>
          <el-table-column  prop="createTime" label="下单时间" width="180" align="center">
             <template slot-scope="scope">
               <span>{{formatDate(new Date(scope.row.createTime))}}</span><br/>
               <!--<span class="red">占位预留：2016-09-22 19:12:00</span>-->
             </template>
          </el-table-column>
-         <el-table-column  label="操作" width="180" align="center">
+         <el-table-column  label="操作" min-width="180" align="center">
              <template slot-scope="scope">
                 <span class="cursor blue" @click="operation(scope.row,1)">详情</span>
                 <span class="em">|</span>
