@@ -90,7 +90,7 @@
               </tr>
               <tr>
                   <td>欠款金额：</td>
-                  <td>{{orderForm.payable - orderForm.paid}}</td>
+                  <td>{{nopayment}}</td>
                   <!--
                     退款完成：this.nonPayment = this.refundList.payable - (this.refundList.paid - this.refundList.realRefundPrice);
                               this.nonPayment = this.refundList.payable - this.refundList.paid;
@@ -130,7 +130,8 @@ export default {
     return {
       //弹窗
       dialogFormMark:false,
-      orderForm:{contact:"{}"}
+      orderForm:{contact:"{}"},
+      nopayment:0
     }
   },
   created(){
@@ -166,6 +167,11 @@ export default {
         this.orderForm = res.data.object;
         let planTime = res.data.object.planTime + '';
         this.orderForm.planTime = planTime.substr(0,4) + '-' + planTime.substr(4,2) + '-' + planTime.substr(6,2);
+        if(this.orderForm.refundStatus==6){
+          this.nopayment = this.orderForm.payable - this.orderForm.paid + this.orderForm.realRefundPrice
+        }else{
+          this.nopayment = this.orderForm.payable - this.orderForm.paid
+        }
       })
     },
     getRowClass({ row, column, rowIndex, columnIndex }) {

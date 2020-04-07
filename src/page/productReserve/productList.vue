@@ -18,11 +18,11 @@
       <!--目的地-->
       <span class="search-title por">目的地<span v-if="isDes" class="poa">没有该地区名称</span></span>
       <el-autocomplete class="input" v-model="destination" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="departure2" @blur="isToastFun(2)" placeholder="请输入目的地"></el-autocomplete>
-      <!--产品类型-->
+      <!--产品类型
       <span class="search-title">产品类型</span>
       <el-select v-model="productType" placeholder="全部类型" class="input">
         <el-option v-for="item in productGenre" :key="item.value" :label="item.label":value="item.value"></el-option>
-      </el-select>
+      </el-select>-->
     </div>
     <!--按钮-->
     <div class="productButton">
@@ -113,7 +113,7 @@
         destinationID:0,//目的地
         isPod:false,
         isDes:false,
-        productType:'',//产品类型
+       // productType:'',//产品类型
         productGenre:[{//产品类型下拉内容
           value: '0',
           label: '全部类型'
@@ -140,7 +140,7 @@
         this.podID = 0;
         this.destination = '';
         this.destinationID = 0;
-        this.productType = '';
+        //this.productType = '';
         this.list(1,this.pageSize);
       },
       getRowClass({ row, column, rowIndex, columnIndex }) {//表格头部颜色
@@ -170,7 +170,7 @@
         })
       },
       //列表
-      list(pageIndex=this.pageIndex,pageSize=this.pageSize,title=this.title,day=this.day,startDate=this.startDate,endDate=this.endDate,podID=this.podID,destinationID=this.destinationID,productType=this.productType){
+      list(pageIndex=this.pageIndex,pageSize=this.pageSize,title=this.title,day=this.day,startDate=this.startDate,endDate=this.endDate,podID=this.podID,destinationID=this.destinationID){//,productType=this.productType
         if(startDate){
           let y=startDate.getFullYear();
           let m=(startDate.getMonth()+1)>9?startDate.getMonth()+1:'0'+(startDate.getMonth()+1);
@@ -197,7 +197,7 @@
                 "endDate": endDate,
                 "podID": podID,
                 "destinationID": destinationID,
-                "productType": productType?productType:0,
+                "productType": 0//productType?productType:0,
             }
          })
         .then(res => {
