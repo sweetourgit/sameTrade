@@ -21,12 +21,12 @@
         </el-tab-pane> 
       </el-tabs>
       <el-table :data="orderList" ref="multipleTable" class="table" :header-cell-style="getRowClass" border>
-         <el-table-column  prop="orderCode" label="ID" min-width="150" align="center"></el-table-column>
+         <el-table-column  prop="orderCode" label="ID" width="190" align="center"></el-table-column>
          <el-table-column  prop="title" label="产品名称" width="240" align="center"></el-table-column>
          <el-table-column  prop="productTypeCN" label="类型" width="90" align="center"></el-table-column>
          <el-table-column  prop="place" label="出发地/目的地" width="135" align="center"></el-table-column>
          <el-table-column  prop="total" label="价格" width="100" align="center"></el-table-column>
-         <el-table-column  prop="orderStatus" label="订单状态" width="100" align="center">
+         <el-table-column  prop="orderStatus" label="订单状态" min-width="100" align="center">
            <template slot-scope="scope">
              <span v-show="scope.row.orderStatus == 1">补充游客材料</span>
              <span v-show="scope.row.orderStatus == 2">电子合同</span>
