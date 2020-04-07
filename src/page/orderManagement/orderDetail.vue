@@ -172,6 +172,9 @@ export default {
         }else{
           this.nopayment = this.orderForm.payable - this.orderForm.paid
         }
+        if(this.nopayment<0){
+          this.nopayment = 0
+        }
       })
     },
     getRowClass({ row, column, rowIndex, columnIndex }) {
