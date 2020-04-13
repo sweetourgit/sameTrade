@@ -74,10 +74,9 @@
   export default {
     data() {
       return {
-        //搜索栏
-        title:'',//产品名称
-        day:'',//天数
-        days:[{//产品类型下拉内容
+        title:'',
+        day:'',
+        days:[{
           value: 1,
           label: '1天'
         }, {
@@ -105,16 +104,16 @@
           value: 9,
           label: '大于8天'
         }],
-        startDate:'',//开始天数
-        endDate:'',//结束天数
+        startDate:'',
+        endDate:'',
         pod:'',
-        podID:0,//出发地
+        podID:0,
         destination:'',
-        destinationID:0,//目的地
+        destinationID:0,
         isPod:false,
         isDes:false,
        // productType:'',//产品类型
-        productGenre:[{//产品类型下拉内容
+        productGenre:[{
           value: '0',
           label: '全部类型'
         }, {
@@ -125,13 +124,13 @@
         tableData:[],
         //分页
         pageshow:true,
-        pageSize: 10, // 设定默认分页每页显示数
-        pageIndex: 1, // 设定当前页数
+        pageSize: 10, 
+        pageIndex: 1, 
         total: 0,
       }
     },
     methods:{
-      empty(){//搜索栏重置
+      empty(){
         this.title = '';
         this.day = '';
         this.startDate = '';

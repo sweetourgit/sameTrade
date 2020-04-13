@@ -1,6 +1,5 @@
 <template>
   <div class="user_list">
-    <!--公司信息-->
     <div class="cominfo">
       <div class="cominfo-title">公司信息</div>
       <div class="comContent">
@@ -25,7 +24,6 @@
         </table>
       </div>
     </div>
-    <!--联系人信息-->
     <div class="cominfo">
       <div class="cominfo-title">联系人和账户信息</div>
       <div class="comContent">
@@ -73,7 +71,6 @@
       </div>
       <el-button v-if="!peerUser" class="button" type="primary" @click="saveLocalcompInfo">保存</el-button>
     </div>
-    <!--账户信息-->
     <div class="cominfo" style="margin-bottom:70px">
       <div class="cominfo-title">账户信息</div>
       <el-table :data="acconutList" ref="multipleTable" class="table" :header-cell-style="getRowClass" border>
@@ -108,7 +105,6 @@
                </template>
            </el-table-column>
          </el-table>
-         <!--分页-->
          <div style="width:100%;margin-left:20px;overflow:hidden;">
            <el-pagination class="pagination"
               @size-change="handleSizeChange"
@@ -156,7 +152,6 @@
       this.accoutList();
     },
     methods:{
-        //获取公司信息
         companyinfo(){
           this.$http.post(this.GLOBAL.serverSrc + "/indirect/localcomp/api/get",{
             "id": this.tyUserInfo.localCompID

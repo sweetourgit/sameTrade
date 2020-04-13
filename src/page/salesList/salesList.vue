@@ -110,8 +110,8 @@
          pageSize: 10, 
          pageIndex: 1,
          total: 0,
-         variable:0,   //设置一个变量展示弹窗
-         dialogType:0, //弹窗类型  1：订单详细  2：修改订单
+         variable:0,   
+         dialogType:0, 
       }
     },
     mounted() {

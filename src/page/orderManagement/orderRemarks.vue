@@ -1,6 +1,5 @@
 <template>
   <div>
-       <!--备注信息弹窗-->
        <el-dialog title="备注" :visible.sync="dialogFormMark" class="city_list" width="780px" @close="close">
           <el-form :model="markFormAdd" :rules="rules" ref="markFormAdd" label-width="80px" class="demo-ruleForm">
                <div v-for="item in markForms">
@@ -33,7 +32,6 @@ export default {
   data() {
     return {
        name:JSON.parse(sessionStorage.getItem('tyUserInfo')).name,
-       //备注信息弹窗
        dialogFormMark:false,     
        markFormAdd:{
          'content':'',
@@ -56,7 +54,6 @@ export default {
   },
   methods: {
       getCommentList(orderId){
-        //查询一条订单信息
         this.$http.post(this.GLOBAL.serverSrc + '/indirect/orderquery/get/GetOrderCommentList',{
              "orderCode": this.orderData.orderCode
           }).then(res => {

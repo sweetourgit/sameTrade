@@ -1,6 +1,5 @@
 <template>
   <div>
-       <!--备注信息弹窗-->
        <el-dialog title="详情" :visible.sync="dialogFormMark" class="city_list" width="800px" style="margin-top:-100px">
           <table border="0" cellpadding="7" cellspacing="10" bgcolor="#f7f7f7" width="760" style="margin-top:-10px">
               <tr>

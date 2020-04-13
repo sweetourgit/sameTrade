@@ -199,14 +199,14 @@
           tourInfo:{},
           tourInfoCopy:{},
           localcomp:{},
-          customerPrice:false,//直客价开关
+          customerPrice:false,
           sales:{
-            tradeSales:'' //同业销售model
+            tradeSales:'' 
           },
           otherPrice:'',
           otherNote:'',
           total:0,
-          order:'3',//下单方式
+          order:'3',
           contact:{
             Name:'',
             Tel:'',
@@ -282,7 +282,7 @@
         .catch(res => {
         })         
       },
-      getLocalcomp(){  //获取同业社名称额度
+      getLocalcomp(){  
           this.$http.post(this.GLOBAL.serverSrc + "/indirect/localcomp/api/get",{
              "id":this.tyUserInfo.localCompID
             },
@@ -460,7 +460,7 @@
                return;
              }
           }
-          let details="";//成人 3000.00 * 2 儿童 3000.00*1
+          let details="";
 
           let guestAll=[];
           let guest=JSON.parse(JSON.stringify(this.guests));
@@ -515,7 +515,7 @@
                   "productType": 1,
                   "remark": "",
                   "topID": this.tyUserInfo.topID,
-                  "platform": 2,  //JQERP = 1,同业系统=2
+                  "platform": 2, 
                   "enrollDetail": details,
                   "plan": {
                     "id": this.tourInfo.id,

@@ -1,6 +1,5 @@
 <template>
   <div>
-     <!--添加SKU-->
      <el-dialog :title="title" :visible.sync="dialogForm" class="city_list" width="580px" style="margin-top:-100px" @close="close">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
                <el-form-item label="姓名" prop="name">

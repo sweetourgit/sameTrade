@@ -1,6 +1,5 @@
 <template>
   <div>
-      <!--搜索-->
       <span class="search-title">产品名称</span>
       <el-input v-model="productName" class="input"></el-input>
       <span class="search-title">订单ID</span>
@@ -15,7 +14,6 @@
       </el-select></br>
       <el-button type="primary" class="search-but" @click="initData(1,pageSize)">搜索</el-button>
       <el-button type="primary" plain class="search-but" @click="reset">重置</el-button>
-      <!--tab筛选-->
       <el-tabs v-model="orderStatus" @tab-click="handleClick" class="el-tab">
         <el-tab-pane v-for="item in elTabs" :label="item.lable" :name="item.orderStatus" :key="item.orderStatus"> 
         </el-tab-pane> 
@@ -67,7 +65,6 @@
              </template> 
          </el-table-column>
      </el-table>
-     <!--分页-->
      <div style="width:1350px;overflow:hidden">
        <el-pagination v-if="pageshow" class="pagination"
             @size-change="handleSizeChange"
@@ -83,7 +80,6 @@
         <order-remarks :orderData="orderData" :variable="variable" :dialogType="dialogType"></order-remarks>  
         <edit-order :orderData="orderData" :variable="variable" :dialogType="dialogType"></edit-order>  
       </div>
-      <!--列表结束--> 
   </div>
 </template>
 
@@ -99,20 +95,18 @@
     },
     data() {
       return {
-        //搜索
-        productName:'',       //产品名称
-        orderCode:'',  //订单ID
+        productName:'',      
+        orderCode:'', 
         startDate: '',
         endDate: '',
-        productType: '',  //产品类型
-        proType: [{//产品类型下拉内容
+        productType: '',  
+        proType: [{
           value: '0',
           label: '全部类型'
         },{
           value: '1',
           label: '跟团游'
         }],
-        //tab筛选
         orderStatus: 0,
         elTabs:[
           {lable:'全部订单',orderStatus:'0'},
@@ -124,15 +118,14 @@
           {lable:'订单完成',orderStatus:'6'},
           {lable:'作废订单',orderStatus:'9'},
         ],
-        //列表
         orderList:[],
         pageshow:true,
         pageSize: 10, 
         pageIndex: 1,
         total: 0,
-        orderData:'',    //组件参数
-        variable:0,   //设置一个变量展示弹窗
-        dialogType:0, //弹窗类型  1：订单详细  2：修改订单
+        orderData:'',   
+        variable:0,   
+        dialogType:0, 
       }
     },
     mounted() {
@@ -185,11 +178,11 @@
           this.dialogType=i;        
       },
       reset(){
-        this.productName='';       //产品名称
-        this.orderCode='';  //订单ID
+        this.productName='';       
+        this.orderCode='';  
         this.startDate='';
         this.endDate='';
-        this.productType='';  //产品类型
+        this.productType='';  
       },
       getRowClass({ row, column, rowIndex, columnIndex }) {
         if (rowIndex == 0) {
@@ -268,16 +261,13 @@
 </script>
 
 <style scoped>
-   /*search*/
    .input{margin:10px 0px;width: 180px}
    .search-title{font-size: 14px;margin:20px -5px 10px 10px;display: inline-block;width: 75px;text-align: center}
    .start-time{margin-left:10px;width: 155px !important}
    .date-line{width:15px;border-bottom:1px solid #e6e6e6;display:inline-block;margin:0 -10px 3px 0}
    .sec-type{width: 180px}
    .search-but{margin: 20px 0 15px 10px}
-   /*tab*/
    .el-tab{margin: 20px 0 0 10px;width:1350px}
-   /*list*/
    .table{border:1px solid #e6e6e6;border-bottom: 0;background-color: #F7F7F7;width:1350px;margin-left: 10px}
    .pagination{text-align:center;margin:40px 0}
    .red{color: red}

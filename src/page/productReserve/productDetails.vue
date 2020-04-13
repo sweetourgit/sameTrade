@@ -31,8 +31,6 @@
             <!--显示日期-->
             <li v-for="(item,index) in arrDay" v-bind:class="{active:chooseDate==currentYear+currentMonth+(item<10?'0'+item:item)}">             
               <div class="tc">{{item}}</div>
-                <!--判断当前日期是否有计划，有则显示-->
-                <!-- surplus为0余位才是0 -->
                 <div v-for="day in calendarDate" v-bind:class="{price_color:day.remaining==0}" v-if="day.date==currentYear+currentMonth+(item<10?'0'+item:item)" @click="chooseDateMes(day.date,day.surplus,day)">
                   <div>{{customerPrice==true?day.enrolls[0].price_01:day.enrolls[0].price_02}}</div>
                   <div v-if="day.remaining==0">已售罄</div>
