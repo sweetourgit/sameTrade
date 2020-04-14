@@ -277,8 +277,8 @@
         crowdlist:[],
         themelist:[],
         ruleForm:{},
-        packageInfo: '', //选中的套餐
-        currentPIndex:0, //选中的套餐index
+        packageInfo: '', 
+        currentPIndex:0,
         scheduleData: [
         {name: '出行信息'},
         //{name: '酒店信息'},
@@ -287,18 +287,18 @@
         //日历
         monthsTitle:[],
         calendarDate:[],
-        currentYear: 0, // 当前月的年份
-        currentMonth: 0,// 当前月的月份
-        currentIndex:0,//当前选中月份索引
-        arrDay:[], //日历日期        
-        chooseDate:0,//选中团期
+        currentYear: 0, 
+        currentMonth: 0,
+        currentIndex:0,
+        arrDay:[],      
+        chooseDate:0,
         rowDate:{
           'travelTime': '----年--月--日',
           'Total': 0
         },
         ulLeft:0,
         fixed:false,
-        active: 0, // 当前激活的导航索引
+        active: 0, 
         fixed1:false,
         active1: 0,
         customerPrice:false,
@@ -318,97 +318,79 @@
     },
     methods:{
       onScroll(){
-        // 获取所有锚点元素
         const navContents = document.querySelectorAll('.content-day')
-        // 所有锚点元素的 offsetTop
+
         const offsetTopArr = []
         navContents.forEach(item => {
           offsetTopArr.push(item.offsetTop)
         })
         const scrollTop = document.getElementById("viewBox").scrollTop 
-        // 定义当前点亮的导航下标
+
         let navIndex = 0
         if(scrollTop >= offsetTopArr[0]&&scrollTop <= this.$refs['instructions'].offsetTop-180){
             this.fixed=true;
           }else{
             this.fixed=false;
         }
-        for (let n = 0; n < offsetTopArr.length; n++) {
-          // 如果 scrollTop 大于等于第 n 个元素的 offsetTop 则说明 n-1 的内容已经完全不可见
-          // 那么此时导航索引就应该是 n 了     
+        for (let n = 0; n < offsetTopArr.length; n++) {  
           if (scrollTop >= offsetTopArr[n]) {
             navIndex = n; 
           }
         }
-        // 把下标赋值给 vue 的 data
         this.active = navIndex;
       },
       onScroll1(){
-        // 获取所有锚点元素
+
         const navContents = document.querySelectorAll('.content-schedule')
-        // 所有锚点元素的 offsetTop
+
         const offsetTopArr = []
         navContents.forEach(item => {
           offsetTopArr.push(item.offsetTop)
         })
         const scrollTop = document.getElementById("viewBox").scrollTop 
-        // 定义当前点亮的导航下标
+
         let navIndex = 0
         if(scrollTop >= offsetTopArr[0]&&scrollTop <= this.$refs['instructions1'].offsetTop-180){
             this.fixed1=true;
           }else{
             this.fixed1=false;
         }
-        for (let n = 0; n < offsetTopArr.length; n++) {
-          // 如果 scrollTop 大于等于第 n 个元素的 offsetTop 则说明 n-1 的内容已经完全不可见
-          // 那么此时导航索引就应该是 n 了     
+        for (let n = 0; n < offsetTopArr.length; n++) {  
           if (scrollTop >= offsetTopArr[n]) {
             navIndex = n; 
           }
         }
-        // 把下标赋值给 vue 的 data
         this.active1 = navIndex;
       },
       scrollTo(index,i) {
-      // 获取目标的 offsetTop
-      // css选择器是从 1 开始计数，我们是从 0 开始，所以要 +1
-      let targetOffsetTop = 0;
-      if(i==1){
-        targetOffsetTop = document.querySelectorAll('.content-day')[index].offsetTop
-      }else{
-        targetOffsetTop = document.querySelectorAll('.content-schedule')[index].offsetTop
-      }
-      
-      // 获取当前 offsetTop
-      let scrollTop = document.getElementById("viewBox").scrollTop
-      // 定义一次跳 50 个像素，数字越大跳得越快
-      const STEP = 50
-      // 判断是往下滑还是往上滑
-      if (scrollTop > targetOffsetTop) {
-        // 往上滑
-        smoothUp()
-      } else {
-        // 往下滑
-        smoothDown()
-      }
-      // 定义往下滑函数
-      function smoothDown() {
-          // 如果当前 scrollTop 小于 targetOffsetTop 说明视口还没滑到指定位置
+        let targetOffsetTop = 0;
+        if(i==1){
+          targetOffsetTop = document.querySelectorAll('.content-day')[index].offsetTop
+        }else{
+          targetOffsetTop = document.querySelectorAll('.content-schedule')[index].offsetTop
+        }
+        
+        let scrollTop = document.getElementById("viewBox").scrollTop
+
+        const STEP = 50
+        if (scrollTop > targetOffsetTop) {
+          smoothUp()
+        } else {
+          smoothDown()
+        }
+
+        function smoothDown() {
           if (scrollTop < targetOffsetTop) {
-            // 如果和目标相差距离大于等于 STEP 就跳 STEP
-            // 否则直接跳到目标点，目标是为了防止跳过了。
             if (targetOffsetTop - scrollTop >= STEP) {
               scrollTop += STEP
             } else {
               scrollTop = targetOffsetTop
             }
             document.getElementById("viewBox").scrollTop = scrollTop
-            // 屏幕在绘制下一帧时会回调传给 requestAnimationFrame 的函数
-            // 关于 requestAnimationFrame 可以自己查一下，在这种场景下，相比 setInterval 性价比更高
             requestAnimationFrame(smoothDown)
           }
         }
-        // 定义往上滑函数
+
         function smoothUp() {
           if (scrollTop > targetOffsetTop) {
             if (scrollTop - targetOffsetTop >= STEP) {
@@ -440,13 +422,13 @@
           "id":this.$route.query.id
         }).then(res => {
           this.ruleForm = res.data.object;
-          //人群
+
           this.crowdlist.filter(v => {
             if(v.id==this.ruleForm.crowdID){
               this.ruleForm.crowdID = v.name
             }
           });
-          //主题
+
           this.themelist.filter(v => {
             if(v.id==this.ruleForm.themeID){
               this.ruleForm.themeID = v.name
@@ -457,7 +439,7 @@
       },
       getMonths(){
         if(this.calendarDate.length!=0){
-          //生成月份数组
+
           let arr=[];
           for(let i=0;i<this.calendarDate.length;i++){
               if(arr.length==0){
@@ -482,7 +464,6 @@
         this.currentIndex=0;
         this.initCalendarTbody();
       },
-      // 按套餐获取详情数据
       clickPackage(index) {
         this.ifMsg=false;
         this.currentPIndex=index;
@@ -494,14 +475,12 @@
         }
         this.getCalendarDate();
       },
-      //获取日历数据
       getCalendarDate(){
         this.chooseDate=0;
         this.rowDate = {
           'travelTime': '----年--月--日',
           'Total': 0
         };
-        let month = new Date().getMonth()+1 < 10 ? '0' + (new Date().getMonth()+1) : new Date().getMonth()+1;
         this.$http.post(this.GLOBAL.serverSrc + '/indirect/team/mobile/package', {
           'object': {
             'packageID': this.ruleForm.package[this.currentPIndex].id
@@ -509,7 +488,6 @@
         }).then(res => {         
           this.calendarDate = [];
           if(res.data.objects.length!==0){
-             // 处理日历数据
               res.data.objects.map(v => {
                 v.enrolls.map(k => {
                   k.adult = 0;
@@ -522,23 +500,22 @@
           this.getMonths();
         })
       },
-      //日历导航切换
       pickNav(type,year,month,index){
-        //向前翻页
+ 
         if(type == "pre"){
           if(this.currentIndex>0){
             this.currentIndex--;
             this.sider("pre");
           }        
         }
-        //向后翻页
+ 
         if(type == "next"){
           if(this.currentIndex<this.monthsTitle.length-1){
             this.currentIndex++; 
             this.sider("next");
           }
         }
-        //点击导航
+ 
         if(type == "nav"){
           this.currentIndex=index;
         }
@@ -546,9 +523,8 @@
         this.currentMonth=this.monthsTitle[this.currentIndex].Month;
         this.initCalendarTbody();
       },
-      sider(type){  //滑动效果
+      sider(type){  
         var _this = this;
-        //target定义的滑动终点的left值
         var target; 
         if(type=="next"){
           target = this.ulLeft == 0?-130:Number(this.ulLeft.slice(0,-2))-130;
@@ -560,17 +536,17 @@
         if(this.monthsTitle.length>4){
            var timer = setInterval(sider,'10');
         }
-        //滑动方法
+
         function sider(){
           var left = _this.ulLeft;
           left = left == 0?0:left.slice(0,-2);
           left=Number(left);       
-          //左右翻页判断
+
           if(type=="next"){
             if(left>target){
              left-=5;
             }else{
-               clearInterval(timer);//如果到终点就把定时器关掉
+               clearInterval(timer);
             }
           }else{
             if(left<target){
@@ -582,20 +558,18 @@
           _this.ulLeft=oDiv.style.left=left+'px';
         }
       },
-      //生成日历
       initCalendarTbody(){
-        //默认选中数据第一个月份
         if(this.currentYear==0){
           this.currentYear=this.monthsTitle[0].Year;
           this.currentMonth=this.monthsTitle[0].Month;
         }
-        //贮存每一天
+
         for (var i = 0; i < 42; i++) {
             this.arrDay[i] = "";
         }
-        //循环团期的每一天，没有团期时为当前月份
+
         for (var i = 0; i < new Date(this.currentYear, this.currentMonth, 0).getDate(); i++) {
-            this.arrDay[i + new Date(this.currentYear, this.currentMonth - 1, 1).getDay()] = i + 1;  //判断1号是星期几确定日期从第几个表格开始显示
+            this.arrDay[i + new Date(this.currentYear, this.currentMonth - 1, 1).getDay()] = i + 1;
         }
       },
       handleChange(item) {
@@ -606,10 +580,9 @@
         )
         this.rowDate.Total = numberNum;
       },
-      //选择团期
-      chooseDateMes(dep,surplus,item){  //dep：计划日期,surplus：选中日期余位
-         this.ifMsg=false;
-      // surplus为0余位才是0
+
+      chooseDateMes(dep,surplus,item){  
+        this.ifMsg=false;
         if(surplus!=0){
           this.chooseDate=dep;
           item.Total = 0;
@@ -617,7 +590,6 @@
           this.rowDate = item;
         }
       },    
-      // 预定按钮
       handeSave(){  
         console.log(this.rowDate)
         if(this.chooseDate==0){
