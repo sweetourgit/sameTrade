@@ -47,7 +47,6 @@
         </td>
       </tr>
     </table>
-    <!--同业销售-->
     <div class="switchText">
       <div class="table_details">
         <el-form :rules="rules" :model="sales" ref="sales">
@@ -66,7 +65,6 @@
       </div>
       -->
       <div class="line"></div>
-      <!--报名人数-->
       <div><span class="table_details_01">*</span>报名人数</div>
       <div class="mb10">
         <div class="adult" v-for="(item,index) in tourInfo.enrolls" >
@@ -95,7 +93,6 @@
         </div>
       </div>
     </div>
-    <!--联系人-->
     <div class="switchText mb10">
       <el-form :rules="rules" :model="contact" ref="contact">
         <div class="people">
@@ -112,7 +109,6 @@
         </div>
       </el-form>
       <div class="line"></div>
-      <!--游客-->
       <table cellpadding="3" cellspacing="1" width="1080" class="tour-list">
         <tr bgcolor="#f7f7f7">
           <td width="100">姓名</td>
@@ -139,7 +135,6 @@
           </tr>
         </tbody>
       </table>
-      <!--填写游客信息-->
     <el-dialog :title="'出行人信息（'+winTitle+'）'" :visible.sync="dialogFormTour" class="city_list" @close="cancelInfo('conForm')" width="700px">
         <el-form :model="conForm" :rules="rules" ref="conForm" style="height:260px;">
             <el-form-item label="中文姓名" prop="cnName" label-width="110px" class="fl">

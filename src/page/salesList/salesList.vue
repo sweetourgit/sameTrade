@@ -42,7 +42,6 @@
            <el-button @click="tradeSales=''">重置</el-button>
       </div>
       <el-button class="excel" type="primary" @click="">导出excel</el-button>
-      
       <div class="ml20">
          <span class="ml20">2016-01</span>
          <span class="line">|</span>
@@ -58,7 +57,6 @@
          <span>本月总订单数 :</span>
          <span class="color-blue">12笔</span>  
       </div>
-
       <el-table :data="saleList" ref="multipleTable" class="table" :header-cell-style="getRowClass" border>
          <el-table-column  prop="id" label="ID" width="80" align="center"></el-table-column>
          <el-table-column  prop="title" label="产品名称" min-width="230" align="center"></el-table-column>
@@ -74,7 +72,6 @@
              </template> 
          </el-table-column>
        </el-table>
-       <!--分页-->
        <div style="width:1160px;margin-left:20px;overflow:hidden">
          <el-pagination v-if="pageshow" class="pagination"
             @size-change="handleSizeChange"
@@ -88,10 +85,6 @@
          </el-pagination>
        </div>
        <order-detail :orderData="saleList" :variable="variable" :dialogType="dialogType"></order-detail>
-
-
-
-
   </div>
 </template>
 

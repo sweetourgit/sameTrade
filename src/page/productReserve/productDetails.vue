@@ -3,15 +3,12 @@
     <div class="color_d7">ID:{{ruleForm.id}}</div>
     <div class="title">{{ruleForm.title}}</div>
     <div class="mt20 oh">
-    <!--左侧轮播图和日历-->
       <div class="picture">
-        <!--图片轮播-->
         <el-carousel :interval="6000" trigger="click" height="380px">
           <el-carousel-item v-for="(item,index) in ruleForm.pepeatpic" :key="item.id">
             <img :src=item.picturePath style="width:100%;height:380px;">
           </el-carousel-item>
         </el-carousel>
-        <!--日历-->
         <div class="w570">
           <ul class="mouth" id="month">
             <li v-for="(item,index) in monthsTitle" v-bind:class="{current: currentIndex==index}" class="mouth_date" @click="pickNav('nav',item.Year,item.Month,index)">{{item.Year}}年{{item.Month}}月</li>
@@ -28,7 +25,6 @@
             <li>六</li>
           </ul>
           <ul class="days">
-            <!--显示日期-->
             <li v-for="(item,index) in arrDay" v-bind:class="{active:chooseDate==currentYear+currentMonth+(item<10?'0'+item:item)}">             
               <div class="tc">{{item}}</div>
                 <div v-for="day in calendarDate" v-bind:class="{price_color:day.remaining==0}" v-if="day.date==currentYear+currentMonth+(item<10?'0'+item:item)" @click="chooseDateMes(day.date,day.surplus,day)">
@@ -40,7 +36,6 @@
           </ul>
         </div>
       </div>
-      <!--右侧基本信息-->
       <div class="fl">
         <div class="information">
         <div class="infor_bor">
@@ -92,7 +87,6 @@
       </div>
       </div>
     </div>
-    <!--产品概况-->
     <div class="cb">
       <div class="survey">产品概况</div>
       <div class="line"></div>
@@ -115,7 +109,6 @@
         </div>
         </div>
         <div class="travel">
-          <!--出行信息-->
           <div class="travel_bc oh">
             <div class="nav_right" v-if="packageInfo.briefMark!=''">
                <div>简要说明：</div>
@@ -145,7 +138,6 @@
               </div>
             </div>
           </div>
-          <!--酒店信息-->
           <div class="hotel content-day" v-if="false">
             <div class="mt20">
               <div class="hotel_img"></div>
@@ -161,7 +153,6 @@
               <div class="cb">酒店周边环境很好，景色优美，非常适合拍照，饮食娱乐也都很方便。酒店员工服务非常的热情，房间宽敞明亮，各种设施齐全，值得推荐！</div>
             </div>
           </div>
-          <!--日程信息-->
           <div class="content-day h50"></div>
           <div class="schedule" v-for="(item, k) in packageInfo.schedules" :key="k">
             <div>
@@ -221,7 +212,6 @@
         </div>
       </div>
     </div>
-    <!--费用说明-->
     <div class="cb" ref="instructions">
       <div class="survey">费用说明</div>
       <div class="line"></div>
@@ -241,7 +231,6 @@
         </div>
       </div>
     </div>
-    <!--预订须知-->
     <div class="cb" ref="instructions1">
       <div class="survey">预订须知</div>
       <div class="line"></div>
@@ -254,7 +243,6 @@
         </div>
       </div>
     </div>
-    <!--使用说明-->
     <div class="cb">
       <div class="survey">使用说明</div>
       <div class="line"></div>

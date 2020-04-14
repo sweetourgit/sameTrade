@@ -1,6 +1,5 @@
 <template>
   <div>
-       <!--备注信息弹窗-->
        <el-dialog title="修改" :visible.sync="dialogFormMark" class="city_list" width="900px" style="margin-top:-100px" @close="close">
          <el-form :rules="rules" :model="contact" ref="contact">
           <div class="people">
@@ -45,7 +44,6 @@
               <el-button type="primary" @click="save">保存</el-button>
            </div>
        </el-dialog>
-       <!--填写游客信息-->
     <el-dialog :title="'出行人信息（'+winTitle+'）'" :visible.sync="dialogFormTour" class="city_list" @close="cancelInfo('conForm')" width="700px">
         <el-form :model="conForm" :rules="rules" ref="conForm" style="height:260px;">
             <el-form-item label="中文姓名" prop="cnName" label-width="110px" class="fl">
@@ -104,7 +102,6 @@ export default {
   },
   data() {
     return {
-      //弹窗
       dialogFormMark:false,
       orderForm:{},
       guests:[],

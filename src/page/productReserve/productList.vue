@@ -1,6 +1,5 @@
 <template>
   <div style="width:1150px;">
-    <!--搜索栏-->
     <div class="searchbox">
       <span class="search-title">产品名称</span>
       <el-input v-model="title" class="input" placeholder="请输入产品内容"></el-input>
@@ -12,10 +11,8 @@
       <el-date-picker v-model="startDate" type="date" placeholder="开始天数" class="input_01" @change="endDateChange"></el-date-picker>
       <span class="dateline">——</span>
       <el-date-picker v-model="endDate" type="date" placeholder="结束天数" class="input_01" @change="endDateChange"></el-date-picker>
-      <!--出发地-->
       <span class="search-title por">出发地<span v-if="isPod" class="poa">没有该地区名称</span></span>
       <el-autocomplete class="input" v-model="pod" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="departure1" @blur="isToastFun(1)" placeholder="请输入出发地"></el-autocomplete>
-      <!--目的地-->
       <span class="search-title por">目的地<span v-if="isDes" class="poa">没有该地区名称</span></span>
       <el-autocomplete class="input" v-model="destination" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="departure2" @blur="isToastFun(2)" placeholder="请输入目的地"></el-autocomplete>
       <!--产品类型
@@ -24,17 +21,14 @@
         <el-option v-for="item in productGenre" :key="item.value" :label="item.label":value="item.value"></el-option>
       </el-select>-->
     </div>
-    <!--按钮-->
     <div class="productButton">
       <el-button type="primary" @click="list(1,pageSize)">搜索</el-button>
       <el-button type="primary" @click="empty()">重置</el-button>
     </div>
-    <!--开关-->
     <div class="switch">
       <div class="switchText">直客价</div>
       <el-switch class="switchButton" v-model="customerPrice"></el-switch>
     </div>
-    <!--表格-->
     <el-table :data="tableData"  class="labelTable" ref="multipleTable" :header-cell-style="getRowClass" border>
       <el-table-column prop="id" label="ID" width="80" align="center"></el-table-column>
       <el-table-column prop="title" label="产品名称" width="249" align="center"></el-table-column>
@@ -56,7 +50,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!--分页-->
     <el-pagination v-if="pageshow" class="pagination"
       @size-change="handleSizeChange"
       background

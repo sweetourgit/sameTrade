@@ -41,7 +41,6 @@
       }
     },
     methods: {
-      //登录
       loginForm(formName) {
         this.$refs['ruleForm'].validate(valid => {
           if(valid){
