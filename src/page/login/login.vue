@@ -28,22 +28,22 @@
 
 <script>
   export default {
-    data(){
+    data () {
       return {
         ruleForm: {
           user: '13022222222',
           password: '123456',
         },
-        rules:{
-          user:[{ required: true, message: '请输入用户名', trigger: 'blur' }],
-          password:[{ required: true, message: '请输入密码', trigger: 'blur' }]
+        rules: {
+          user: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+          password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
         }
       }
     },
     methods: {
-      loginForm(formName) {
+      loginForm (formName) {
         this.$refs['ruleForm'].validate(valid => {
-          if(valid){
+          if (valid) {
                 this.$http.post(this.GLOBAL.serverSrc+'/user/api/silogin',{
                   'userName': this.ruleForm.user,
                   'passWord': this.ruleForm.password,

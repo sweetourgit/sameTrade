@@ -95,21 +95,16 @@
 
 <script>
 export default {
-  props:{
-    orderData: '',
-    variable:0,
-    dialogType:0,
-  },
-  data() {
+  data () {
     return {
-      dialogFormMark:false,
-      orderForm:{},
-      guests:[],
-      contact:{},
-      dialogFormTour:false,
-      winTitle:'',
-      conForm:{},
-      guestsi:0,
+      dialogFormMark: false,
+      orderForm: {},
+      guests: [],
+      contact: {},
+      dialogFormTour: false,
+      winTitle: '',
+      conForm: {},
+      guestsi: 0,
       rules: {
             Name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
             Tel: [{ required: true, message: "请输入电话", trigger: "blur" }],
@@ -132,18 +127,23 @@ export default {
         }
     }
   },
-  created(){
+  props: {
+    orderData: '',
+    variable: 0,
+    dialogType: 0,
+  },
+  created () {
   },
   watch: {
-    variable:function(){        
-      if(this.dialogType==3){
-        this.dialogFormMark=true;    
+    variable: function(){        
+      if(this.dialogType == 3){
+        this.dialogFormMark = true;    
         this.getOrderData();
       }
     }
   },
   methods: {
-    getOrderData(){
+    getOrderData () {
       this.$http.post(this.GLOBAL.serverSrc + '/indirect/orderquery/get/siorders', {
         "orderCode": this.orderData.orderCode,
         "id": this.orderData.id
@@ -160,31 +160,31 @@ export default {
         return ''
       }
     },
-    getCellClass(){
+    getCellClass () {
       return 'textAlign:center'
     },
-    close(){
-      this.dialogFormMark=false;
+    close () {
+      this.dialogFormMark = false;
       this.$refs['contact'].resetFields();
-      this.orderForm={};
-      this.guests=[];
+      this.orderForm = {};
+      this.guests = [];
     },
-    fillTour(index){
+    fillTour (index) {
       this.dialogFormTour = true;
-      this.winTitle=this.guests[index].enrollName;
-      this.conForm=JSON.parse(JSON.stringify(this.guests[index]));
-      if(this.conForm.sex==3){
-        this.conForm.sex='';
+      this.winTitle = this.guests[index].enrollName;
+      this.conForm = JSON.parse(JSON.stringify(this.guests[index]));
+      if(this.conForm.sex == 3){
+        this.conForm.sex = '';
       }
-      this.guestsi=index;
+      this.guestsi = index;
     },
-    cancelInfo(formName) {
+    cancelInfo (formName) {
       this.dialogFormTour = false;
       setTimeout(() => {
         this.$refs[formName].resetFields();
       },300);  
     },
-    subInfo(formName){
+    subInfo (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$set(this.guests,this.guestsi,JSON.parse(JSON.stringify(this.conForm)))
@@ -192,30 +192,30 @@ export default {
         }
       })
     },
-    save(){
+    save () {
       this.$refs['contact'].validate(valid => {
-        if(valid) {
-          let guest=JSON.parse(JSON.stringify(this.guests));
-          for(let i = 0;i < guest.length;i++){
-                guest[i].bornDate=new Date(guest[i].bornDate).getTime();
+        if (valid) {
+          let guest = JSON.parse(JSON.stringify(this.guests));
+          for(let i = 0; i < guest.length; i++){
+                guest[i].bornDate = new Date(guest[i].bornDate).getTime();
           };
           this.$http.post(this.GLOBAL.serverSrc + '/indirect/order/mobile/update', {
-              "object":{
-                "orderCode":this.orderForm.orderCode,
+              "object": {
+                "orderCode": this.orderForm.orderCode,
                 "plan": {
-                  "groupCode":this.orderForm.groupCode
+                  "groupCode": this.orderForm.groupCode
                 },
-                "favourable":this.orderForm.favourable,
-                "guests":guest,
-                "number":this.orderForm.number,
-                "id":this.orderForm.id,
+                "favourable": this.orderForm.favourable,
+                "guests": guest,
+                "number": this.orderForm.number,
+                "id": this.orderForm.id,
                 "payable": this.orderForm.payable,
-                "contact":JSON.stringify(this.contact),
-                "occupyStatus":this.orderForm.occupyStatus,
-                "orderStatus":this.orderForm.orderStatus,
-                "localComp":{
-                  "id":this.orderForm.localCompID,
-                  "settlementType":this.orderForm.settlementType
+                "contact": JSON.stringify(this.contact),
+                "occupyStatus": this.orderForm.occupyStatus,
+                "orderStatus": this.orderForm.orderStatus,
+                "localComp": {
+                  "id": this.orderForm.localCompID,
+                  "settlementType": this.orderForm.settlementType
                 }
               }
           }).then(res => {
