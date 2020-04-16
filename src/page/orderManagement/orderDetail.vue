@@ -120,45 +120,45 @@
 
 <script>
 export default {
-  props:{
+  props: {
     orderData: '',
-    variable:0,
-    dialogType:0,
+    variable: 0,
+    dialogType: 0,
   },
-  data() {
+  data () {
     return {
       //弹窗
-      dialogFormMark:false,
-      orderForm:{contact:"{}"},
-      nopayment:0
+      dialogFormMark: false,
+      orderForm: {contact:"{}"},
+      nopayment: 0
     }
   },
-  created(){
+  created () {
   },
   watch: {
-    variable:function(){        
-      if(this.dialogType==1){
-        this.dialogFormMark=true;    
+    variable: function(){        
+      if(this.dialogType == 1){
+        this.dialogFormMark = true;    
         this.getOrderData();
       }
     }
   },
   methods: {
-    formatDate(date){
+    formatDate (date) {
        var y = date.getFullYear();  
        var m = date.getMonth() + 1;  
            m = m < 10 ? ('0' + m) : m;  
        var d = date.getDate();  
            d = d < 10 ? ('0' + d) : d;  
        var h = date.getHours();  
-           h=h < 10 ? ('0' + h) : h;  
+           h = h < 10 ? ('0' + h) : h;  
        var minute = date.getMinutes();  
            minute = minute < 10 ? ('0' + minute) : minute;  
-       var second=date.getSeconds();  
-           second=second < 10 ? ('0' + second) : second;  
+       var second = date.getSeconds();  
+           second = second < 10 ? ('0' + second) : second;  
            return y + '-' + m + '-' + d +' '+ h + ':' + minute + ':' + second;
     },
-    getOrderData(){
+    getOrderData () {
       this.$http.post(this.GLOBAL.serverSrc + '/indirect/orderquery/get/siorders', {
         "orderCode": this.orderData.orderCode,
         "id": this.orderData.id
@@ -166,28 +166,28 @@ export default {
         this.orderForm = res.data.object;
         let planTime = res.data.object.planTime + '';
         this.orderForm.planTime = planTime.substr(0,4) + '-' + planTime.substr(4,2) + '-' + planTime.substr(6,2);
-        if(this.orderForm.refundStatus==6){
+        if (this.orderForm.refundStatus==6) {
           this.nopayment = this.orderForm.payable - this.orderForm.paid + this.orderForm.realRefundPrice
-        }else{
+        } else {
           this.nopayment = this.orderForm.payable - this.orderForm.paid
         }
-        if(this.nopayment<0){
+        if (this.nopayment < 0) {
           this.nopayment = 0
         }
       })
     },
-    getRowClass({ row, column, rowIndex, columnIndex }) {
+    getRowClass ({ row, column, rowIndex, columnIndex }) {
       if (rowIndex == 0) {
         return 'background:#f7f7f7;height:50px;textAlign:center;color:#333;fontSize:15px'
       } else {
         return ''
       }
     },
-    getCellClass(){
+    getCellClass () {
       return 'textAlign:center'
     },
-    close(){
-      this.dialogFormMark=false;
+    close () {
+      this.dialogFormMark = false;
     },
     }
 }
