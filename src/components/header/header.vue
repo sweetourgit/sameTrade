@@ -15,21 +15,21 @@
 
 <script>
     export default {
-    	data(){
-    	  return{
+    	data () {
+    	  return {
           name: ''
 	      }
 	    },
-      created(){
+      created () {
         this.name = JSON.parse(sessionStorage.getItem('tyUserInfo')).name;
       },
-	    methods:{
-        submit:function(){
+	    methods: {
+        submit: function(){
           this.$router.push({path: '/login'});
           sessionStorage.removeItem('tyToken');
           sessionStorage.removeItem('tyUserInfo');
         },
-        listUser(){
+        listUser () {
           this.$router.push({path: '/accountInfor'})
         }
 	    }

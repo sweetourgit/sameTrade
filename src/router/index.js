@@ -1,14 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import productList from '@/page/productReserve/productList'
-import insertOrder from '@/page/productReserve/insertOrder'
-import productDetails from '@/page/productReserve/productDetails'
-import orderManagement from '@/page/orderManagement/orderList'
-import userList from '@/page/userList/userList'
-import salesList from '@/page/salesList/salesList'
-import login from '@/page/login/login'
-
-
 Vue.use(Router);
 
 export default new Router({
@@ -17,49 +8,49 @@ export default new Router({
       path: '/', redirect: 'login',
     }, {
       path: '/productList',
-      component: productList,
+      component: () => import('@/page/productReserve/productList'),
       name: '产品预订',
       meta: {
         keepAlive: true,
         auth:true}
     }, {
       path: '/insertOrder',
-      component: insertOrder,
+      component: () => import('@/page/productReserve/insertOrder'),
       name: '详情预定',
       meta: {
         keepAlive: true,
         auth:true}
     }, {
       path: '/productDetails', 
-      component: productDetails,
+      component: () => import('@/page/productReserve/productDetails'),
       name: '产品详情',
       meta: {
         keepAlive: true,
         auth:true}
     },{
           path: '/orderManagement',
-          component: orderManagement,
+          component: () => import('@/page/orderManagement/orderList'),
           name: '订单管理',
           meta: {
               keepAlive: true,
               auth:true}
       },{
           path: '/userList',
-          component: userList,
+          component: () => import('@/page/userList/userList'),
           name: '账户信息',
           meta: {
               keepAlive: true,
               auth:true}
       },{
           path: '/salesList',
-          component: salesList,
+          component: () => import('@/page/salesList/salesList'),
           name: '销售统计',
           meta: {
               keepAlive: true,
               auth:true}
       },{
       path: '/login',
-      component: login,
+      component: () => import('@/page/login/login'),
       meta: {
         keepAlive: false}
     },

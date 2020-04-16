@@ -38,15 +38,15 @@
               items: [
                 {
                   value: '产品预订',
-                  router:'/productList'
+                  router: '/productList'
                 },
                 {
                     value: '订单管理',
-                    router:'/orderManagement'
+                    router: '/orderManagement'
                 },
                 {
                     value: '账户信息',
-                    router:'/userList'
+                    router: '/userList'
                 }//,{
                  //   value: '销售统计',
                  //   router:'/salesList'
@@ -54,20 +54,20 @@
               ]
             },
         ],
-        isRouter:true,
-        menuNumber:[],
+        isRouter: true,
+        menuNumber: [],
         index: ''
     }
   },
   methods: {
-    handleOpen(key){
+    handleOpen (key) {
       let aa = Number(key)
-      for(let i=0;i<this.category.length;i++){
+      for(let i = 0; i < this.category.length; i++){
         this.menuNumber[i] = i
       }
       if(this.menuNumber.indexOf(aa) !== -1){
-        for(let i=0;i<this.menuNumber.length;i++){
-          if(aa !== this.menuNumber[i]){
+        for (let i = 0; i < this.menuNumber.length; i++) {
+          if (aa !== this.menuNumber[i]) {
             let bb = String(this.menuNumber[i])
             this.$refs.menu.close(bb)
           }

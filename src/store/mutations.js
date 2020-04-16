@@ -1,13 +1,13 @@
 
 
 export default {
-  changeLogin(state,data){
+  changeLogin (state, data) {
     state.isLogin = data
   },
-  saveToken(state,data){
+  saveToken (state, data) {
     state.token = data
   },
-  saveName(state, data){
+  saveName (state, data) {
     state.name = data
   }
 }
