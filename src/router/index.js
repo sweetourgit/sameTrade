@@ -13,7 +13,7 @@ export default new Router({
       meta: {
         keepAlive: true,
         auth:true}
-    }, {
+    }, { 
       path: '/insertOrder',
       component: () => import('@/page/productReserve/insertOrder'),
       name: '详情预定',
