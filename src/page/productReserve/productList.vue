@@ -65,11 +65,11 @@
 
 <script>
   export default {
-    data() {
+    data () {
       return {
-        title:'',
-        day:'',
-        days:[{
+        title: '',
+        day: '',
+        days: [{
           value: 1,
           label: '1天'
         }, {
@@ -97,33 +97,33 @@
           value: 9,
           label: '大于8天'
         }],
-        startDate:'',
-        endDate:'',
-        pod:'',
-        podID:0,
-        destination:'',
-        destinationID:0,
-        isPod:false,
-        isDes:false,
+        startDate: '',
+        endDate: '',
+        pod: '',
+        podID: 0,
+        destination: '',
+        destinationID: 0,
+        isPod: false,
+        isDes: false,
        // productType:'',//产品类型
-        productGenre:[{
+        productGenre: [{
           value: '0',
           label: '全部类型'
         }, {
           value: '1',
           label: '跟团游'
         }],
-        customerPrice:false,
-        tableData:[],
+        customerPrice: false,
+        tableData: [],
         //分页
-        pageshow:true,
+        pageshow: true,
         pageSize: 10, 
         pageIndex: 1, 
         total: 0,
       }
     },
     methods:{
-      empty(){
+      empty () {
         this.title = '';
         this.day = '';
         this.startDate = '';
@@ -133,7 +133,7 @@
         this.destination = '';
         this.destinationID = 0;
         //this.productType = '';
-        this.list(1,this.pageSize);
+        this.list(1, this.pageSize);
       },
       getRowClass({ row, column, rowIndex, columnIndex }) {//表格头部颜色
         if (rowIndex == 0) {
@@ -143,48 +143,48 @@
         }
       },
       //分页
-      handleSizeChange(val){
+      handleSizeChange (val) {
         this.pageSize = val;
         this.pageIndex = 1;
-        this.list(1,val);
+        this.list(1, val);
       },
-      handleCurrentChange(val){
-        this.list(val,this.pageSize);
-        this.pageIndex=val;
+      handleCurrentChange (val) {
+        this.list(val, this.pageSize);
+        this.pageIndex = val;
       },
-      checkIncome(id){
+      checkIncome (id) {
         this.$router.push({
           path: '/productDetails',
           query: {
               id: id,
-              customerPrice:this.customerPrice
+              customerPrice: this.customerPrice
           }
         })
       },
       //列表
-      list(pageIndex=this.pageIndex,pageSize=this.pageSize,title=this.title,day=this.day,startDate=this.startDate,endDate=this.endDate,podID=this.podID,destinationID=this.destinationID){//,productType=this.productType
-        if(startDate){
-          let y=startDate.getFullYear();
-          let m=(startDate.getMonth()+1)>9?startDate.getMonth()+1:'0'+(startDate.getMonth()+1);
-          let d=startDate.getDate()>9?startDate.getDate():'0'+startDate.getDate();
-          startDate=''+ y + m + d
-        }else{
+      list (pageIndex = this.pageIndex, pageSize = this.pageSize, title = this.title, day = this.day, startDate = this.startDate, endDate = this.endDate, podID = this.podID, destinationID = this.destinationID){//,productType=this.productType
+        if (startDate) {
+          let y = startDate.getFullYear();
+          let m = (startDate.getMonth() + 1) > 9 ? startDate.getMonth() + 1 : '0' + (startDate.getMonth() + 1);
+          let d = startDate.getDate() > 9 ? startDate.getDate() : '0' + startDate.getDate();
+          startDate = '' + y + m + d
+        } else {
           startDate = 0;
         }
-        if(endDate){
-          let y=endDate.getFullYear();
-          let m=(endDate.getMonth()+1)>9?endDate.getMonth()+1:'0'+(endDate.getMonth()+1);
-          let d=endDate.getDate()>9?endDate.getDate():'0'+endDate.getDate();
-          endDate=''+ y + m + d
-        }else{
+        if (endDate) {
+          let y = endDate.getFullYear();
+          let m = (endDate.getMonth() + 1) > 9 ? endDate.getMonth() + 1 : '0' + (endDate.getMonth() + 1);
+          let d = endDate.getDate() > 9 ? endDate.getDate() : '0' + endDate.getDate();
+          endDate = ''+ y + m + d
+        } else {
           endDate = 0;
         }
         this.$http.post(this.GLOBAL.serverSrc + "/indirect/team/pc/page",{
-            "pageIndex":pageIndex,
-            "pageSize":pageSize,
+            "pageIndex": pageIndex,
+            "pageSize": pageSize,
             "object": {
                 "title": title,
-                "day": day?day:0,
+                "day": day ? day : 0,
                 "startDate": startDate,
                 "endDate": endDate,
                 "podID": podID,
@@ -193,13 +193,13 @@
             }
          })
         .then(res => {
-            this.tableData=[];
+            this.tableData = [];
             this.tableData = res.data.objects;
             this.total = res.data.total;
             this.tableData.forEach(v => {
               v.date = v.date.toString();
               let date = v.date.substr(0,4) + '-' + v.date.substr(4,2) + '-' + v.date.substr(6,2);
-              v.date=date;
+              v.date = date;
             });
             this.$nextTick(() => {
                 this.pageshow = true;
@@ -207,18 +207,18 @@
         })
       },
        //目的地
-    querySearch(queryString, cb) {
+    querySearch (queryString, cb) {
       this.$http.post(this.GLOBAL.serverSrc + '/indirect/universal/area/fuzzy', {
         "object": {
           areaName: queryString
         }
       }).then(res => {
          if (res.data.objects.length > 0) {
-          let tableData=[];
-          for(let i=0;i<res.data.objects.length;i++){
+          let tableData = [];
+          for(let i = 0; i < res.data.objects.length; i++){
             tableData.push({
               "value" : res.data.objects[i].areaName,
-              "id":res.data.objects[i].id
+              "id": res.data.objects[i].id
             })
           }
           var results = queryString ? tableData.filter(this.createFilter(queryString)) : [];
@@ -232,21 +232,21 @@
           console.log(err);
         })
       },
-      createFilter(queryString){
+      createFilter (queryString) {
         return (restaurant) => {
           return (restaurant.value);
         }
       },
-      departure1(item){
+      departure1 (item) {
         this.podID = item.id;
         this.pod = item.value;
       },
-      departure2(item){
+      departure2 (item) {
         this.destinationID = item.id;
         this.destination = item.value;
       },
-      isToastFun(i){
-        if(i==1){
+      isToastFun (i) {
+        if(i == 1){
           this.isDes = false;
           this.pod = "";
           this.podID = 0;
@@ -256,7 +256,7 @@
           this.destinationID = 0;
         }
       },
-      endDateChange() {
+      endDateChange () {
         let startDate = new Date(this.startDate).getTime();
         let endDate = new Date(this.endDate).getTime();
         if (this.startDate !== "") {
@@ -267,8 +267,8 @@
         }
       }
     },
-    mounted(){
-      this.list(1,this.pageSize);
+    mounted () {
+      this.list(1, this.pageSize);
     }
   }
 

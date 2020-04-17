@@ -262,40 +262,40 @@
   export default {
     data() {
       return {
-        crowdlist:[],
-        themelist:[],
-        ruleForm:{},
+        crowdlist: [],
+        themelist: [],
+        ruleForm: {},
         packageInfo: '', 
-        currentPIndex:0,
+        currentPIndex: 0,
         scheduleData: [
         {name: '出行信息'},
         //{name: '酒店信息'},
         {name: '日程信息'}
         ],
         //日历
-        monthsTitle:[],
-        calendarDate:[],
+        monthsTitle: [],
+        calendarDate: [],
         currentYear: 0, 
         currentMonth: 0,
-        currentIndex:0,
-        arrDay:[],      
-        chooseDate:0,
+        currentIndex: 0,
+        arrDay: [],      
+        chooseDate: 0,
         rowDate:{
           'travelTime': '----年--月--日',
           'Total': 0
         },
-        ulLeft:0,
-        fixed:false,
+        ulLeft: 0,
+        fixed: false,
         active: 0, 
-        fixed1:false,
+        fixed1: false,
         active1: 0,
-        customerPrice:false,
-        ifMsg:false,
-        msg:"",
+        customerPrice: false,
+        ifMsg: false,
+        msg: "",
       }
     },
-    mounted(){  
-      this.customerPrice=this.$route.query.customerPrice;
+    mounted () {  
+      this.customerPrice = this.$route.query.customerPrice;
       document.getElementById("viewBox").addEventListener('scroll', this.onScroll)
       document.getElementById("viewBox").addEventListener('scroll', this.onScroll1)
       this.getCrowdlist();
@@ -304,8 +304,8 @@
         this.getProductInfo();
       },300);
     },
-    methods:{
-      onScroll(){
+    methods: {
+      onScroll () {
         const navContents = document.querySelectorAll('.content-day')
 
         const offsetTopArr = []
@@ -315,10 +315,10 @@
         const scrollTop = document.getElementById("viewBox").scrollTop 
 
         let navIndex = 0
-        if(scrollTop >= offsetTopArr[0]&&scrollTop <= this.$refs['instructions'].offsetTop-180){
-            this.fixed=true;
+        if(scrollTop >= offsetTopArr[0] && scrollTop <= this.$refs['instructions'].offsetTop - 180){
+            this.fixed = true;
           }else{
-            this.fixed=false;
+            this.fixed = false;
         }
         for (let n = 0; n < offsetTopArr.length; n++) {  
           if (scrollTop >= offsetTopArr[n]) {
@@ -327,7 +327,7 @@
         }
         this.active = navIndex;
       },
-      onScroll1(){
+      onScroll1 () {
 
         const navContents = document.querySelectorAll('.content-schedule')
 
@@ -338,10 +338,10 @@
         const scrollTop = document.getElementById("viewBox").scrollTop 
 
         let navIndex = 0
-        if(scrollTop >= offsetTopArr[0]&&scrollTop <= this.$refs['instructions1'].offsetTop-180){
-            this.fixed1=true;
+        if(scrollTop >= offsetTopArr[0] && scrollTop <= this.$refs['instructions1'].offsetTop - 180){
+            this.fixed1 = true;
           }else{
-            this.fixed1=false;
+            this.fixed1 = false;
         }
         for (let n = 0; n < offsetTopArr.length; n++) {  
           if (scrollTop >= offsetTopArr[n]) {
@@ -352,9 +352,9 @@
       },
       scrollTo(index,i) {
         let targetOffsetTop = 0;
-        if(i==1){
+        if (i == 1) {
           targetOffsetTop = document.querySelectorAll('.content-day')[index].offsetTop
-        }else{
+        } else {
           targetOffsetTop = document.querySelectorAll('.content-schedule')[index].offsetTop
         }
         
@@ -391,80 +391,80 @@
           }
         }
       },
-      getCrowdlist(){
+      getCrowdlist () {
         this.$http.post(this.GLOBAL.serverSrc + "/indirect/universal/crowd/crowdlist",{
-         'object':{isDeleted: 0}
+         'object': {isDeleted: 0}
         }).then(res => {
-          this.crowdlist=res.data.objects;
+          this.crowdlist = res.data.objects;
        })
       },
-      getThemelist(){
+      getThemelist () {
         this.$http.post(this.GLOBAL.serverSrc + "/indirect/universal/theme/themelist",{
-         'object':{isDeleted: 0}
+         'object': {isDeleted: 0}
         }).then(res => {
-          this.themelist=res.data.objects;
+          this.themelist = res.data.objects;
        })
       },
-      getProductInfo(){
+      getProductInfo () {
         this.$http.post(this.GLOBAL.serverSrc + "/indirect/team/mobile/detail",{
-          "id":this.$route.query.id
+          "id": this.$route.query.id
         }).then(res => {
           this.ruleForm = res.data.object;
 
           this.crowdlist.filter(v => {
-            if(v.id==this.ruleForm.crowdID){
+            if(v.id == this.ruleForm.crowdID){
               this.ruleForm.crowdID = v.name
             }
           });
 
           this.themelist.filter(v => {
-            if(v.id==this.ruleForm.themeID){
+            if(v.id == this.ruleForm.themeID){
               this.ruleForm.themeID = v.name
             }
           });
           this.clickPackage(0);   
         })
       },
-      getMonths(){
-        if(this.calendarDate.length!=0){
+      getMonths () {
+        if(this.calendarDate.length != 0){
 
-          let arr=[];
-          for(let i=0;i<this.calendarDate.length;i++){
-              if(arr.length==0){
+          let arr = [];
+          for(let i = 0; i < this.calendarDate.length; i++){
+              if(arr.length == 0){
                  arr.push({'Month':this.calendarDate[0].date.toString().substr(4,2),'Year':this.calendarDate[0].date.toString().substr(0,4)});
               }
-              let a=0;
-              for(let j=0;j<arr.length;j++){               
-                if(this.calendarDate[i].date.toString().substr(0,6)==arr[j].Year+''+arr[j].Month){
-                   a=1;
+              let a = 0;
+              for(let j = 0; j < arr.length; j++){               
+                if(this.calendarDate[i].date.toString().substr(0,6) == arr[j].Year + '' + arr[j].Month){
+                   a = 1;
                 }
               }
-              if(a==0){
+              if(a == 0){
                   arr.push({'Month':this.calendarDate[i].date.toString().substr(4,2),'Year':this.calendarDate[i].date.toString().substr(0,4)});
                 }
           }
-          this.monthsTitle=arr;          
+          this.monthsTitle = arr;          
         }else{
-          this.monthsTitle=[{'Month':new Date().getMonth()+1>9?new Date().getMonth()+1:'0'+(new Date().getMonth()+1),'Year':new Date().getFullYear()}]
+          this.monthsTitle = [{'Month': new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : '0' + (new Date().getMonth() + 1),'Year': new Date().getFullYear()}]
         }      
-        this.currentYear=this.monthsTitle[0].Year;
-        this.currentMonth=this.monthsTitle[0].Month;
-        this.currentIndex=0;
+        this.currentYear = this.monthsTitle[0].Year;
+        this.currentMonth = this.monthsTitle[0].Month;
+        this.currentIndex = 0;
         this.initCalendarTbody();
       },
-      clickPackage(index) {
-        this.ifMsg=false;
-        this.currentPIndex=index;
-        this.packageInfo=this.ruleForm.package[index];
-        if(typeof(this.packageInfo.traffic[0].ext_Stopover)=='string'){      
+      clickPackage (index) {
+        this.ifMsg = false;
+        this.currentPIndex = index;
+        this.packageInfo = this.ruleForm.package[index];
+        if (typeof(this.packageInfo.traffic[0].ext_Stopover) == 'string') {      
           this.packageInfo.traffic.forEach(v =>        
-              v.ext_Stopover=JSON.parse(v.ext_Stopover)         
+              v.ext_Stopover = JSON.parse(v.ext_Stopover)         
           )
         }
         this.getCalendarDate();
       },
-      getCalendarDate(){
-        this.chooseDate=0;
+      getCalendarDate () {
+        this.chooseDate = 0;
         this.rowDate = {
           'travelTime': '----年--月--日',
           'Total': 0
@@ -475,7 +475,7 @@
           }
         }).then(res => {         
           this.calendarDate = [];
-          if(res.data.objects.length!==0){
+          if(res.data.objects.length !== 0){
               res.data.objects.map(v => {
                 v.enrolls.map(k => {
                   k.adult = 0;
@@ -488,68 +488,68 @@
           this.getMonths();
         })
       },
-      pickNav(type,year,month,index){
+      pickNav(type, year, month, index){
  
-        if(type == "pre"){
-          if(this.currentIndex>0){
+        if (type == "pre") {
+          if(this.currentIndex > 0){
             this.currentIndex--;
             this.sider("pre");
           }        
         }
  
-        if(type == "next"){
-          if(this.currentIndex<this.monthsTitle.length-1){
+        if (type == "next") {
+          if(this.currentIndex < this.monthsTitle.length - 1){
             this.currentIndex++; 
             this.sider("next");
           }
         }
  
-        if(type == "nav"){
-          this.currentIndex=index;
+        if (type == "nav") {
+          this.currentIndex = index;
         }
-        this.currentYear=this.monthsTitle[this.currentIndex].Year;
-        this.currentMonth=this.monthsTitle[this.currentIndex].Month;
+        this.currentYear = this.monthsTitle[this.currentIndex].Year;
+        this.currentMonth = this.monthsTitle[this.currentIndex].Month;
         this.initCalendarTbody();
       },
-      sider(type){  
+      sider (type) {  
         var _this = this;
         var target; 
-        if(type=="next"){
-          target = this.ulLeft == 0?-130:Number(this.ulLeft.slice(0,-2))-130;
-        }else{
-          target = this.ulLeft == 0?130:Number(this.ulLeft.slice(0,-2))+130;
+        if (type == "next") {
+          target = this.ulLeft == 0 ? -130 : Number(this.ulLeft.slice(0,-2)) - 130;
+        } else {
+          target = this.ulLeft == 0 ? 130 : Number(this.ulLeft.slice(0,-2)) + 130;
         }    
 
         var oDiv = document.getElementById("month");
-        if(this.monthsTitle.length>4){
-           var timer = setInterval(sider,'10');
+        if (this.monthsTitle.length > 4) {
+           var timer = setInterval(sider, '10');
         }
 
         function sider(){
           var left = _this.ulLeft;
-          left = left == 0?0:left.slice(0,-2);
-          left=Number(left);       
+          left = left == 0 ? 0 : left.slice(0, -2);
+          left = Number(left);       
 
-          if(type=="next"){
-            if(left>target){
+          if (type == "next") {
+            if (left > target) {
              left-=5;
-            }else{
+            } else {
                clearInterval(timer);
             }
-          }else{
-            if(left<target){
+          } else {
+            if (left < target) {
              left+=5;
-            }else{
+            } else {
                clearInterval(timer);
             }
           }
-          _this.ulLeft=oDiv.style.left=left+'px';
+          _this.ulLeft = oDiv.style.left = left+'px';
         }
       },
-      initCalendarTbody(){
-        if(this.currentYear==0){
-          this.currentYear=this.monthsTitle[0].Year;
-          this.currentMonth=this.monthsTitle[0].Month;
+      initCalendarTbody () {
+        if (this.currentYear == 0) {
+          this.currentYear = this.monthsTitle[0].Year;
+          this.currentMonth = this.monthsTitle[0].Month;
         }
 
         for (var i = 0; i < 42; i++) {
@@ -560,43 +560,43 @@
             this.arrDay[i + new Date(this.currentYear, this.currentMonth - 1, 1).getDay()] = i + 1;
         }
       },
-      handleChange(item) {
-        this.ifMsg=false;
+      handleChange (item) {
+        this.ifMsg = false;
         let numberNum = 0;
         this.rowDate.enrolls.forEach(v => 
-          numberNum += v.adult *(this.customerPrice==true?v.price_01:v.price_02)
+          numberNum += v.adult *(this.customerPrice == true ? v.price_01 : v.price_02)
         )
         this.rowDate.Total = numberNum;
       },
 
-      chooseDateMes(dep,surplus,item){  
-        this.ifMsg=false;
-        if(surplus!=0){
-          this.chooseDate=dep;
+      chooseDateMes (dep,surplus,item) {  
+        this.ifMsg = false;
+        if(surplus != 0){
+          this.chooseDate = dep;
           item.Total = 0;
           item.travelTime = String(item.date).substring(0, 4) + '年' + String(item.date).substring(4, 6) + '月' + String(item.date).substring(6) + '日';
           this.rowDate = item;
         }
       },    
-      handeSave(){  
+      handeSave () {  
         console.log(this.rowDate)
-        if(this.chooseDate==0){
+        if(this.chooseDate == 0){
           this.$message.error("请选择团期");
           return;
         }
-        this.ifMsg=false;
-        let num=0;
+        this.ifMsg = false;
+        let num = 0;
         this.rowDate.enrolls.forEach(v => 
           num += v.adult
         )
-        if(num==0){
-          this.ifMsg=true;
-          this.msg="报名类型个数为0,不能下单";
+        if (num == 0) {
+          this.ifMsg = true;
+          this.msg = "报名类型个数为0,不能下单";
           return;
         }
-        if(num>this.rowDate.remaining){
-          this.ifMsg=true;
-          this.msg="报名总人数不能超过余位";
+        if (num > this.rowDate.remaining) {
+          this.ifMsg = true;
+          this.msg = "报名总人数不能超过余位";
           return;
         }
         this.$router.push({

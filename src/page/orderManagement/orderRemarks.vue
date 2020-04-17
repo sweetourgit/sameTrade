@@ -24,36 +24,36 @@
 
 <script>
 export default {
-  props:{
-    orderData: '',
-    variable:0,
-    dialogType:0
-  },
-  data() {
+  data () {
     return {
-       name:JSON.parse(sessionStorage.getItem('tyUserInfo')).name,
-       dialogFormMark:false,     
-       markFormAdd:{
-         'content':'',
+       name: JSON.parse(sessionStorage.getItem('tyUserInfo')).name,
+       dialogFormMark: false,     
+       markFormAdd: {
+         'content': '',
        },
-       markForms:[],
-       rules:{      
+       markForms: [],
+       rules: {      
          content: [{ required: true, message: '请填写备注信息', trigger: 'blur' }]
        }
     }
   },
-  created(){
+  props: {
+    orderData: '',
+    variable: 0,
+    dialogType: 0
+  },
+  created () {
   },
   watch: {
-      variable:function(){        
-        if(this.dialogType==2){
+      variable: function(){        
+        if(this.dialogType == 2){
           this.getCommentList();
-          this.dialogFormMark=true;    
+          this.dialogFormMark = true;    
         }
      }
   },
   methods: {
-      getCommentList(orderId){
+      getCommentList (orderId) {
         this.$http.post(this.GLOBAL.serverSrc + '/indirect/orderquery/get/GetOrderCommentList',{
              "orderCode": this.orderData.orderCode
           }).then(res => {
@@ -63,25 +63,25 @@ export default {
           }).catch(err => {
         })
       },
-      close(){
-        this.dialogFormMark=false;
+      close () {
+        this.dialogFormMark = false;
         this.$refs['markFormAdd'].resetFields();
       },
-      formatDate(date){
+      formatDate (date) {
        var y = date.getFullYear();  
        var m = date.getMonth() + 1;  
            m = m < 10 ? ('0' + m) : m;  
        var d = date.getDate();  
            d = d < 10 ? ('0' + d) : d;  
        var h = date.getHours();  
-           h=h < 10 ? ('0' + h) : h;  
+           h = h < 10 ? ('0' + h) : h;  
        var minute = date.getMinutes();  
            minute = minute < 10 ? ('0' + minute) : minute;  
-       var second=date.getSeconds();  
-           second=second < 10 ? ('0' + second) : second;  
+       var second = date.getSeconds();  
+           second = second < 10 ? ('0' + second) : second;  
            return y + '-' + m + '-' + d +' '+ h + ':' + minute + ':' + second;
       },
-      submitMark(){
+      submitMark () {
         this.$refs['markFormAdd'].validate((valid) => {
           if (valid) {
             this.$http.post(this.GLOBAL.serverSrc + '/indirect/orderquery/get/inserordercomment', {

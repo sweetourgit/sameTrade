@@ -187,33 +187,33 @@
 </template>
 <script>
   export default{
-    data() {
+    data () {
       return {
-          tyUserInfo:{},
-          productInfo:{},
-          tourInfo:{},
-          tourInfoCopy:{},
-          localcomp:{},
-          customerPrice:false,
-          sales:{
-            tradeSales:'' 
+          tyUserInfo: {},
+          productInfo: {},
+          tourInfo: {},
+          tourInfoCopy: {},
+          localcomp: {},
+          customerPrice: false,
+          sales: {
+            tradeSales: '' 
           },
-          otherPrice:'',
-          otherNote:'',
-          total:0,
-          order:'3',
-          contact:{
-            Name:'',
-            Tel:'',
+          otherPrice: '',
+          otherNote: '',
+          total: 0,
+          order: '3',
+          contact: {
+            Name: '',
+            Tel: '',
           },
-          guests:[],
-          dialogFormTour:false,
-          winTitle:'',
-          conForm:{},
-          guestsi:0,
-          guestsk:0,
-          ifMsg:false,
-          msg:"",
+          guests: [],
+          dialogFormTour: false,
+          winTitle: '',
+          conForm: {},
+          guestsi: 0,
+          guestsk: 0,
+          ifMsg: false,
+          msg: "",
           rules: {
             Name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
             Tel: [{ required: true, message: "请输入电话", trigger: "blur" }],
@@ -237,27 +237,27 @@
         }
       }
     },
-    watch:{
-      otherPrice:function(){
+    watch: {
+      otherPrice: function(){
         this.changecout()
       },
-      customerPrice:function(){
+      customerPrice: function(){
         this.changecout()
       }
     },
-    beforeDestroy(){
+    beforeDestroy () {
       sessionStorage.removeItem('tourInfo')
     },
-    mounted(){
-      this.tyUserInfo=JSON.parse(sessionStorage.getItem('tyUserInfo'));
+    mounted () {
+      this.tyUserInfo = JSON.parse(sessionStorage.getItem('tyUserInfo'));
       this.getTourInfo();
       this.getProductInfo();
       this.getLocalcomp();
       this.changecout();
       this.changeinfo();
     },
-    methods:{
-      getTourInfo(){
+    methods: {
+      getTourInfo () {
         const tourInfo = sessionStorage.getItem('tourInfo');
           if(tourInfo){
             this.tourInfo = JSON.parse(tourInfo);
@@ -266,9 +266,9 @@
             sessionStorage.setItem('tourInfo', JSON.stringify(this.$route.params.page));
           }
       },
-      getProductInfo(){
+      getProductInfo () {
         this.$http.post(this.GLOBAL.serverSrc + "/indirect/teamquery/get/siteampreview",{
-            "planID":this.tourInfo.id,
+            "planID": this.tourInfo.id,
             "localCompID": this.tyUserInfo.localCompID
         })
         .then(res => {
@@ -277,9 +277,9 @@
         .catch(res => {
         })         
       },
-      getLocalcomp(){  
+      getLocalcomp () {  
           this.$http.post(this.GLOBAL.serverSrc + "/indirect/localcomp/api/get",{
-             "id":this.tyUserInfo.localCompID
+             "id": this.tyUserInfo.localCompID
             },
           ).then(res => {
               this.localcomp = res.data.object;
@@ -287,23 +287,23 @@
           .catch(res => {
           })
       },
-      changecout(){
+      changecout () {
           this.total = 0;
-          this.tourInfo.enrolls.forEach(v=>{
+          this.tourInfo.enrolls.forEach(v => {
               if(this.customerPrice == true){
                 this.total += v.adult * v.price_01
               }else{
                 this.total += v.adult * v.price_02
               }
           })
-          this.total += parseInt(this.otherPrice!=''?this.otherPrice:0)
+          this.total += parseInt(this.otherPrice != '' ? this.otherPrice : 0)
       },
-      changeinfo(){
-          this.tourInfo.enrolls.forEach(v=>{
+      changeinfo () {
+          this.tourInfo.enrolls.forEach(v => {
               this.guests.push([]);
           })
-          for(var i= 0; i< this.guests.length; i++){
-            for(var j=0; j< this.tourInfo.enrolls[i].adult; j++){
+          for(var i = 0; i < this.guests.length; i++){
+            for(var j = 0; j < this.tourInfo.enrolls[i].adult; j++){
                 this.guests[i].push({
                     'cnName': '',
                     'enName': '',
@@ -322,18 +322,18 @@
                     'orderID': 0,
                     'orgID': this.tyUserInfo.localCompID,
                     'userID': this.tyUserInfo.id,
-                    "teamID":this.$route.query.id,
-                    "planID":this.tourInfo.id,
+                    "teamID": this.$route.query.id,
+                    "planID": this.tourInfo.id,
                     'createTime': Date.parse(new Date()),
                     'code': 0
                 })
               }
           }
-          this.tourInfoCopy=JSON.parse(JSON.stringify(this.tourInfo));
+          this.tourInfoCopy = JSON.parse(JSON.stringify(this.tourInfo));
       },
-      handleChange(val,index){
-          this.ifMsg=false;
-          if(val.adult > this.tourInfoCopy.enrolls[index].adult) {
+      handleChange (val, index) {
+          this.ifMsg = false;
+          if (val.adult > this.tourInfoCopy.enrolls[index].adult) {
                   this.guests[index].push({
                       'cnName': '',
                       'enName': '',
@@ -352,14 +352,14 @@
                       'orderID': 0,
                       'orgID': this.tyUserInfo.localCompID,
                       'userID': this.tyUserInfo.id,
-                      "teamID":this.$route.query.id,
-                      "planID":this.tourInfo.id,
+                      "teamID": this.$route.query.id,
+                      "planID": this.tourInfo.id,
                       'createTime': Date.parse(new Date()),
                       'code': 0
                   })
           }else{
-              if(this.guests[index].length==1){
-                this.guests[index]=[];
+              if(this.guests[index].length == 1){
+                this.guests[index] = [];
               }
               for(var i = this.guests[index].length; i > 0; i--){
                 if(this.guests[index][i-1].enName == "") {
@@ -369,10 +369,10 @@
               }
 
           }
-          this.tourInfoCopy=JSON.parse(JSON.stringify(this.tourInfo));
+          this.tourInfoCopy = JSON.parse(JSON.stringify(this.tourInfo));
           this.changecout();
         },
-        handleDelete(i,k){
+        handleDelete (i,k) {
               this.$confirm('是否删除该条信息', '提示', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
@@ -390,7 +390,7 @@
                   })
               })
         },
-        cancel(){
+        cancel () {
           this.$router.push({
             path: '/productDetails',
             query: {
@@ -398,80 +398,80 @@
             }
           })
         },
-        fillTour(i,k){
+        fillTour (i,k) {
           this.dialogFormTour = true;
-          this.winTitle=this.guests[i][k].enrollName;
-          this.conForm=JSON.parse(JSON.stringify(this.guests[i][k]));
-          this.guestsi=i;
-          this.guestsk=k;
+          this.winTitle = this.guests[i][k].enrollName;
+          this.conForm = JSON.parse(JSON.stringify(this.guests[i][k]));
+          this.guestsi = i;
+          this.guestsk = k;
         },
-        cancelInfo(formName) {
+        cancelInfo (formName) {
           this.dialogFormTour = false;
           this.$refs[formName].resetFields();
         },
-        subInfo(formName){
+        subInfo (formName) {
           this.$refs[formName].validate(valid => {
             if (valid) {
-              this.guests[this.guestsi][this.guestsk]=JSON.parse(JSON.stringify(this.conForm));
+              this.guests[this.guestsi][this.guestsk] = JSON.parse(JSON.stringify(this.conForm));
               this.cancelInfo(formName);
             }
           })
         },
-       submit(){
-         let a=true,b=true;
+       submit () {
+         let a = true, b = true;
          this.$refs['sales'].validate(valid => {
-          if(!valid){ 
-              a=false
+          if (!valid) { 
+              a = false
             }
           })
          this.$refs['contact'].validate(valid => {
-          if(!valid){ 
-              b=false
+          if (!valid) { 
+              b = false
             }
           })
           
           let cout = 0;
-          this.tourInfo.enrolls.forEach(v =>{
-              cout+= parseInt(v.adult)
+          this.tourInfo.enrolls.forEach(v => {
+              cout += parseInt(v.adult)
           });
           
-          this.ifMsg=false;
-          if(cout==0){
-            this.ifMsg=true;
-            this.msg="报名类型个数为0,不能下单";
+          this.ifMsg = false;
+          if(cout == 0){
+            this.ifMsg = true;
+            this.msg = "报名类型个数为0,不能下单";
             return;
           }
-          if(cout>this.tourInfo.remaining){
-            this.ifMsg=true;
-            this.msg="报名总人数不能超过余位";
+          if (cout > this.tourInfo.remaining) {
+            this.ifMsg = true;
+            this.msg = "报名总人数不能超过余位";
             return;
           }
-          if(a==false||b==false){
+          if(a == false || b == false){
             return
           }
-          if(this.localcomp.settlementType==1){
-             if(this.total>this.localcomp.balance){
+          if(this.localcomp.settlementType == 1){
+             if(this.total > this.localcomp.balance){
                this.$message.error('剩余额度小于订单总额');
                return;
              }
           }
-          let details="";
+          let details = "";
 
-          let guestAll=[];
-          let guest=JSON.parse(JSON.stringify(this.guests));
-          for(let i = 0;i < guest.length;i++){
-              details+=this.tourInfo.enrolls[i].enrollName;
-              details+=this.customerPrice == true?this.tourInfo.enrolls[i].price_01:this.tourInfo.enrolls[i].price_02;
-              details+='*'+guest[i].length;
-              for(let j = 0;j < guest[i].length;j++) {
+          let guestAll = [];
+          let guest = JSON.parse(JSON.stringify(this.guests));
+          for(let i = 0; i < guest.length; i++){
+              details += this.tourInfo.enrolls[i].enrollName;
+              details += this.customerPrice == true?this.tourInfo.enrolls[i].price_01:this.tourInfo.enrolls[i].price_02;
+              details += '*' + guest[i].length;
+              for(let j = 0; j < guest[i].length; j++) {
                 if(this.customerPrice == true) {
                   guest[i][j].singlePrice = this.tourInfo.enrolls[i].price_01;
                 }else{
                   guest[i][j].singlePrice = this.tourInfo.enrolls[i].price_02;
                 }
-                guest[i][j].orgID=this.tyUserInfo.localCompID;
-                guest[i][j].userID=this.tyUserInfo.id;
-                guest[i][j].bornDate=new Date(guest[i][j].bornDate).getTime();
+                guest[i][j].orgID = this.tyUserInfo.localCompID;
+                guest[i][j].userID = this.tyUserInfo.id;
+                guest[i][j].bornDate = new Date(guest[i][j].bornDate).getTime();
                 guestAll.push(guest[i][j]);
               }
           };
@@ -487,7 +487,7 @@
                     {
                       "id": 0,
                       "orderID": 0,
-                      "price": this.otherPrice?this.otherPrice:0,
+                      "price": this.otherPrice?this.otherPrice: 0,
                       "title": "其他费用",
                       "favMode": 1,
                       "mark": this.otherNote
@@ -516,11 +516,11 @@
                     "id": this.tourInfo.id,
                   },
                   "settlementType": this.localcomp.settlementType,
-                  "indirectSale":this.sales.tradeSales
+                  "indirectSale": this.sales.tradeSales
                 }
             }
-          ).then(res=>{
-             if(res.data.isSuccess==true){
+          ).then(res => {
+             if(res.data.isSuccess == true){
                this.$message.success("提交成功");
                this.cancel();
              }else{

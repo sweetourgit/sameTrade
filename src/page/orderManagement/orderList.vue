@@ -88,15 +88,10 @@
   import orderRemarks from './orderRemarks';
   import editOrder from './editOrder';
   export default {
-    components:{
-      "order-detail":orderDetail,
-      "order-remarks":orderRemarks,
-      "edit-order":editOrder,
-    },
-    data() {
+    data () {
       return {
-        productName:'',      
-        orderCode:'', 
+        productName: '',      
+        orderCode: '', 
         startDate: '',
         endDate: '',
         productType: '',  
@@ -108,48 +103,53 @@
           label: '跟团游'
         }],
         orderStatus: 0,
-        elTabs:[
-          {lable:'全部订单',orderStatus:'0'},
-          {lable:'未确认',orderStatus:'10'},
-          {lable:'补充资料',orderStatus:'1'},
-          {lable:'签署合同',orderStatus:'8'},
-          {lable:'待出行',orderStatus:'3'},
-          {lable:'出行中',orderStatus:'4'},
-          {lable:'订单完成',orderStatus:'6'},
-          {lable:'作废订单',orderStatus:'9'},
+        elTabs: [
+          {lable: '全部订单', orderStatus: '0'},
+          {lable: '未确认', orderStatus: '10'},
+          {lable: '补充资料', orderStatus: '1'},
+          {lable: '签署合同', orderStatus: '8'},
+          {lable: '待出行', orderStatus: '3'},
+          {lable: '出行中', orderStatus: '4'},
+          {lable: '订单完成', orderStatus: '6'},
+          {lable: '作废订单', orderStatus: '9'},
         ],
-        orderList:[],
-        pageshow:true,
+        orderList: [],
+        pageshow: true,
         pageSize: 10, 
         pageIndex: 1,
         total: 0,
-        orderData:'',   
-        variable:0,   
-        dialogType:0, 
+        orderData: '',   
+        variable: 0,   
+        dialogType: 0, 
       }
     },
-    mounted() {
+    components: {
+      "order-detail": orderDetail,
+      "order-remarks": orderRemarks,
+      "edit-order": editOrder,
+    },
+    mounted () {
       this.initData();
     },
-    methods:{
-      initData(pageIndex=this.pageIndex,pageSize=this.pageSize,productName=this.productName,orderCode=this.orderCode,startDate=this.startDate,endDate=this.endDate,productType=this.productType,orderStatus=this.orderStatus){
-        if(startDate){
-          let y=startDate.getFullYear();
-          let m=(startDate.getMonth()+1)>9?startDate.getMonth()+1:'0'+(startDate.getMonth()+1);
-          let d=startDate.getDate()>9?startDate.getDate():'0'+startDate.getDate();
-          startDate=''+ y + m + d
-        }else{
+    methods: {
+      initData (pageIndex = this.pageIndex, pageSize = this.pageSize, productName = this.productName, orderCode = this.orderCode, startDate = this.startDate, endDate = this.endDate, productType = this.productType, orderStatus = this.orderStatus) {
+        if (startDate) {
+          let y = startDate.getFullYear();
+          let m = (startDate.getMonth() + 1 ) > 9 ? startDate.getMonth() + 1 : '0' + (startDate.getMonth() + 1);
+          let d = startDate.getDate() > 9 ? startDate.getDate() : '0' + startDate.getDate();
+          startDate = '' + y + m + d
+        } else {
           startDate = 0;
         }
-        if(endDate){
-          let y=endDate.getFullYear();
-          let m=(endDate.getMonth()+1)>9?endDate.getMonth()+1:'0'+(endDate.getMonth()+1);
-          let d=endDate.getDate()>9?endDate.getDate():'0'+endDate.getDate();
-          endDate=''+ y + m + d
-        }else{
+        if (endDate) {
+          let y = endDate.getFullYear();
+          let m = (endDate.getMonth() + 1 ) > 9 ? endDate.getMonth() + 1 : '0' + (endDate.getMonth() + 1);
+          let d = endDate.getDate() > 9 ? endDate.getDate() : '0' + endDate.getDate();
+          endDate = '' + y + m + d
+        } else {
           endDate = 0;
         }
-        if(productType == '') productType = 0;
+        if (productType == '') productType = 0;
         this.$http.post(this.GLOBAL.serverSrc + '/indirect/orderquery/get/sipage', {
           "pageIndex": pageIndex,
           "pageSize": pageSize,
@@ -164,7 +164,7 @@
             }
           }
         }).then(res => {
-          this.orderList=[];
+          this.orderList = [];
           this.orderList = res.data.objects;
           this.total = res.data.total;
           this.$nextTick(() => {
@@ -172,39 +172,39 @@
           })
         })
       },
-      operation(order,i){
+      operation (order,i) {
           this.orderData = order;
           this.variable++;
-          this.dialogType=i;        
+          this.dialogType = i;        
       },
-      reset(){
-        this.productName='';       
-        this.orderCode='';  
-        this.startDate='';
-        this.endDate='';
-        this.productType='';  
+      reset () {
+        this.productName = '';       
+        this.orderCode = '';  
+        this.startDate = '';
+        this.endDate = '';
+        this.productType = '';  
       },
-      getRowClass({ row, column, rowIndex, columnIndex }) {
+      getRowClass ({ row, column, rowIndex, columnIndex }) {
         if (rowIndex == 0) {
           return 'background:#f7f7f7;height:60px;textAlign:center;color:#333;fontSize:15px'
         } else {
           return ''
         }
       },
-      handleClick(tab, event) {
+      handleClick (tab, event) {
         this.orderStatus = tab.name;
-        this.initData(1,this.pageSize);
+        this.initData(1, this.pageSize);
       },
-      handleSizeChange(val){
+      handleSizeChange (val) {
         this.pageSize = val;
         this.pageIndex = 1;
-        this.initData(1,val);
+        this.initData(1, val);
       },
-      handleCurrentChange(val){
-        this.initData(val,this.pageSize);
-        this.pageIndex=val;
+      handleCurrentChange (val) {
+        this.initData(val, this.pageSize);
+        this.pageIndex = val;
       },
-      cancelOrder(order){
+      cancelOrder (order) {
         this.$confirm("是否取消该订单?", "提示",{
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -215,9 +215,9 @@
               'orderCode': order.orderCode,
               "orderStatus": 9
             }).then(res => {
-              if(res.data.isSuccess==true){
-                this.initData(1,this.pageSize)
-              }else{
+              if (res.data.isSuccess == true) {
+                this.initData(1, this.pageSize)
+              } else {
                 this.$message.error(res.data.result.message); 
               }
             })
@@ -229,7 +229,7 @@
             })
           })
       },
-      endDateChange(){
+      endDateChange () {
         let startDate = new Date(this.startDate).getTime();
         let endDate = new Date(this.endDate).getTime();
         if (this.startDate !== "") {
@@ -239,18 +239,18 @@
           }
         }
       },
-      formatDate(date){
+      formatDate (date) {
        var y = date.getFullYear();  
        var m = date.getMonth() + 1;  
            m = m < 10 ? ('0' + m) : m;  
        var d = date.getDate();  
            d = d < 10 ? ('0' + d) : d;  
        var h = date.getHours();  
-           h=h < 10 ? ('0' + h) : h;  
+           h = h < 10 ? ('0' + h) : h;  
        var minute = date.getMinutes();  
            minute = minute < 10 ? ('0' + minute) : minute;  
-       var second=date.getSeconds();  
-           second=second < 10 ? ('0' + second) : second;  
+       var second = date.getSeconds();  
+           second = second < 10 ? ('0' + second) : second;  
            return y + '-' + m + '-' + d +' '+ h + ':' + minute + ':' + second;
       }
     }
