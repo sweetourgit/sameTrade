@@ -91,55 +91,55 @@
 <script>
   import orderDetail from '../orderManagement/orderDetail';
   export default {
-    components:{
-      "order-detail":orderDetail
-  },
-  data() {
+  data () {
       return {
-         tradeSales:"",
-         manager:[],
-         saleList:[],
-         pageshow:true,
+         tradeSales: "",
+         manager: [],
+         saleList: [],
+         pageshow: true,
          pageSize: 10, 
          pageIndex: 1,
          total: 0,
-         variable:0,   
-         dialogType:0, 
+         variable: 0,   
+         dialogType: 0, 
       }
     },
-    mounted() {
+    components: {
+      "order-detail": orderDetail
+    },
+    mounted () {
       //this.initData();
     },
-    methods:{
-         operation(order,i){
+    methods: {
+         operation (order,i) {
             this.orderData = order;
             this.variable++;
-            this.dialogType=i;        
+            this.dialogType = i;        
          },
-         getRowClass({ row, column, rowIndex, columnIndex }) {
+         getRowClass ({ row, column, rowIndex, columnIndex }) {
             if (rowIndex == 0) {
               return 'background:#f7f7f7;height:60px;textAlign:center;color:#333;fontSize:15px'
             } else {
               return ''
             }
          },
-         handleSizeChange(val){
+         handleSizeChange (val) {
             this.pageSize = val;
             this.pageIndex = 1;
-            this.initData(1,val);
+            this.initData(1, val);
          },
-         handleCurrentChange(val){
-            this.initData(val,this.pageSize);
-            this.pageIndex=val;
+         handleCurrentChange (val) {
+            this.initData(val, this.pageSize);
+            this.pageIndex = val;
          },
-         initData(pageIndex=this.pageIndex,pageSize=this.pageSize,tradeSales=this.tradeSales){
+         initData (pageIndex = this.pageIndex, pageSize = this.pageSize, tradeSales = this.tradeSales) {
             this.$http.post(this.GLOBAL.serverSrc + '/orderquery/get/api/sipage',{
               "pageIndex": pageIndex,
               "pageSize": pageSize,
               "object": {
                 }
             }).then(res => {
-              this.saleList=[];
+              this.saleList = [];
               this.saleList = res.data.objects;
               this.total = res.data.total;
               this.$nextTick(() => {
@@ -147,13 +147,6 @@
               })
             })
           },
-
-
-
-
-
-
-
     }
   }
 

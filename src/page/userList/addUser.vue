@@ -49,14 +49,10 @@
 
 <script>
 export default {
-  props:{
-    accountId:0,
-    variable:0,
-  },
-  data(){
-    return{
-      dialogForm:false,
-      title:"",
+  data () {
+    return {
+      dialogForm: false,
+      title: "",
       ruleForm: {
         "id": 0,
         "isDeleted": 0,
@@ -73,7 +69,7 @@ export default {
         "mark": "",
         "localCompName": JSON.parse(sessionStorage.getItem('tyUserInfo')).localCompName
       },
-      rules:{
+      rules: {
         name: [
             { required: true, message: '请输入姓名', trigger: 'blur' },
             { min: 1, max: 40, message: '长度在 1 到 40 个字符', trigger: 'blur' }
@@ -98,49 +94,53 @@ export default {
       },
     }
   },
+  props: {
+    accountId: 0,
+    variable: 0,
+  },
   watch: {
-      variable:function(){
+      variable: function(){
         this.dialogForm = true;
-        if(this.accountId==0){
+        if (this.accountId == 0) {
           this.title = "添加账户"
-        }else{
+        } else {
           this.title = "编辑账户";
           this.getData();
         }
      }
   },
   methods: {
-    getData(){
+    getData () {
         this.$http.post(this.GLOBAL.serverSrc + '/indirect/localcomp/api/peeruserpage',{
              "pageIndex": 1,
              "pageSize": 10,
-             "object":{
-              'phone':this.accountId
+             "object": {
+              'phone': this.accountId
              }
             }).then(res => {
-              this.ruleForm={};
-              if(res.data.isSuccess == true){
-                this.ruleForm=res.data.objects[0];
-                if(this.ruleForm.sex==3){
-                   this.ruleForm.sex="";
+              this.ruleForm = {};
+              if (res.data.isSuccess == true) {
+                this.ruleForm = res.data.objects[0];
+                if (this.ruleForm.sex == 3) {
+                   this.ruleForm.sex = "";
                 }
               }
         })
     },
-    close(){
-      this.dialogForm=false;
+    close () {
+      this.dialogForm = false;
       this.$refs["ruleForm"].resetFields();
-      this.ruleForm={};
+      this.ruleForm = {};
     },
-    save(){
-      let url='';
-      if(this.accountId==0){
-        url="/indirect/localcomp/api/peeruserinsert";
-      }else{
-        url="/indirect/localcomp/api/peeruserupdate";
+    save () {
+      let url = '';
+      if (this.accountId == 0) {
+        url = "/indirect/localcomp/api/peeruserinsert";
+      } else {
+        url = "/indirect/localcomp/api/peeruserupdate";
       }
       this.$refs['ruleForm'].validate(valid => {
-        if(valid) {
+        if (valid) {
           this.$http.post(this.GLOBAL.serverSrc + url, {
               "object":this.ruleForm
           }).then(res => {

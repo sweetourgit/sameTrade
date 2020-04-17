@@ -128,39 +128,39 @@
 <script>
   import addUser from './addUser'
   export default {
-    components:{
-      "add-user":addUser,
-    },
-    data() {
+    data () {
       return {
-        tyUserInfo:{},
-        localcompInfo:{},
+        tyUserInfo: {},
+        localcompInfo: {},
         fileList: [],
-        acconutList:[],
+        acconutList: [],
         pageSize: 10, 
         pageIndex: 1,
         total: 0,
-        accountId:0,
-        variable:0,
-        peerUser:false
+        accountId: 0,
+        variable: 0,
+        peerUser: false
       }
     },
-    mounted(){
-      this.tyUserInfo=JSON.parse(sessionStorage.getItem('tyUserInfo'));
-      this.peerUser=this.tyUserInfo.peerUserType==1?false:true;
+    components: {
+      "add-user": addUser,
+    },
+    mounted () {
+      this.tyUserInfo = JSON.parse(sessionStorage.getItem('tyUserInfo'));
+      this.peerUser = this.tyUserInfo.peerUserType == 1 ? false : true;
       this.companyinfo();
       this.accoutList();
     },
-    methods:{
-        companyinfo(){
+    methods: {
+        companyinfo () {
           this.$http.post(this.GLOBAL.serverSrc + "/indirect/localcomp/api/get",{
             "id": this.tyUserInfo.localCompID
-            }).then(res=> {
-                this.localcompInfo={};
-                if(res.data.isSuccess==true){
-                  this.localcompInfo=res.data.object;
+            }).then(res => {
+                this.localcompInfo = {};
+                if(res.data.isSuccess == true){
+                  this.localcompInfo = res.data.object;
                   if(this.localcompInfo.fileUrl){
-                    let list={
+                    let list = {
                       url:this.localcompInfo.fileUrl,
                       //name:"公司logo"
                     };
@@ -168,42 +168,42 @@
                   }
                 }
             })
-            .catch(res=>{
+            .catch(res => {
             })
         },
-        saveLocalcompInfo(){
-            this.localcompInfo.fileUrl=this.fileList[0].url;
+        saveLocalcompInfo () {
+            this.localcompInfo.fileUrl = this.fileList[0].url;
             this.$http.post(this.GLOBAL.serverSrc + "/indirect/universal/localcomp/save",{
-              "object":this.localcompInfo
-            }).then(res=> {
-                if(res.data.isSuccess==true){
+              "object": this.localcompInfo
+            }).then(res => {
+                if(res.data.isSuccess == true){
                   this.$message.success("提交成功")
                 }
             })
-            .catch(res=>{
+            .catch(res => {
             })
         },
-        handleSuccess(res, file ,fileList){
+        handleSuccess (res, file ,fileList) {
           //this.fileList[0].name = JSON.parse(fileList[0].response).paths[0].Name;
           this.fileList[0].url = JSON.parse(fileList[0].response).paths[0].Url;
         },
-        handleRemove(file, fileList) {
+        handleRemove (file, fileList) {
 
         },
-        handleExceed(files, fileList) {
+        handleExceed (files, fileList) {
             this.$message.error(`只能上传一个文件`);
         },
-        beforeRemove(file, fileList) {
+        beforeRemove (file, fileList) {
             return this.$confirm(`确定移除公司logo？`);
         },
-        getRowClass({ row, column, rowIndex, columnIndex }) {
+        getRowClass ({ row, column, rowIndex, columnIndex }) {
             if (rowIndex == 0) {
               return 'background:#f7f7f7;height:60px;textAlign:center;color:#333;fontSize:15px'
             } else {
               return ''
             }
         },
-        accoutList(id){
+        accoutList (id) {
             this.$http.post(this.GLOBAL.serverSrc + "/indirect/localcomp/api/peeruserpage",
                 {
                   "pageIndex": this.pageIndex,
@@ -212,7 +212,7 @@
                       "localCompID": this.tyUserInfo.localCompID,
                   }
                 }
-            ).then(res=>{
+            ).then(res => {
                 this.acconutList = res.data.objects
                 this.total = res.data.total
 
@@ -220,20 +220,20 @@
             .catch(function (obj) {
             })
         },
-        handleSizeChange(val){
+        handleSizeChange (val) {
             this.pageSize = val;
             this.pageIndex = 1;
-            this.accoutList(1,val);
+            this.accoutList(1, val);
          },
-         handleCurrentChange(val){
-            this.initData(val,this.pageSize);
-            this.accoutList=val;
+         handleCurrentChange (val) {
+            this.initData(val, this.pageSize);
+            this.accoutList = val;
          },
-         operation(i,id){
+         operation (i, id) {
             this.variable++;
-            if(i==2){
+            if (i == 2) {
               this.accountId = id;
-            }else{
+            } else {
               this.accountId = 0;
             }
          }
